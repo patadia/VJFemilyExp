@@ -1,0 +1,30 @@
+.explistcontainer{
+    width: 100%;
+    margin-top: 10px;
+}
+
+.debit{
+    color: red;
+}
+
+.credit{
+    color: green;
+}
+.listdiv{
+    max-height: 70%;
+    overflow-y: scroll;
+}
+
+.listitem{
+    opacity: 0.5;
+    margin:10px;
+    
+}
+
+.listmain{
+    background-color: transparent;
+}
+
+ion-item::part(native) {
+    background: transparent;
+}

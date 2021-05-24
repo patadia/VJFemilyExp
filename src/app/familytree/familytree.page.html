@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-toolbar>
+    <div class="toolbarhead">
+
+      <ion-icon name="arrow-back-outline" class="ion-padding" [routerLink]="['/home']">back</ion-icon>
+      <ion-title>Family Members</ion-title>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div>
+    <ion-label class="fkey">Your family key is <p> {{Familykey}} </p>
+    </ion-label>
+  </div>
+
+  <form [formGroup]="FormCreateFamilyHead" (ngSubmit)="CreateRecord()">
+
+    <ion-item>
+      <ion-label position="floating">Name</ion-label>
+      <ion-input formControlName="Name"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Username</ion-label>
+      <ion-input formControlName="username"></ion-input>
+    </ion-item>
+
+
+    <ion-button class="btnadmember" (click)="CreateRecord()" [disabled]="FormCreateFamilyHead.invalid">
+      <ion-icon size="small" slot="icon-only" name="add"></ion-icon>
+      &nbsp;Add Member
+    </ion-button>
+
+  </form>
+  <div>
+    <hr>
+    <div class="listtitle">
+      <label>Family Tree 😍</label>
+    </div>
+    <ion-list class="listmember" lines="full">
+      <ion-item *ngFor="let m of Members">
+        
+          <div (click)="OnclickMember(m)">
+            <label>{{m.Name}}</label>
+          </div>
+      
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <div class="bottomlabel">
+    <label>
+      You can continue by seleting your slef from Family Tree's List 😎
+    </label>
+  </div>
+</ion-content>

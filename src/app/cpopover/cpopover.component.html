@@ -1,0 +1,34 @@
+<ion-content>
+  <ion-item>
+    <ion-label position="floating">
+      Title
+    </ion-label>
+    <ion-input placeholder='Title' [(ngModel)]="title" id="title">
+
+    </ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">
+      Ammount
+    </ion-label>
+    <ion-input placeholder='Ammount' type="numeric" [(ngModel)]="amount"
+    id="amount">
+
+    </ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">
+      Type of transaction
+    </ion-label>
+    <ion-select  interface="popover" 
+    [(ng-model)]="mySelect" (ionChange)="onChange($event)">
+      <ion-select-option value="credit">
+        Credit
+      </ion-select-option>
+      <ion-select-option value="debit">
+        Debit
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-button (click)="Add_data()">Add</ion-button>
+</ion-content>

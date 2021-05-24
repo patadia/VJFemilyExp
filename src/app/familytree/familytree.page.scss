@@ -1,0 +1,44 @@
+.toolbarhead {
+    display: flex;
+}
+.fkey {
+    display: flex;
+    align-items: center;
+    p {
+        color: silver;
+        font-size: 20px;
+        font-weight: 900;
+        margin-top: 2px;
+        margin-left: 12px;
+    }
+    padding: 10px;
+    border-bottom: silver 1px;
+}
+.btnadmember {
+    margin-left: 50%;
+}
+ion-item::part(native) {
+    background: transparent;
+}
+
+.listtitle{
+    text-align: center;
+    margin: 10px;
+}
+.listmember {
+    background-color: transparent;
+    border-radius: 20px;
+    border: 1px solid snow;
+}
+form {
+    border: silver 1px solid;
+    border-radius: 25px;
+    padding: 10px;
+}
+
+.bottomlabel{
+    position: fixed;
+    bottom: 10px;
+    text-align: center;
+    opacity: 0.3;
+}

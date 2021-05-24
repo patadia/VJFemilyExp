@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Expenses</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div>
+
+    <ion-label>Welcome {{name}}</ion-label>
+  </div>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button>
+      <ion-icon name="add" (click)="add_new_data()"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  <hr>
+  <div>
+    <ion-item>
+      <ion-label>Month</ion-label>
+      <ion-datetime displayFormat="MMMM, YYYY" value="" [(ngModel)]="monthDate"></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label>Credit <p>{{Creditbal}}</p></ion-label>
+      <ion-label>Debit <p>{{Debitbal}}</p></ion-label>
+    </ion-item>
+  </div>
+  <hr>
+  <div class="listdiv">
+    <ion-list class="listmain">
+      <ion-item *ngFor="let e of ExpennseList">
+       
+
+        <div class="explistcontainer">
+
+          <ion-item class="listitem">
+            <ion-label>{{e.date_on | date:'dd MMMM'}}</ion-label> 
+            <p>{{e.date_on | date:'hh:mm a'}}</p>
+          </ion-item>
+          <ion-item class="listitem">
+            <ion-label 
+            [ngClass]="{debit: e.Transaction_Type == 'debit',
+            credit: e.Transaction_Type == 'credit'}">
+              {{e.Title}} <p>{{e.byName}}</p>
+            </ion-label>
+            <p class="Amount">{{e.Amount}}</p>
+          </ion-item>
+        </div>
+
+
+
+
+
+      </ion-item>
+    </ion-list>
+  </div>
+
+
+</ion-content>
