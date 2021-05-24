@@ -34,7 +34,7 @@ private _storage: Storage | null = null;
       Amount:(<HTMLInputElement>document.getElementById('amount')).value,
       Transaction_Type : this.type,
       date_on: new Date().toLocaleString(),
-      Date_unix: parseInt((new Date('2012.08.10').getTime() / 1000).toFixed(0)),
+      Date_unix: parseInt((new Date().getTime() / 1000).toFixed(0)),
       byName:this.byName
     }
     //console.log(data);
