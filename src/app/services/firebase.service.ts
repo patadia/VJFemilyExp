@@ -1,6 +1,8 @@
 // firebase.service.ts
+import { getAttrsForDirectiveMatching } from '@angular/compiler/src/render3/view/util';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import * as firebase from 'firebase';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -56,11 +58,16 @@ export class FirebaseService {
     const end = new Date(year,Month,daysinmonth);
     console.log(start);
     console.log(end);
-   ;
-    // let start_unix =  parseInt((start.getTime() / 1000).toFixed(0));
+  // var start_u =  firebase.default.firestore.Timestamp.fromDate(start);
+  // var end_u =  firebase.default.firestore.Timestamp.fromDate(end);
+     let start_unix =  parseInt((start.getTime() / 1000).toFixed(0));
+     let End_unix =  parseInt((end.getTime() / 1000).toFixed(0));
+     console.log(start_unix);
+     console.log(End_unix);
     return this.firestore.collection(this.expensetable, ref => ref
-    .where('Date_unix', '>',  parseInt((start.getTime() / 1000).toFixed(0)))
-    .where('Date_unix', '<',  parseInt((end.getTime() / 1000).toFixed(0)))).snapshotChanges();
+    .where('Date_unix', '>=',  start_unix)
+    .where('Date_unix', '<=',  End_unix)).valueChanges()
+    
   }
 
 

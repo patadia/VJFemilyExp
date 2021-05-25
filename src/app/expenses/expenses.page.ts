@@ -23,6 +23,7 @@ export class ExpensesPage implements OnInit {
   Creditbal:any= 0.0;
   Debitbal:any = 0.0;
   paramID :string = '';
+  private readExpdataSub: Subscription;
 
   constructor(private route: ActivatedRoute,
     private popover: PopoverController,
@@ -47,41 +48,55 @@ export class ExpensesPage implements OnInit {
       console.log(params['ID']) //log the value of id
       this.paramID= params['ID'];
       this.getdata_expense(params['ID']);
+      console.log('initcall');
     });
   }
 
   getdata_expense(ID){
     try {
       this.ExpennseList = [];
-      this.fire.read_expense().subscribe((data)=> {
-        this.ExpennseList =  data.map(e => {
-           return {
-             id: e.payload.doc.id,
-             Title: e.payload.doc.data()['Title'],
-             Amount: e.payload.doc.data()['Amount'],
-             Transaction_Type: e.payload.doc.data()['Transaction_Type'],
-             date_on:e.payload.doc.data()['date_on'],
-             byName:e.payload.doc.data()['byName'],
-             Date_unix:e.payload.doc.data()['Date_unix']
-           };
-         })
-         this.Creditbal = 0.0;
-         this.Debitbal = 0.0;
-         this.ExpennseList.forEach(element => {
-          console.log(element)
-          if(element.Transaction_Type == 'debit'){
-            this.Debitbal+= parseFloat(element.Amount);
-          }
-          else{
-            this.Creditbal +=parseFloat(element.Amount);
-          }
-        });
-       });
-
+      // this.fire.read_expense().subscribe((data)=> {
+      //   // this.ExpennseList =  data.map(e => {
+      //   //    return {
+      //   //      id: e.payload.doc.id,
+      //   //      Title: e.payload.doc.data()['Title'],
+      //   //      Amount: e.payload.doc.data()['Amount'],
+      //   //      Transaction_Type: e.payload.doc.data()['Transaction_Type'],
+      //   //      date_on:e.payload.doc.data()['date_on'],
+      //   //      byName:e.payload.doc.data()['byName'],
+      //   //      Date_unix:e.payload.doc.data()['Date_unix']
+      //   //    };
+      //   //  })
+      //   console.log('document load',data);
+      //  });
+      console.log('getdata_call');
        let nedate = new Date(this.monthDate);
-
-       this.fire.Read_expbyMonth(nedate.getFullYear(),nedate.getMonth()).subscribe((edata)=>{
+       this.Creditbal = 0.0;
+       this.Debitbal = 0.0;
+       this.readExpdataSub = this.fire.Read_expbyMonth(nedate.getFullYear(),nedate.getMonth()).subscribe((edata:any)=>{
           console.log('check',edata);
+          this.ExpennseList = [];
+
+          edata.forEach(e => {
+            let pusher = {
+              Title:e.Title,
+              Amount:e.Amount,
+              Transaction_Type : e.Transaction_Type,
+              date_on:e.date_on,
+              Date_unix: e.Date_unix,
+              full_date:e.full_date,
+              byName:e.byName
+            }
+            this.ExpennseList.push(pusher);
+            if(e.Transaction_Type == 'debit'){
+              this.Debitbal+= parseFloat(e.Amount);
+            }
+            else{
+              this.Creditbal +=parseFloat(e.Amount);
+            }
+            this.Subscription_release();
+          });
+          
        })
       
     } catch (error) {
@@ -121,7 +136,7 @@ return datetoday;
   Create_newdata(Add_data: any) {
     try {
        this.fire.Create_expense(Add_data).then((data)=>{
-          console.log(data);
+          console.log('add data',data);
          this.getdata_expense(this.paramID);
         
        });
@@ -130,10 +145,19 @@ return datetoday;
     }
   }
 
+  ChangedDate(Monthdater){
+    console.log('datechanges')
+    this.getdata_expense(this.paramID);
+  }
+
+  Subscription_release() {
+    this.readExpdataSub.unsubscribe();
+  }
 }
 
 
 
 
  
+
 

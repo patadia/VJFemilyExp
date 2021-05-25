@@ -11,13 +11,13 @@
     color: green;
 }
 .listdiv{
-    max-height: 70%;
+    max-height: 85%;
     overflow-y: scroll;
 }
 
 .listitem{
-    opacity: 0.5;
-    margin:10px;
+    opacity: 0.9;
+    margin:5px;
     
 }
 
@@ -27,4 +27,35 @@
 
 ion-item::part(native) {
     background: transparent;
+}
+
+.listitemdate{
+    opacity: 0.4;
+    margin: 2px;
+    height: 0px;
+    padding:0px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.datelabel{
+    font-size: 9px;
+} 
+
+.pdate{
+    font-size: 10px;
+    
+}
+
+.headerExpense{
+    display: flex;
+}
+.balance{
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+}
+
+hr{
+    margin: 2px;
 }

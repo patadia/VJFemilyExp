@@ -35,6 +35,7 @@ private _storage: Storage | null = null;
       Transaction_Type : this.type,
       date_on: new Date().toLocaleString(),
       Date_unix: parseInt((new Date().getTime() / 1000).toFixed(0)),
+      full_date: new Date(),
       byName:this.byName
     }
     //console.log(data);
