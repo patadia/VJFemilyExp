@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { CPopoverComponent } from '../cpopover/cpopover.component';
 import { FirebaseService } from '../services/firebase.service';
 import{Storage} from '@ionic/storage';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-expenses',
@@ -19,18 +20,25 @@ export class ExpensesPage implements OnInit {
   name:string ='';
   private _storage: Storage | null = null;
   monthDate: any = new Date().toISOString();
+  datepick:any ;
   public ExpennseList:any = [];
   Creditbal:any= 0.0;
   Debitbal:any = 0.0;
   paramID :string = '';
+  setdate:any;
   private readExpdataSub: Subscription;
 
   constructor(private route: ActivatedRoute,
     private popover: PopoverController,
     private fire:FirebaseService,
-    private storage:Storage
+    private storage:Storage,
+    public datepipe: DatePipe
     ) {
       this.init();
+      //let datelog = document.getElementById('pickdate');
+      this.datepick =this.datepipe.transform(new Date(), 'yyyy-MM-dd');
+     console.log('date new',this.datepick);
+     this.setdate =  new Date(this.datepick);
   }
 
   async init() {
@@ -70,7 +78,7 @@ export class ExpensesPage implements OnInit {
       //   console.log('document load',data);
       //  });
       console.log('getdata_call');
-       let nedate = new Date(this.monthDate);
+       let nedate = new Date(this.datepick);
        this.Creditbal = 0.0;
        this.Debitbal = 0.0;
        this.readExpdataSub = this.fire.Read_expbyMonth(nedate.getFullYear(),nedate.getMonth()).subscribe((edata:any)=>{
@@ -153,6 +161,18 @@ return datetoday;
   Subscription_release() {
     this.readExpdataSub.unsubscribe();
   }
+
+  changenewdate(datepick){
+    console.log(datepick);
+    this.setdate =  new Date(datepick);
+    console.log('datechanges_picker',this.setdate);
+    this.getdata_expense(this.paramID);
+  }
+
+  opendatepicker(){
+   
+  }
+
 }
 
 

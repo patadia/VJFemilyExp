@@ -59,3 +59,39 @@ ion-item::part(native) {
 hr{
     margin: 2px;
 }
+
+.cdatepick{
+    //background-color: transparent;
+    background-color: transparent;
+    font-size: 12px;
+    border: 1px;
+    color: transparent;
+    //border: 0px;
+    //padding: 0px;
+    //color: transparent;
+
+}
+.labelDate{
+    margin-left: -10px;
+    position: fixed;
+    /* margin: 50px; */
+    color: gray;
+    background-color: black;
+    padding: 10px;
+    border-radius: 20px;
+    width: 100%;
+    pointer-events: none;
+
+}
+.headtitle{
+    max-width: 50%;
+    font-size: 15px;
+
+}
+
+.iconcal{
+    pointer-events: none;
+    position: fixed;
+    margin-left: 35%;
+
+}

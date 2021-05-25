@@ -2,11 +2,19 @@
   <ion-toolbar>
     <div class="headerExpense">
 
-      <ion-title>Welcome {{name}} </ion-title>
+      <ion-title class="headtitle">Welcome {{name}} </ion-title>
       <ion-item>
-        <ion-icon name="calendar-outline"></ion-icon>
-        <ion-datetime displayFormat="MMMM, YYYY" value="" [(ngModel)]="monthDate" (ionChange)="ChangedDate(monthDate)"></ion-datetime>
+        <!-- <ion-icon name="calendar-outline"></ion-icon> -->
+        <!-- <ion-datetime displayFormat="MMMM, YYYY" value="" [(ngModel)]="monthDate" (ionChange)="ChangedDate(monthDate)"></ion-datetime> -->
+        <!-- <div> -->
+          <!-- <label>{{setdate | date:'MMMM yy'}}</label> -->
+          <label class="labelDate">{{setdate | date:'MMMM yy'}}</label>
+          <ion-icon class="iconcal" name="calendar-outline"></ion-icon>
+          <input class="btn btn-dark form-controll cdatepick" type="date" id="pickdate" [(ngModel)]="datepick" (change)="changenewdate(datepick)">
+        <!-- </div> -->
       </ion-item>
+     
+        
     </div>
   </ion-toolbar>
 </ion-header>

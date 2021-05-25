@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment';
 import { AngularFirestoreModule,SETTINGS}from '@angular/fire/firestore'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {Storage}from '@ionic/storage';
-
+import { DatePipe } from '@angular/common';
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -19,7 +19,7 @@ import {Storage}from '@ionic/storage';
      BrowserModule,
   AngularFireModule.initializeApp(environment.firebaseConfig),AngularFirestoreModule],
   providers: [{ provide: RouteReuseStrategy, 
-    useClass: IonicRouteStrategy },Storage],
+    useClass: IonicRouteStrategy },Storage,DatePipe],
   bootstrap: [AppComponent],
 })
 
