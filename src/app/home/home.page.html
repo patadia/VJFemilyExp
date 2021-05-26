@@ -14,7 +14,7 @@
   </ion-header>
 
   <div id="container" style="text-align: center;">
-    <strong>Wanna start !! Create Family Tree first </strong><br>
+    <strong>Wanna start !! <br> Create Family Tree first </strong><br>
 
     <button class="btn btn-primary" (click)="gotofamilytreecreate()">Create Family Tree</button>
    
@@ -25,8 +25,24 @@
 
     </div>
     <div class="container-fluid">
+      <form [formGroup]="Formverify" (ngSubmit)="verifyRecord()">
 
-      <input class="form-control" type="text" style="width: 60%;margin-left:20%;" placeholder="Add family key"/>
+        <ion-item>
+          <ion-label position="floating">Name</ion-label>
+          <ion-input formControlName="Name"></ion-input>
+        </ion-item>
+    
+        <ion-item>
+          <ion-label position="floating">Family Key</ion-label>
+          <ion-input formControlName="fkey"></ion-input>
+        </ion-item>
+    
+    
+        <ion-button class="btnadmember" (click)="verifyRecord()" [disabled]="Formverify.invalid">
+        Verify
+        </ion-button>
+    
+      </form>
     </div>
       </div>
     </div>

@@ -8,5 +8,6 @@ export const environment = {
     messagingSenderId: "27618328115",
     appId: "1:27618328115:web:386bb736894590676b2d46",
     measurementId: "G-C6D3SVS3HX"
-  }
+  },
+  headpass:'vj'
 };
