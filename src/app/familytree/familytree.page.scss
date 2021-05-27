@@ -11,7 +11,7 @@
         margin-top: 2px;
         margin-left: 12px;
     }
-    padding: 10px;
+    padding: 0px;
     border-bottom: silver 1px;
 }
 .btnadmember {
@@ -25,10 +25,13 @@ ion-item::part(native) {
     text-align: center;
     margin: 10px;
 }
-.listmember {
-    background-color: transparent;
-    border-radius: 20px;
-    border: 1px solid snow;
+.listmemberlist {
+   overflow-y: scroll;
+   max-height: 40%;
+   .listmember{
+       background-color: transparent;
+   }
+    // border: 1px solid snow;
 }
 form {
     border: silver 1px solid;

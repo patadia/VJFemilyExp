@@ -11,6 +11,7 @@
           <label class="labelDate">{{setdate | date:'MMMM yy'}}</label>
           <ion-icon class="iconcal" name="calendar-outline"></ion-icon>
           <input class="btn btn-dark form-controll cdatepick" type="date" id="pickdate" [(ngModel)]="datepick" (change)="changenewdate(datepick)">
+          <ion-icon name="log-out" (click)="Logout()" class="logoutbtn"></ion-icon>
         <!-- </div> -->
       </ion-item>
      

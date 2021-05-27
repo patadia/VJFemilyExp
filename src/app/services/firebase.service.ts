@@ -24,8 +24,18 @@ export class FirebaseService {
     return this.firestore.collection(this.Membercollection).add(record);
   }
 
-  read_Memberss() {
-    return this.firestore.collection(this.Membercollection).snapshotChanges();
+  read_Memberss(familykey) {
+    return this.firestore.collection(this.Membercollection,ref=> ref.where('FamilyKey','==',familykey)).snapshotChanges();
+  }
+
+  varify_Members(record:any) {
+    return this.firestore.collection(this.Membercollection,ref=> ref.where('username','==',record.username)
+    .where('password','==',record.password)).valueChanges();
+  }
+
+  varify_user(record:any) {
+    return this.firestore.collection(this.Membercollection,ref=> ref.where('username','==',record.username)
+    .where('FamilyKey','==',record.FamilyKey)).snapshotChanges();
   }
 
   update_Member(recordID, record) {
@@ -69,6 +79,8 @@ export class FirebaseService {
     .where('Date_unix', '<=',  End_unix)).valueChanges()
     
   }
+
+  
 
 
 

@@ -4,6 +4,7 @@
 
       <ion-icon name="arrow-back-outline" class="ion-padding" [routerLink]="['/home']">back</ion-icon>
       <ion-title>Family Members</ion-title>
+      <ion-icon name="calculator" class="ion-padding" [routerLink]="['/expenses/head']"></ion-icon>
     </div>
   </ion-toolbar>
 </ion-header>
@@ -33,20 +34,22 @@
     </ion-button>
 
   </form>
-  <div>
-    <hr>
-    <div class="listtitle">
-      <label>Family Tree 😍</label>
-    </div>
-    <ion-list class="listmember" lines="full">
-      <ion-item *ngFor="let m of Members">
-        
+  <hr>
+  <div class="listtitle">
+    <label>Family Tree 😍</label>
+  </div>
+  <div class="listmemberlist">
+   
+      <ion-list class="listmember" lines="full">
+        <ion-item *ngFor="let m of Members">
+
           <div (click)="OnclickMember(m)">
             <label>{{m.Name}}</label>
           </div>
-      
-      </ion-item>
-    </ion-list>
+
+        </ion-item>
+      </ion-list>
+
   </div>
 
   <div class="bottomlabel">

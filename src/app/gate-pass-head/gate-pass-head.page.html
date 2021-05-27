@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Head Gate Pass</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="FormLoginregister" (ngSubmit)="LoginRegister()">
+    <ion-item>
+      <ion-label position="floating">Name</ion-label>
+      <ion-input formControlName="Name"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Username</ion-label>
+      <ion-input formControlName="username"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Password</ion-label>
+      <ion-input formControlName="password" type="password"></ion-input>
+    </ion-item> 
+
+<div class="btnlr">
+
+  <ion-button (click)="LoginRegister()" [disabled]="FormLoginregister.invalid">
+    Login or Register
+  </ion-button>
+</div>
+
+    <div class="regdiv">
+
+  
+      {{registerNote}}
+      <button *ngIf="ishidden" class="btn btn-dark" (click)="register()" [disabled]="FormLoginregister.invalid">Register</button>
+    
+  </div>  
+
+  </form>
+
+</ion-content>

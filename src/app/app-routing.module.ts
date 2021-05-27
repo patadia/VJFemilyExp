@@ -19,6 +19,10 @@ const routes: Routes = [
     path: 'expenses/:ID',
     loadChildren: () => import('./expenses/expenses.module').then( m => m.ExpensesPageModule)
   },
+  {
+    path: 'gate-pass-head',
+    loadChildren: () => import('./gate-pass-head/gate-pass-head.module').then( m => m.GatePassHeadPageModule)
+  },
 ];
 
 @NgModule({

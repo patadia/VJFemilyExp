@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { PopoverController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { PasswordAdminComponent } from '../password-admin/password-admin.component';
+import { FirebaseService } from '../services/firebase.service';
 
 @Component({
   selector: 'app-home',
@@ -14,36 +15,76 @@ export class HomePage {
   private _storage: Storage | null = null;
   public handle:string;
   Formverify: FormGroup;
-  constructor(private route: Router, private storage: Storage,public popoverc:PopoverController
-    , public fb:FormBuilder) {
+  constructor(private route: Router,
+     private storage: Storage,public popoverc:PopoverController, 
+     private firebaseService:FirebaseService
+    ,public fb:FormBuilder) {
+   
     this.init();
+  }
+
+  async movetoexpense(id:string){
+    if(id != null){
+
+      
+      this.route.navigate(['./expenses',id]);
+    }
   }
 
   async ngOnInit() {
     this.Formverify = this.fb.group({
-      Name: new FormControl('',Validators.required),
-      fkey: new FormControl('',Validators.required),
+      username: new FormControl('',Validators.required),
+      FamilyKey: new FormControl('',Validators.required),
     })
   }
 
   async init(){
     const storage = await this.storage.create();
     this._storage = storage;
-    
+    try {
+      
+      let check = await this._storage?.get('ISKeyUser');
+      console.log(check);
+      if(check === 'Logedin'){
+        let userid = await this.storage.get('KeyUserID');
+        console.log(userid);
+          this.movetoexpense(userid);
+      }
+
+      if(check === 'HeadLogedin'){
+        console.log(check);
+          // this.route.navigate(['./familytree']);
+          let userid = await this.storage.get('KeyUserID');
+          this.movetoexpense(userid);
+
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
   }
-   makeid() {
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   
-    for (var i = 0; i < 5; i++)
-      text += possible.charAt(Math.floor(Math.random() * possible.length));
-  
-    return text;
-  }
   
   async verifyRecord(){
     console.log(this.Formverify.value);
-      
+      try {
+        this.firebaseService.varify_user(this.Formverify.value).subscribe(async(d:any)=>{
+          console.log(d);
+            if(d.length>0){
+              let ID = await this._storage?.set('KeyUserID',d[0].id);
+              let usercheck = await this._storage?.set('ISKeyUser','Logedin');
+              let name = await this._storage.set("name_user",d[0].payload.doc.data()['Name']);
+              let femID = await this._storage.set("fcmID",d[0].payload.doc.id);
+              let uname = await this._storage.set("Current_uname",d[0].payload.doc.data()['username']);
+              this.Formverify.reset();
+                this.movetoexpense(d[0].payload.doc.id);
+            }else{
+              alert('No user found.');
+            }
+        })
+      } catch (error) {
+        console.log(error);
+      }
   }
   async gotofamilytreecreate() {
     // console.log('i am here');
@@ -65,7 +106,7 @@ export class HomePage {
       try {
         if(data.data.login === 'Success'){
 
-          this.route.navigate(['./familytree']);
+          this.route.navigate(['./gate-pass-head']);
         }
       } catch (error) {
         console.log(error);

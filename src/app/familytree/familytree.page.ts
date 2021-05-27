@@ -37,7 +37,8 @@ export class FamilytreePage implements OnInit {
     }
     GetMembers(){
       try{
-        this.firebaseService.read_Memberss().subscribe((data)=> {
+        this.firebaseService.read_Memberss(this.Familykey).subscribe((data)=> {
+          console.log(data);
          this.Members =  data.map(e => {
             return {
               id: e.payload.doc.id,
@@ -46,6 +47,7 @@ export class FamilytreePage implements OnInit {
               username: e.payload.doc.data()['username']
             };
           })
+          console.log(this.Members);
         })
       }catch(e){
         console.log(e);
@@ -55,6 +57,7 @@ export class FamilytreePage implements OnInit {
     this.FormCreateFamilyHead = this.fb.group({
       Name: new FormControl('',Validators.required),
       username: new FormControl('',Validators.required),
+      FamilyKey : this.Familykey
       //ishead:true
     })
     
@@ -62,9 +65,11 @@ export class FamilytreePage implements OnInit {
 
   CreateRecord() {
     console.log(this.FormCreateFamilyHead.value);
+    this.FormCreateFamilyHead.value.FamilyKey = this.Familykey;
     this.firebaseService.create_Member(this.FormCreateFamilyHead.value).then(resp => {
       console.log(resp.id);
-      this._storage.set('PersonalID',resp.id);
+     // this._storage.set('PersonalID',resp.id);
+      this.FormCreateFamilyHead.reset();
     })
       .catch(error => {
         console.log(error);
