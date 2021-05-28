@@ -77,12 +77,13 @@ export class FamilytreePage implements OnInit {
   }
 
  async OnclickMember(m){
-  let name = await this._storage.set("name_user",m.Name);
-let ID = await this._storage.set("fcmID",m.id);
-let uname = await this._storage.set("Current_uname",m.username);
+   console.log(m);
+//   let name = await this._storage.set("name_user",m.Name);
+// let ID = await this._storage.set("fcmID",m.id);
+// let uname = await this._storage.set("Current_uname",m.username);
 
-    //console.log(name,ID,uname);
-    this.route.navigate(['/expenses/'+ID]);
+//     //console.log(name,ID,uname);
+//     this.route.navigate(['/expenses/'+ID]);
   }
 
 }
