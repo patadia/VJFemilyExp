@@ -24,9 +24,8 @@ export class HomePage {
   }
 
   async movetoexpense(id:string){
+   // alert(id);
     if(id != null){
-
-      
       this.route.navigate(['./expenses',id]);
     }
   }
@@ -45,6 +44,7 @@ export class HomePage {
       
       let check = await this._storage?.get('ISKeyUser');
       console.log(check);
+     // alert(check);
       if(check === 'Logedin'){
         let userid = await this.storage.get('KeyUserID');
         console.log(userid);
@@ -55,11 +55,13 @@ export class HomePage {
         console.log(check);
           // this.route.navigate(['./familytree']);
           let userid = await this.storage.get('KeyUserID');
+         // alert(userid);
           this.movetoexpense(userid);
 
       }
 
     } catch (error) {
+      alert(error);
       console.log(error);
     }
   }

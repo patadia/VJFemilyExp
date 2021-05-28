@@ -30,7 +30,7 @@ export class FirebaseService {
 
   varify_Members(record:any) {
     return this.firestore.collection(this.Membercollection,ref=> ref.where('username','==',record.username)
-    .where('password','==',record.password)).valueChanges();
+    .where('password','==',record.password)).snapshotChanges();
   }
 
   varify_user(record:any) {

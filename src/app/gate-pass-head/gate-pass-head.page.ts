@@ -73,9 +73,11 @@ export class GatePassHeadPage implements OnInit {
            veryfysub.unsubscribe();
           }
           else{
-            let ID = await this._storage.set("fcmID",d[0].id);
-            let userid = await this.storage.set("KeyUserID",d[0].id);
-            this._headmem = d[0] as headMember;
+            let ID = await this._storage.set("fcmID",d[0].payload.doc.id);
+            let userid = await this.storage.set("KeyUserID",d[0].payload.doc.id);
+            console.log(d[0].payload.doc.data());
+            //alert(userid);
+            this._headmem =d[0].payload.doc.data() as headMember;
             this.gotoMemberListPage();
             console.log('we can go ahead');
             veryfysub.unsubscribe();
