@@ -107,6 +107,7 @@ export class GatePassHeadPage implements OnInit {
      let ID = await this._storage?.set('familykeyID',this._headmem.FamilyKey);
      console.log('family key',ID);
      let name = await this._storage.set("name_user",this._headmem.Name);
+     
     //
     let keyuserid = await this._storage?.set('ISKeyUser','HeadLogedin');
      let uname = await this._storage.set("Current_uname",this._headmem.username);
