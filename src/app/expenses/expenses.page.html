@@ -44,7 +44,12 @@
   <hr>
   <div class="listdiv">
     <ion-list class="listmain" >
-      <ion-item *ngFor="let e of ExpennseList">
+      <ion-item-sliding *ngFor="let e of ExpennseList">
+        <ion-item-options side="end">
+          <!-- <ion-item-option (click)="favorite(item)">Favorite</ion-item-option> -->
+          <ion-item-option color="danger" (click)="Delete(e.id)">Delete</ion-item-option>
+        </ion-item-options>
+      <ion-item >
        
 
         <div class="explistcontainer">
@@ -68,6 +73,7 @@
 
 
       </ion-item>
+      </ion-item-sliding> 
     </ion-list>
   </div>
 

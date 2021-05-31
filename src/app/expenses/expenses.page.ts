@@ -104,13 +104,14 @@ export class ExpensesPage implements OnInit {
 
         edata.forEach(e => {
           let pusher = {
-            Title: e.Title,
-            Amount: e.Amount,
-            Transaction_Type: e.Transaction_Type,
-            date_on: e.date_on,
-            Date_unix: e.Date_unix,
-            full_date: e.full_date,
-            byName: e.byName
+            id: e.payload.doc.id,
+            Title: e.payload.doc.data()['Title'],
+            Amount:e.payload.doc.data()['Amount'],
+            Transaction_Type: e.payload.doc.data()['Transaction_Type'],
+            date_on: e.payload.doc.data()['date_on'],
+            Date_unix: e.payload.doc.data()['Date_unix'],
+            full_date: e.payload.doc.data()['full_date'],
+            byName: e.payload.doc.data()['byName'],
           }
           this.ExpennseList.push(pusher);
           if (e.Transaction_Type == 'debit') {
@@ -188,6 +189,13 @@ export class ExpensesPage implements OnInit {
 
   opendatepicker() {
 
+  }
+
+  async Delete(id){
+    console.log(id);
+   var del = await this.fire.delete_Expense(id);
+   this.getdata_expense(this.paramID);
+   
   }
 
 }

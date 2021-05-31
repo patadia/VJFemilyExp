@@ -42,8 +42,8 @@ export class FirebaseService {
     this.firestore.doc(this.Membercollection + '/' + recordID).update(record);
   }
 
-  delete_Member(record_id) {
-    this.firestore.doc(this.Membercollection + '/' + record_id).delete();
+  delete_Expense(record_id) {
+    this.firestore.doc(this.expensetable + '/' + record_id).delete();
   }
 
   create_Linkmember(token:string,id:string){
@@ -63,20 +63,22 @@ export class FirebaseService {
   }
 
   Read_expbyMonth(year:number,Month:number){
-    const start = new Date(year,Month,1);
-    const daysinmonth = new Date(year,Month,0).getDate();
-    const end = new Date(year,Month,daysinmonth);
+    let month = Month ;
+    const start = new Date(year,month,1);
+    const daysinmonth = new Date(year,month+1,0).getDate();
+    console.log(daysinmonth,month,year);
+    const end = new Date(year,month,daysinmonth,23,59,59);
     console.log(start);
     console.log(end);
-  // var start_u =  firebase.default.firestore.Timestamp.fromDate(start);
-  // var end_u =  firebase.default.firestore.Timestamp.fromDate(end);
+  //var start_u =  firebase.default.firestore.Timestamp.fromDate(start);
+   //var end_u =  firebase.default.firestore.Timestamp.fromDate(end);
      let start_unix =  parseInt((start.getTime() / 1000).toFixed(0));
      let End_unix =  parseInt((end.getTime() / 1000).toFixed(0));
-     console.log(start_unix);
-     console.log(End_unix);
+    // console.log(start_unix);
+     //console.log(End_unix);
     return this.firestore.collection(this.expensetable, ref => ref
     .where('Date_unix', '>=',  start_unix)
-    .where('Date_unix', '<=',  End_unix)).valueChanges()
+    .where('Date_unix', '<=',  End_unix)).snapshotChanges()
     
   }
 
