@@ -1,0 +1,29 @@
+<ion-split-pane contentId="menu">
+  <ion-menu contentId="menu" side="start" type="overlay">
+    <ion-header>
+      <ion-toolbar color="primary">
+        <ion-title>Family Expenses</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-menu-toggle autoHide="false">
+
+        <ion-item (click)="GotoMenu('expenses')">
+          <ion-label>Expenses</ion-label>
+        </ion-item>
+      </ion-menu-toggle>
+      <ion-menu-toggle autoHide="false">
+        <ion-item (click)="GotoMenu('familytree')">
+          <ion-label>Family Tree</ion-label>
+        </ion-item>
+      </ion-menu-toggle>
+      <ion-menu-toggle autoHide="false">
+
+        <ion-item (click)="GotoMenu('home')">
+          <ion-label>Logout</ion-label>
+        </ion-item>
+      </ion-menu-toggle>
+    </ion-content>
+  </ion-menu>
+  <ion-router-outlet id="menu"></ion-router-outlet>
+</ion-split-pane>

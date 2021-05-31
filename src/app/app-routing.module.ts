@@ -16,12 +16,16 @@ const routes: Routes = [
     loadChildren: () => import('./familytree/familytree.module').then( m => m.FamilytreePageModule)
   },
   {
-    path: 'expenses/:ID',
+    path: 'expenses',
     loadChildren: () => import('./expenses/expenses.module').then( m => m.ExpensesPageModule)
   },
   {
     path: 'gate-pass-head',
     loadChildren: () => import('./gate-pass-head/gate-pass-head.module').then( m => m.GatePassHeadPageModule)
+  },
+  {
+    path: 'split-master',
+    loadChildren: () => import('./split-master/split-master.module').then( m => m.SplitMasterPageModule)
   },
 ];
 

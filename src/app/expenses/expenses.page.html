@@ -1,7 +1,9 @@
 <ion-header>
   <ion-toolbar>
     <div class="headerExpense">
-
+      <ion-buttons>
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
       <ion-title class="headtitle">Welcome {{name}} </ion-title>
       <ion-item>
         <!-- <ion-icon name="calendar-outline"></ion-icon> -->
@@ -11,7 +13,7 @@
           <label class="labelDate">{{setdate | date:'MMMM yy'}}</label>
           <ion-icon class="iconcal" name="md-calculator"></ion-icon>
           <input class="btn btn-dark form-controll cdatepick" type="date" id="pickdate" [(ngModel)]="datepick" (change)="changenewdate(datepick)">
-          <ion-icon name="log-out-outline" (click)="Logout()" class="logoutbtn"></ion-icon>
+          <!-- <ion-icon name="log-out-outline" (click)="Logout()" class="logoutbtn"></ion-icon> -->
         <!-- </div> -->
       </ion-item>
      

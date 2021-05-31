@@ -26,7 +26,7 @@ export class HomePage {
   async movetoexpense(id:string){
    // alert(id);
     if(id != null){
-      this.route.navigate(['./expenses',id]);
+      this.route.navigate(['./split-master']);
     }
   }
 
@@ -117,4 +117,5 @@ export class HomePage {
     return await pauth_popover.present(); 
 
   }
+
 }

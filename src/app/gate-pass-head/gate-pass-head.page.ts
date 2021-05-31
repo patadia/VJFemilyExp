@@ -113,7 +113,7 @@ export class GatePassHeadPage implements OnInit {
     //
     let keyuserid = await this._storage?.set('ISKeyUser','HeadLogedin');
      let uname = await this._storage.set("Current_uname",this._headmem.username);
-     this.route.navigate(['./familytree']);
+     this.route.navigate(['./split-master/familytree']);
    } catch (error) {
      console.log('on other page to go',error);
    }

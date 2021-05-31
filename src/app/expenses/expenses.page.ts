@@ -61,11 +61,11 @@ export class ExpensesPage implements OnInit {
 
   }
 
-  async Logout() {
-    console.log('logout');
-    await this._storage.clear();
-    this.rou.navigate(['./home']);
-  }
+  // async Logout() {
+  //   console.log('logout');
+  //   await this._storage.clear();
+  //   this.rou.navigate(['./home']);
+  // }
 
   ngOnInit() {
     this.routeSub = this.route.params.subscribe(params => {
