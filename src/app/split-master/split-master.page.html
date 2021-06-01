@@ -12,7 +12,7 @@
           <ion-label>Expenses</ion-label>
         </ion-item>
       </ion-menu-toggle>
-      <ion-menu-toggle autoHide="false">
+      <ion-menu-toggle autoHide="false" *ngIf="!ishidden">
         <ion-item (click)="GotoMenu('familytree')">
           <ion-label>Family Tree</ion-label>
         </ion-item>

@@ -1,8 +1,10 @@
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PopoverController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
+import { Subscription } from 'rxjs';
 import { PasswordAdminComponent } from '../password-admin/password-admin.component';
 import { FirebaseService } from '../services/firebase.service';
 
@@ -15,6 +17,7 @@ export class HomePage {
   private _storage: Storage | null = null;
   public handle:string;
   Formverify: FormGroup;
+  private verifysub: Subscription;
   constructor(private route: Router,
      private storage: Storage,public popoverc:PopoverController, 
      private firebaseService:FirebaseService
@@ -70,7 +73,7 @@ export class HomePage {
   async verifyRecord(){
     console.log(this.Formverify.value);
       try {
-        this.firebaseService.varify_user(this.Formverify.value).subscribe(async(d:any)=>{
+       this.verifysub =  this.firebaseService.varify_user(this.Formverify.value).subscribe(async(d:any)=>{
           console.log(d);
             if(d.length>0){
               let ID = await this._storage?.set('KeyUserID',d[0].id);
@@ -81,7 +84,9 @@ export class HomePage {
               this.Formverify.reset();
                 this.movetoexpense(d[0].payload.doc.id);
             }else{
+              this.Formverify.reset();
               alert('No user found.');
+             this.UnsubScribe();
             }
         })
       } catch (error) {
@@ -116,6 +121,10 @@ export class HomePage {
     });
     return await pauth_popover.present(); 
 
+  }
+
+  async UnsubScribe(){
+    this.verifysub.unsubscribe();
   }
 
 }

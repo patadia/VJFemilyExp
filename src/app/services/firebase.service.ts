@@ -66,7 +66,7 @@ export class FirebaseService {
     let month = Month ;
     const start = new Date(year,month,1);
     const daysinmonth = new Date(year,month+1,0).getDate();
-    console.log(daysinmonth,month,year);
+    //console.log(daysinmonth,month,year);
     const end = new Date(year,month,daysinmonth,23,59,59);
     console.log(start);
     console.log(end);
@@ -78,7 +78,7 @@ export class FirebaseService {
      //console.log(End_unix);
     return this.firestore.collection(this.expensetable, ref => ref
     .where('Date_unix', '>=',  start_unix)
-    .where('Date_unix', '<=',  End_unix)).snapshotChanges()
+    .where('Date_unix', '<=',  End_unix).orderBy('Date_unix','desc')).snapshotChanges()
     
   }
 

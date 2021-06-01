@@ -9,16 +9,17 @@ import { Storage } from '@ionic/storage';
 })
 export class SplitMasterPage implements OnInit {
   private _storage: Storage | null = null;
-  constructor(public route:Router,
-    private storage: Storage) {this.init(); }
+  ishidden: boolean = true;
+  constructor(public route: Router,
+    private storage: Storage) { this.init(); }
 
-  GotoMenu(path){
-    if(path === 'home'){
+  GotoMenu(path) {
+    if (path === 'home') {
       this._storage.clear();
       this.route.navigate(['./home']);
-    }else{
+    } else {
 
-      this.route.navigate(['split-master/'+path]);
+      this.route.navigate(['split-master/' + path]);
     }
   }
 
@@ -26,7 +27,9 @@ export class SplitMasterPage implements OnInit {
     // If using, define drivers here: await this.storage.defineDriver(/*...*/);
     const storage = await this.storage.create();
     this._storage = storage;
-    
+    let check = await this._storage?.get('ISKeyUser');
+    if (check === 'HeadLogedin')
+      this.ishidden = false;
 
 
   }

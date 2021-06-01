@@ -57,8 +57,6 @@ export class ExpensesPage implements OnInit {
     const storage = await this.storage.create();
     this._storage = storage;
     this.name = await this._storage?.get('name_user');
-
-
   }
 
   // async Logout() {
@@ -96,12 +94,12 @@ export class ExpensesPage implements OnInit {
       //  });
       console.log('getdata_call');
       let nedate = new Date(this.datepick);
-      this.Creditbal = 0.0;
-      this.Debitbal = 0.0;
+     
       this.readExpdataSub = this.fire.Read_expbyMonth(nedate.getFullYear(), nedate.getMonth()).subscribe((edata: any) => {
         console.log('check', edata);
         this.ExpennseList = [];
-
+        this.Creditbal = 0.0;
+        this.Debitbal = 0.0;
         edata.forEach(e => {
           let pusher = {
             id: e.payload.doc.id,
@@ -114,13 +112,13 @@ export class ExpensesPage implements OnInit {
             byName: e.payload.doc.data()['byName'],
           }
           this.ExpennseList.push(pusher);
-          if (e.Transaction_Type == 'debit') {
-            this.Debitbal += parseFloat(e.Amount);
+          if (e.payload.doc.data()['Transaction_Type'] == 'debit') {
+            this.Debitbal += parseFloat(e.payload.doc.data()['Amount']);
           }
           else {
-            this.Creditbal += parseFloat(e.Amount);
+            this.Creditbal += parseFloat(e.payload.doc.data()['Amount']);
           }
-          this.Subscription_release();
+        //  this.Subscription_release();
         });
 
       })
@@ -163,7 +161,7 @@ export class ExpensesPage implements OnInit {
     try {
       this.fire.Create_expense(Add_data).then((data) => {
         console.log('add data', data);
-        this.getdata_expense(this.paramID);
+      //  this.getdata_expense(this.paramID);
 
       });
     } catch (error) {
@@ -173,6 +171,7 @@ export class ExpensesPage implements OnInit {
 
   ChangedDate(Monthdater) {
     console.log('datechanges')
+    this.Subscription_release();
     this.getdata_expense(this.paramID);
   }
 
@@ -184,6 +183,7 @@ export class ExpensesPage implements OnInit {
     console.log(datepick);
     this.setdate = new Date(datepick);
     console.log('datechanges_picker', this.setdate);
+    this.Subscription_release();
     this.getdata_expense(this.paramID);
   }
 
@@ -192,9 +192,16 @@ export class ExpensesPage implements OnInit {
   }
 
   async Delete(id){
-    console.log(id);
-   var del = await this.fire.delete_Expense(id);
-   this.getdata_expense(this.paramID);
+    let check = await this._storage?.get('ISKeyUser');
+    if (check === 'HeadLogedin')
+      {
+        console.log(id);
+        var del = await this.fire.delete_Expense(id);
+        this.Subscription_release();
+        this.getdata_expense(this.paramID);
+      }else{
+        alert('You do not have permission to delete!');
+      }
    
   }
 
