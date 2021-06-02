@@ -10,7 +10,7 @@
         <!-- <ion-datetime displayFormat="MMMM, YYYY" value="" [(ngModel)]="monthDate" (ionChange)="ChangedDate(monthDate)"></ion-datetime> -->
         <!-- <div> -->
           <!-- <label>{{setdate | date:'MMMM yy'}}</label> -->
-          <label class="labelDate">{{setdate | date:'MMMM yy'}}</label>
+          <label class="labelDate">{{setdate | date:'dd MMM yyyy'}}</label>
           <ion-icon class="iconcal" name="md-calculator"></ion-icon>
           <input class="btn btn-dark form-controll cdatepick" type="date" id="pickdate" [(ngModel)]="datepick" (change)="changenewdate(datepick)">
           <!-- <ion-icon name="log-out-outline" (click)="Logout()" class="logoutbtn"></ion-icon> -->

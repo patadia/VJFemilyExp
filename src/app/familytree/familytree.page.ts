@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core'
 import { FirebaseService } from '../services/firebase.service';
 import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
-import{Storage} from '@ionic/storage';
+import{StorageService} from '../services/storage.service';
 import { Router } from '@angular/router';
 interface Familytree {
   Name: string;
   username: number;
   ishead: boolean;
+  isDelete:boolean;
 }
 
 @Component({
@@ -15,23 +16,27 @@ interface Familytree {
   styleUrls: ['./familytree.page.scss'],
 })
 export class FamilytreePage implements OnInit {
-  private _storage: Storage | null = null;
+  
   public Familykey:string = '';
   Members = [];
   _familydata: Familytree;
   FormCreateFamilyHead: FormGroup;
   constructor(private firebaseService:FirebaseService,
-    public fb: FormBuilder,private storage:Storage,private route:Router) {
+    public fb: FormBuilder,
+   public Store:StorageService,
+    private route:Router) {
       this._familydata = {} as Familytree;
-      this.init();
+      this.Store.init().then(()=>{
+
+        this.init();
+      })
       
      }
 
      async init() {
       // If using, define drivers here: await this.storage.defineDriver(/*...*/);
-      const storage = await this.storage.create();
-      this._storage = storage;
-      this.Familykey =  await this._storage?.get('familykeyID');
+     
+      this.Familykey =  await this.Store.GetStorevalue('familykeyID');
 
       this.GetMembers();
     }
@@ -57,10 +62,15 @@ export class FamilytreePage implements OnInit {
     this.FormCreateFamilyHead = this.fb.group({
       Name: new FormControl('',Validators.required),
       username: new FormControl('',Validators.required),
-      FamilyKey : this.Familykey
+      FamilyKey : this.Familykey,
+      isDelete :false
       //ishead:true
     })
     
+  }
+
+  ngOnDestroy() {
+   
   }
 
   CreateRecord() {
@@ -84,6 +94,11 @@ export class FamilytreePage implements OnInit {
 
 //     //console.log(name,ID,uname);
 //     this.route.navigate(['/expenses/'+ID]);
+  }
+  Delete(M){
+    let member = M as Familytree;
+    member.isDelete = true;
+    this.firebaseService.update_Member(M.id,member);
   }
 
 }

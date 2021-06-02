@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Storage } from '@ionic/storage';
+import { StorageService } from '../services/storage.service';
 
 @Component({
   selector: 'app-split-master',
@@ -8,14 +8,19 @@ import { Storage } from '@ionic/storage';
   styleUrls: ['./split-master.page.scss'],
 })
 export class SplitMasterPage implements OnInit {
-  private _storage: Storage | null = null;
+ 
   ishidden: boolean = true;
   constructor(public route: Router,
-    private storage: Storage) { this.init(); }
+    private Store: StorageService) { 
+      this.Store.init().then(()=>{
+
+        this.init(); 
+      })  
+    }
 
   GotoMenu(path) {
     if (path === 'home') {
-      this._storage.clear();
+     this.Store.ClearStore();
       this.route.navigate(['./home']);
     } else {
 
@@ -25,9 +30,8 @@ export class SplitMasterPage implements OnInit {
 
   async init() {
     // If using, define drivers here: await this.storage.defineDriver(/*...*/);
-    const storage = await this.storage.create();
-    this._storage = storage;
-    let check = await this._storage?.get('ISKeyUser');
+   
+    let check = await this.Store.GetStorevalue('ISKeyUser');
     if (check === 'HeadLogedin')
       this.ishidden = false;
 

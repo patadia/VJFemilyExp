@@ -1,7 +1,7 @@
 import { Component, OnInit,ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { FirebaseService } from '../services/firebase.service';
 import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
-import{Storage} from '@ionic/storage';
+import{StorageService} from '../services/storage.service';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 
@@ -20,15 +20,20 @@ interface headMember{
   changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class GatePassHeadPage implements OnInit {
-  private _storage: Storage | null = null;
+ 
   FormLoginregister: FormGroup;
   public ishidden:boolean = false;
   registerNote:string ='';
   _headmem : headMember;
+
   constructor(private firebaseService:FirebaseService,
-    public fb: FormBuilder,private storage:Storage,private cd: ChangeDetectorRef,
+    public fb: FormBuilder,
+    private Store:StorageService,
+    private cd: ChangeDetectorRef,
     public route:Router) {
-      this.init();
+      this.Store.init()
+      
+      
       this._headmem = {} as headMember;
      }
 
@@ -52,11 +57,7 @@ export class GatePassHeadPage implements OnInit {
     return text;
   }
 
-  async init() {
-    // If using, define drivers here: await this.storage.defineDriver(/*...*/);
-    const storage = await this.storage.create();
-    this._storage = storage;
-  }
+ 
 
   LoginRegister(){
     try {
@@ -73,8 +74,8 @@ export class GatePassHeadPage implements OnInit {
            veryfysub.unsubscribe();
           }
           else{
-            let ID = await this._storage.set("fcmID",d[0].payload.doc.id);
-            let userid = await this.storage.set("KeyUserID",d[0].payload.doc.id);
+            let ID = await this.Store.SetStorageData("fcmID",d[0].payload.doc.id);
+            let userid = await this.Store.SetStorageData("KeyUserID",d[0].payload.doc.id);
             console.log(d[0].payload.doc.data());
             //alert(userid);
             this._headmem =d[0].payload.doc.data() as headMember;
@@ -93,8 +94,8 @@ export class GatePassHeadPage implements OnInit {
     try {
    this.firebaseService.create_Member(this.FormLoginregister.value).then(async(account)=>{
      console.log(account);
-     let ID = await this._storage.set("fcmID",account.id);
-     let userid = await this.storage.set("KeyUserID",account.id);
+     let ID = await this.Store.SetStorageData("fcmID",account.id);
+     let userid = await this.Store.SetStorageData("KeyUserID",account.id);
      this._headmem = this.FormLoginregister.value as headMember;
       this.gotoMemberListPage();
    })
@@ -106,13 +107,13 @@ export class GatePassHeadPage implements OnInit {
 
  async gotoMemberListPage(){
    try {
-     let ID = await this._storage?.set('familykeyID',this._headmem.FamilyKey);
+     let ID = await this.Store.SetStorageData('familykeyID',this._headmem.FamilyKey);
      console.log('family key',ID);
-     let name = await this._storage.set("name_user",this._headmem.Name);
+     let name = await this.Store.SetStorageData("name_user",this._headmem.Name);
      
     //
-    let keyuserid = await this._storage?.set('ISKeyUser','HeadLogedin');
-     let uname = await this._storage.set("Current_uname",this._headmem.username);
+    let keyuserid = await this.Store.SetStorageData('ISKeyUser','HeadLogedin');
+     let uname = await this.Store.SetStorageData("Current_uname",this._headmem.username);
      this.route.navigate(['./split-master/familytree']);
    } catch (error) {
      console.log('on other page to go',error);

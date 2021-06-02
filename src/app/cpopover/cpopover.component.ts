@@ -1,48 +1,66 @@
 import { Component, OnInit } from '@angular/core';
-import { PopoverController } from '@ionic/angular';
-import{Storage} from '@ionic/storage';
+import {  PopoverController } from '@ionic/angular';
+import{StorageService} from '../services/storage.service';
 
 @Component({
   selector: 'app-cpopover',
   templateUrl: './cpopover.component.html',
   styleUrls: ['./cpopover.component.scss'],
 })
+
+
+
 export class CPopoverComponent implements OnInit {
 public title:string ;
 public amount:any ;
 public type:any;
 public byName:string='';
-private _storage: Storage | null = null;
-  constructor(private popover:PopoverController, private storage:Storage) { 
-    this.init();
+
+  constructor(private popover:PopoverController, 
+    private Store:StorageService) { 
+
+      this.Store.init().then(()=>{
+
+        this.init();
+      })
   }
   
 
   async init() {
     // If using, define drivers here: await this.storage.defineDriver(/*...*/);
-    const storage = await this.storage.create();
-    this._storage = storage;
-    this.byName =  await this._storage?.get('name_user');
+
+    this.byName =  await this.Store.GetStorevalue('name_user');
 
  
   }
-  ngOnInit() {}
-  
+  ngOnInit() {
+   
+  }
+
   Add_data(){
+    
     const data = {
       Title:(<HTMLInputElement>document.getElementById('title')).value,
-      Amount:(<HTMLInputElement>document.getElementById('amount')).value,
+      Amount:((<HTMLInputElement>document.getElementById('amount')).value).replace(/\D/g, ''),
       Transaction_Type : this.type,
       date_on: new Date().toLocaleString(),
       Date_unix: parseInt((new Date().getTime() / 1000).toFixed(0)),
       full_date: new Date(),
       byName:this.byName
     }
-    //console.log(data);
 
+    //console.log(data);
+    if(!data.Title || !data.Amount || !data.Transaction_Type){
+      alert('Add All the Field');
+      return;
+    }
     this.popover.dismiss({
       "Add_data":data
     })
+  }
+
+  verifyModel(dta:any){
+
   }
 
   onChange(mySelect){

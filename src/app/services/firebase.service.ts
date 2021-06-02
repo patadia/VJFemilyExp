@@ -25,7 +25,7 @@ export class FirebaseService {
   }
 
   read_Memberss(familykey) {
-    return this.firestore.collection(this.Membercollection,ref=> ref.where('FamilyKey','==',familykey)).snapshotChanges();
+    return this.firestore.collection(this.Membercollection,ref=> ref.where('FamilyKey','==',familykey).where('isDelete','==',false)).snapshotChanges();
   }
 
   varify_Members(record:any) {
@@ -41,6 +41,8 @@ export class FirebaseService {
   update_Member(recordID, record) {
     this.firestore.doc(this.Membercollection + '/' + recordID).update(record);
   }
+
+ 
 
   delete_Expense(record_id) {
     this.firestore.doc(this.expensetable + '/' + record_id).delete();

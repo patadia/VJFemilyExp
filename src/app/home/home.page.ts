@@ -1,4 +1,5 @@
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { stringify } from '@angular/compiler/src/util';
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -7,23 +8,27 @@ import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs';
 import { PasswordAdminComponent } from '../password-admin/password-admin.component';
 import { FirebaseService } from '../services/firebase.service';
-
+import {StorageService} from '../services/storage.service'
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-  private _storage: Storage | null = null;
+  //private _storage: Storage | null = null;
   public handle:string;
   Formverify: FormGroup;
   private verifysub: Subscription;
   constructor(private route: Router,
-     private storage: Storage,public popoverc:PopoverController, 
+     //private storage: Storage,
+     public popoverc:PopoverController, 
      private firebaseService:FirebaseService
-    ,public fb:FormBuilder) {
-   
-    this.init();
+    ,public fb:FormBuilder,
+    public Store:StorageService) {
+      this.Store.init().then(()=>{
+        this.init();
+      })
+    
   }
 
   async movetoexpense(id:string){
@@ -41,15 +46,15 @@ export class HomePage {
   }
 
   async init(){
-    const storage = await this.storage.create();
-    this._storage = storage;
+    // const storage = await this.storage.create();
+    // this._storage = storage;
     try {
       
-      let check = await this._storage?.get('ISKeyUser');
+      let check = await this.Store.GetStorevalue('ISKeyUser');
       console.log(check);
      // alert(check);
       if(check === 'Logedin'){
-        let userid = await this.storage.get('KeyUserID');
+        let userid = await this.Store.GetStorevalue('KeyUserID');
         console.log(userid);
           this.movetoexpense(userid);
       }
@@ -57,11 +62,12 @@ export class HomePage {
       if(check === 'HeadLogedin'){
         console.log(check);
           // this.route.navigate(['./familytree']);
-          let userid = await this.storage.get('KeyUserID');
+          let userid = await this.Store.GetStorevalue('KeyUserID');
          // alert(userid);
           this.movetoexpense(userid);
 
       }
+    
 
     } catch (error) {
       alert(error);
@@ -76,13 +82,21 @@ export class HomePage {
        this.verifysub =  this.firebaseService.varify_user(this.Formverify.value).subscribe(async(d:any)=>{
           console.log(d);
             if(d.length>0){
-              let ID = await this._storage?.set('KeyUserID',d[0].id);
-              let usercheck = await this._storage?.set('ISKeyUser','Logedin');
-              let name = await this._storage.set("name_user",d[0].payload.doc.data()['Name']);
-              let femID = await this._storage.set("fcmID",d[0].payload.doc.id);
-              let uname = await this._storage.set("Current_uname",d[0].payload.doc.data()['username']);
+              let ID = await this.Store.SetStorageData('KeyUserID',d[0].payload.doc.id);
+              console.log(ID);
+              let Loginuser = 'Logedin'
+              if(d[0].payload.doc.data()['ishead'] === true){
+                Loginuser = 'HeadLogedin'
+              }
+              let usercheck = await this.Store.SetStorageData('ISKeyUser',Loginuser);
+              console.log(usercheck);
+              let name = await this.Store.SetStorageData("name_user",d[0].payload.doc.data()['Name']);
+              let femID = await this.Store.SetStorageData("fcmID",d[0].payload.doc.id);
+              let uname = await this.Store.SetStorageData("Current_uname",d[0].payload.doc.data()['username']);
+              let fkey = await this.Store.SetStorageData("familykeyID",d[0].payload.doc.data()['FamilyKey']);
               this.Formverify.reset();
-                this.movetoexpense(d[0].payload.doc.id);
+              this.movetoexpense(d[0].payload.doc.id);
+              this.UnsubScribe();
             }else{
               this.Formverify.reset();
               alert('No user found.');

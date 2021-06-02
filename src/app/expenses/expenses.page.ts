@@ -5,7 +5,7 @@ import { IonRouterOutlet, Platform, PopoverController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { CPopoverComponent } from '../cpopover/cpopover.component';
 import { FirebaseService } from '../services/firebase.service';
-import { Storage } from '@ionic/storage';
+import { StorageService } from '../services/storage.service';
 import { DatePipe } from '@angular/common';
 import { App } from '@capacitor/app';
 import { Router } from '@angular/router';
@@ -20,7 +20,6 @@ import { Router } from '@angular/router';
 export class ExpensesPage implements OnInit {
   private routeSub: Subscription;
   name: string = '';
-  private _storage: Storage | null = null;
   monthDate: any = new Date().toISOString();
   datepick: any;
   public ExpennseList: any = [];
@@ -33,13 +32,16 @@ export class ExpensesPage implements OnInit {
   constructor(private route: ActivatedRoute,
     private popover: PopoverController,
     private fire: FirebaseService,
-    private storage: Storage,
+    private Store: StorageService,
     public datepipe: DatePipe,
     private platform: Platform,
     private rou: Router,
     private routerOutlet: IonRouterOutlet
   ) {
-    this.init();
+    this.Store.init().then(()=>{
+
+      this.init();
+    })
     //let datelog = document.getElementById('pickdate');
     this.datepick = this.datepipe.transform(new Date(), 'yyyy-MM-dd');
     console.log('date new', this.datepick);
@@ -53,10 +55,9 @@ export class ExpensesPage implements OnInit {
   }
 
   async init() {
-    // If using, define drivers here: await this.storage.defineDriver(/*...*/);
-    const storage = await this.storage.create();
-    this._storage = storage;
-    this.name = await this._storage?.get('name_user');
+   
+  
+    this.name = await this.Store.GetStorevalue('name_user');
   }
 
   // async Logout() {
@@ -129,6 +130,7 @@ export class ExpensesPage implements OnInit {
   }
   ngOnDestroy() {
     this.routeSub.unsubscribe();
+    this.Subscription_release();
   }
   async getdate() {
     var datetoday = new Date().toISOString();
@@ -192,7 +194,7 @@ export class ExpensesPage implements OnInit {
   }
 
   async Delete(id){
-    let check = await this._storage?.get('ISKeyUser');
+    let check = await this.Store.GetStorevalue('ISKeyUser');
     if (check === 'HeadLogedin')
       {
         console.log(id);
