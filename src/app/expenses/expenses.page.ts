@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ActivatedRoute } from '@angular/router';
-import { IonRouterOutlet, Platform, PopoverController } from '@ionic/angular';
+import { IonRouterOutlet, Platform, PopoverController, ActionSheetController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { CPopoverComponent } from '../cpopover/cpopover.component';
 import { FirebaseService } from '../services/firebase.service';
@@ -36,9 +36,10 @@ export class ExpensesPage implements OnInit {
     public datepipe: DatePipe,
     private platform: Platform,
     private rou: Router,
-    private routerOutlet: IonRouterOutlet
+    private routerOutlet: IonRouterOutlet,
+    private actionSheetCtrl: ActionSheetController
   ) {
-    this.Store.init().then(()=>{
+    this.Store.init().then(() => {
 
       this.init();
     })
@@ -55,8 +56,8 @@ export class ExpensesPage implements OnInit {
   }
 
   async init() {
-   
-  
+
+
     this.name = await this.Store.GetStorevalue('name_user');
   }
 
@@ -95,7 +96,7 @@ export class ExpensesPage implements OnInit {
       //  });
       console.log('getdata_call');
       let nedate = new Date(this.datepick);
-     
+
       this.readExpdataSub = this.fire.Read_expbyMonth(nedate.getFullYear(), nedate.getMonth()).subscribe((edata: any) => {
         console.log('check', edata);
         this.ExpennseList = [];
@@ -105,7 +106,7 @@ export class ExpensesPage implements OnInit {
           let pusher = {
             id: e.payload.doc.id,
             Title: e.payload.doc.data()['Title'],
-            Amount:e.payload.doc.data()['Amount'],
+            Amount: e.payload.doc.data()['Amount'],
             Transaction_Type: e.payload.doc.data()['Transaction_Type'],
             date_on: e.payload.doc.data()['date_on'],
             Date_unix: e.payload.doc.data()['Date_unix'],
@@ -119,7 +120,7 @@ export class ExpensesPage implements OnInit {
           else {
             this.Creditbal += parseFloat(e.payload.doc.data()['Amount']);
           }
-        //  this.Subscription_release();
+          //  this.Subscription_release();
         });
 
       })
@@ -163,7 +164,7 @@ export class ExpensesPage implements OnInit {
     try {
       this.fire.Create_expense(Add_data).then((data) => {
         console.log('add data', data);
-      //  this.getdata_expense(this.paramID);
+        //  this.getdata_expense(this.paramID);
 
       });
     } catch (error) {
@@ -193,18 +194,41 @@ export class ExpensesPage implements OnInit {
 
   }
 
-  async Delete(id){
+  async Delete(id) {
     let check = await this.Store.GetStorevalue('ISKeyUser');
-    if (check === 'HeadLogedin')
-      {
-        console.log(id);
-        var del = await this.fire.delete_Expense(id);
-        this.Subscription_release();
-        this.getdata_expense(this.paramID);
-      }else{
-        alert('You do not have permission to delete!');
+    if (check === 'HeadLogedin') {
+      console.log(id);
+      try {
+        let actionSheet = await this.actionSheetCtrl.create({
+          header: 'Are you sure, you wants to delete this expense?',
+          buttons: [{
+            text: 'Delete',
+            handler: async() => {
+
+              var del = await this.fire.delete_Expense(id);
+              this.Subscription_release();
+              this.getdata_expense(this.paramID);
+              let navTransition = actionSheet.dismiss();
+              return false;
+            },
+          },
+          {
+            text: 'No keep it!',
+            handler: () => {
+              let navTransition = actionSheet.dismiss();
+              return false;
+            },
+          }]
+        });
+
+        await actionSheet.present();
+      } catch (error) {
+        console.log(error);
       }
-   
+    } else {
+      alert('You do not have permission to delete!');
+    }
+
   }
 
 }

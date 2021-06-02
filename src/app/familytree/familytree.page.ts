@@ -3,6 +3,7 @@ import { FirebaseService } from '../services/firebase.service';
 import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
 import{StorageService} from '../services/storage.service';
 import { Router } from '@angular/router';
+import { ActionSheetController } from '@ionic/angular';
 interface Familytree {
   Name: string;
   username: number;
@@ -24,7 +25,9 @@ export class FamilytreePage implements OnInit {
   constructor(private firebaseService:FirebaseService,
     public fb: FormBuilder,
    public Store:StorageService,
-    private route:Router) {
+    private route:Router,
+    public actionSheetCtrl:ActionSheetController
+    ) {
       this._familydata = {} as Familytree;
       this.Store.init().then(()=>{
 
@@ -47,9 +50,10 @@ export class FamilytreePage implements OnInit {
          this.Members =  data.map(e => {
             return {
               id: e.payload.doc.id,
-              
               Name: e.payload.doc.data()['Name'],
-              username: e.payload.doc.data()['username']
+              username: e.payload.doc.data()['username'],
+              ishead: e.payload.doc.data()['ishead']
+              
             };
           })
           console.log(this.Members);
@@ -86,19 +90,50 @@ export class FamilytreePage implements OnInit {
       });
   }
 
- async OnclickMember(m){
-   console.log(m);
-//   let name = await this._storage.set("name_user",m.Name);
-// let ID = await this._storage.set("fcmID",m.id);
-// let uname = await this._storage.set("Current_uname",m.username);
+//  async OnclickMember(m){
+//    console.log(m);
+// //   let name = await this._storage.set("name_user",m.Name);
+// // let ID = await this._storage.set("fcmID",m.id);
+// // let uname = await this._storage.set("Current_uname",m.username);
 
-//     //console.log(name,ID,uname);
-//     this.route.navigate(['/expenses/'+ID]);
-  }
-  Delete(M){
-    let member = M as Familytree;
-    member.isDelete = true;
-    this.firebaseService.update_Member(M.id,member);
+// //     //console.log(name,ID,uname);
+// //     this.route.navigate(['/expenses/'+ID]);
+//   }
+ async Delete(M){
+    try {
+      let member = M as Familytree;
+      console.log(member);
+      if(!member.ishead){
+      let actionSheet =await this.actionSheetCtrl.create({
+       header:'Are you sure, you wants to delete this member?',
+        buttons: [{
+            text: 'Delete',
+            handler: () => {
+              
+      member.isDelete = true;
+      this.firebaseService.update_Member(M.id,member);
+                let navTransition = actionSheet.dismiss();
+                return false;
+            },
+        },
+        {
+          text: 'No keep it!',
+          handler: () => {
+              let navTransition = actionSheet.dismiss();
+              return false;
+          },
+      }]
+        });
+    
+        await actionSheet.present(); 
+       }
+        else{
+          alert('Sorry, you tried to delete Head user 😱😱😱');
+        }
+      
+    } catch (error) {
+      console.log(error);
+    }
   }
 
 }
