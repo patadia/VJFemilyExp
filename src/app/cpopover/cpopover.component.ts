@@ -40,7 +40,7 @@ public byName:string='';
   Add_data(){
     
     const data = {
-      Title:(<HTMLInputElement>document.getElementById('title')).value,
+      Title:(<HTMLInputElement>document.getElementById('title')).value.trim(),
       Amount:((<HTMLInputElement>document.getElementById('amount')).value).replace(/\D/g, ''),
       Transaction_Type : this.type,
       date_on: new Date().toLocaleString(),
@@ -50,7 +50,7 @@ public byName:string='';
     }
 
     //console.log(data);
-    if(!data.Title || !data.Amount || !data.Transaction_Type){
+    if(!data.Title || !data.Amount || !data.Transaction_Type || ){
       alert('Add All the Field');
       return;
     }
