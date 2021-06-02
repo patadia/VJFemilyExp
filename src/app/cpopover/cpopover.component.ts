@@ -50,7 +50,7 @@ public byName:string='';
     }
 
     //console.log(data);
-    if(!data.Title || !data.Amount || !data.Transaction_Type || ){
+    if(!data.Title || !data.Amount || !data.Transaction_Type ){
       alert('Add All the Field');
       return;
     }
