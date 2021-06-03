@@ -7,6 +7,10 @@ import { environment } from './environments/environment';
 if (environment.production) {
   enableProdMode();
 }
-
-platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => console.log(err));
+fetch('https://firestoreconfig.herokuapp.com/confg').then(resp => resp.json()).then(config => {
+  window['firebase_config'] = config.firebase;
+  window['config'] = config;
+  platformBrowserDynamic().bootstrapModule(AppModule).catch(err => console.error(err));
+});
+// platformBrowserDynamic().bootstrapModule(AppModule)
+//   .catch(err => console.log(err));

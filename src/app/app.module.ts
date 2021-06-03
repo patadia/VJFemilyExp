@@ -4,23 +4,63 @@ import { RouteReuseStrategy } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { AngularFireModule } from '@angular/fire';
+import { AngularFireModule,FirebaseApp,FirebaseOptions, FIREBASE_OPTIONS } from '@angular/fire';
 import { environment } from 'src/environments/environment';
-import { AngularFirestoreModule,SETTINGS}from '@angular/fire/firestore'
+import { AngularFirestoreModule, SETTINGS } from '@angular/fire/firestore'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {Storage}from '@ionic/storage';
+import { Storage } from '@ionic/storage';
 import { DatePipe } from '@angular/common';
+
+
+export class AppConfigService {
+  static settings: IAppConfig;
+  constructor() { }
+  fireConfig() {
+    AppConfigService.settings = window['config'];
+    return window['firebase_config']
+  }
+}
+export interface IAppConfig {
+  production: boolean;
+  name: string;
+  firebase: {
+    apiKey: string;
+    authDomain: string;
+    databaseURL: string;
+    projectId: string;
+    storageBucket: string;
+    messagingSenderId: string;
+  };
+}
+export function initializeApp(appConfig: AppConfigService) {
+  return appConfig.fireConfig()
+}
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(),
-     AppRoutingModule,
-     FormsModule,ReactiveFormsModule,
-     BrowserModule,
-  AngularFireModule.initializeApp(environment.firebaseConfig),AngularFirestoreModule],
-  providers: [{ provide: RouteReuseStrategy, 
-    useClass: IonicRouteStrategy },Storage,DatePipe],
-  bootstrap: [AppComponent],
+    AppRoutingModule,
+    FormsModule, ReactiveFormsModule,
+    BrowserModule,
+    AngularFireModule, AngularFirestoreModule], //
+  providers: [
+    AppConfigService,
+    {
+      provide: FIREBASE_OPTIONS,//FIREBASE_OPTIONS.toString(),
+      deps: [AppConfigService],
+      useFactory: initializeApp
+    },
+      {
+        provide: RouteReuseStrategy,
+        useClass: IonicRouteStrategy
+      }, Storage, DatePipe],
+    bootstrap: [AppComponent],
 })
 
-export class AppModule {}
+
+export class AppModule {
+
+}
+
+

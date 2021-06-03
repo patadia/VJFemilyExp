@@ -75,7 +75,22 @@
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
 }
+ion-item-sliding{
+  display: block;
+  position: relative;
+  width: auto;
+  overflow: hidden;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-color: #e3e3e3;
+  margin-top: 5px;
+  margin-left: 2px;
+  margin-right: 2px;
+  border-radius: 20px;
 
+}
 @media (prefers-color-scheme: dark) {
   /*
    * Dark Colors
@@ -197,7 +212,7 @@
    */
 
   .md body {
-    --ion-background-color: #121212;
+    --ion-background-color: #000000;
     --ion-background-color-rgb: 18,18,18;
 
     --ion-text-color: #ffffff;
@@ -233,4 +248,22 @@
 
     --ion-card-background: #1e1e1e;
   }
+  ion-item-sliding{
+    display: block;
+    position: relative;
+    width: auto;
+    overflow: hidden;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: #1f1f1f;
+    margin-top: 5px;
+    margin-left: 2px;
+    margin-right: 2px;
+    border-radius: 20px;
+  
+  }
 }
+
+
