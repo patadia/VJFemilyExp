@@ -1,10 +1,14 @@
-<ion-header>
+<ion-header  translucent="true"  class="ion-no-border">
   <ion-toolbar>
-    <ion-title>Head Gate Pass</ion-title>
+    <div class="toolbardiv">
+
+      <ion-icon name="arrow-back-outline" class="ion-padding" [routerLink]="['/home']">back</ion-icon>
+      <ion-title>Head Gate Pass</ion-title>
+    </div>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content fullscreen="true">
   <form [formGroup]="FormLoginregister" (ngSubmit)="LoginRegister()">
     <ion-item>
       <ion-label position="floating">Name</ion-label>

@@ -8,7 +8,9 @@ import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs';
 import { PasswordAdminComponent } from '../password-admin/password-admin.component';
 import { FirebaseService } from '../services/firebase.service';
-import {StorageService} from '../services/storage.service'
+import {StorageService} from '../services/storage.service';
+import {AnimationOptions} from 'ngx-lottie';
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -19,6 +21,10 @@ export class HomePage {
   public handle:string;
   Formverify: FormGroup;
   private verifysub: Subscription;
+  options:AnimationOptions ={
+    path:'assets/expense.json'
+  }
+
   constructor(private route: Router,
      //private storage: Storage,
      public popoverc:PopoverController, 
@@ -139,6 +145,10 @@ export class HomePage {
 
   async UnsubScribe(){
     this.verifysub.unsubscribe();
+  }
+
+  Created(animation:AnimationEventInit){
+      console.log(animation);
   }
 
 }

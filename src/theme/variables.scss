@@ -1,16 +1,32 @@
 // Ionic Variables and Theming. For more info, please see:
 // http://ionicframework.com/docs/theming/
 
+
+.ion-color-primary {
+  --ion-color-base: var(--ion-color-primary);
+  --ion-color-base-rgb: var(--ion-color-primary-rgb);
+  --ion-color-contrast: var(--ion-color-primary-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-primary-contrast-rgb);
+  --ion-color-shade: var(--ion-color-primary-shade);
+  --ion-color-tint: var(--ion-color-primary-tint);
+}
+
 /** Ionic CSS Variables **/
 :root {
   /** primary **/
-  --ion-color-primary: #3880ff;
-  --ion-color-primary-rgb: 56, 128, 255;
+  // --ion-color-primary: #3880ff;
+  // --ion-color-primary-rgb: 56, 128, 255;
+  // --ion-color-primary-contrast: #ffffff;
+  // --ion-color-primary-contrast-rgb: 255, 255, 255;
+  // --ion-color-primary-shade: #3171e0;
+  // --ion-color-primary-tint: #4c8dff;
+  --ion-color-primary: #1576b2;
+  --ion-color-primary-rgb: 21,118,178;
   --ion-color-primary-contrast: #ffffff;
-  --ion-color-primary-contrast-rgb: 255, 255, 255;
-  --ion-color-primary-shade: #3171e0;
-  --ion-color-primary-tint: #4c8dff;
-
+  --ion-color-primary-contrast-rgb: 255,255,255;
+  --ion-color-primary-shade: #12689d;
+  --ion-color-primary-tint: #2c84ba;
+ 
   /** secondary **/
   --ion-color-secondary: #3dc2ff;
   --ion-color-secondary-rgb: 61, 194, 255;
@@ -74,196 +90,230 @@
   --ion-color-light-contrast-rgb: 0, 0, 0;
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
+
+  $colors: (
+  primary:    #488aff,
+  secondary:  #32db64,
+  danger:     #f53d3d,
+  light:      #f4f4f4,
+  dark:       #222,
+  Myapp: yellowgreen
+);
 }
-ion-item-sliding{
-  display: block;
-  position: relative;
-  width: auto;
-  overflow: hidden;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  background-color: #e3e3e3;
-  margin-top: 5px;
-  margin-left: 2px;
-  margin-right: 2px;
-  border-radius: 20px;
+// ion-item-sliding{
+//   display: block;
+//   position: relative;
+//   width: auto;
+//   overflow: hidden;
+//   -webkit-user-select: none;
+//   -moz-user-select: none;
+//   -ms-user-select: none;
+//   user-select: none;
+//   background-color: #e3e3e3;
+//   margin-top: 5px;
+//   margin-left: 2px;
+//   margin-right: 2px;
+//   border-radius: 20px;
 
-}
-@media (prefers-color-scheme: dark) {
-  /*
-   * Dark Colors
-   * -------------------------------------------
-   */
+// }
+// @media (prefers-color-scheme: dark) {
+//   /* 
+//    * Dark Colors
+//    * -------------------------------------------
+//    */
 
-  body {
-    --ion-color-primary: #428cff;
-    --ion-color-primary-rgb: 66,140,255;
-    --ion-color-primary-contrast: #ffffff;
-    --ion-color-primary-contrast-rgb: 255,255,255;
-    --ion-color-primary-shade: #3a7be0;
-    --ion-color-primary-tint: #5598ff;
+//   body{
+//     --ion-color-primary: #428cff;
+//     --ion-color-primary-rgb: 66,140,255;
+//     --ion-color-primary-contrast: #ffffff;
+//     --ion-color-primary-contrast-rgb: 255,255,255;
+//     --ion-color-primary-shade: #3a7be0;
+//     --ion-color-primary-tint: #5598ff;
 
-    --ion-color-secondary: #50c8ff;
-    --ion-color-secondary-rgb: 80,200,255;
-    --ion-color-secondary-contrast: #ffffff;
-    --ion-color-secondary-contrast-rgb: 255,255,255;
-    --ion-color-secondary-shade: #46b0e0;
-    --ion-color-secondary-tint: #62ceff;
+//     --ion-color-secondary: #50c8ff;
+//     --ion-color-secondary-rgb: 80,200,255;
+//     --ion-color-secondary-contrast: #ffffff;
+//     --ion-color-secondary-contrast-rgb: 255,255,255;
+//     --ion-color-secondary-shade: #46b0e0;
+//     --ion-color-secondary-tint: #62ceff;
 
-    --ion-color-tertiary: #6a64ff;
-    --ion-color-tertiary-rgb: 106,100,255;
-    --ion-color-tertiary-contrast: #ffffff;
-    --ion-color-tertiary-contrast-rgb: 255,255,255;
-    --ion-color-tertiary-shade: #5d58e0;
-    --ion-color-tertiary-tint: #7974ff;
+//     --ion-color-tertiary: #6a64ff;
+//     --ion-color-tertiary-rgb: 106,100,255;
+//     --ion-color-tertiary-contrast: #ffffff;
+//     --ion-color-tertiary-contrast-rgb: 255,255,255;
+//     --ion-color-tertiary-shade: #5d58e0;
+//     --ion-color-tertiary-tint: #7974ff;
 
-    --ion-color-success: #2fdf75;
-    --ion-color-success-rgb: 47,223,117;
-    --ion-color-success-contrast: #000000;
-    --ion-color-success-contrast-rgb: 0,0,0;
-    --ion-color-success-shade: #29c467;
-    --ion-color-success-tint: #44e283;
+//     --ion-color-success: #2fdf75;
+//     --ion-color-success-rgb: 47,223,117;
+//     --ion-color-success-contrast: #000000;
+//     --ion-color-success-contrast-rgb: 0,0,0;
+//     --ion-color-success-shade: #29c467;
+//     --ion-color-success-tint: #44e283;
 
-    --ion-color-warning: #ffd534;
-    --ion-color-warning-rgb: 255,213,52;
-    --ion-color-warning-contrast: #000000;
-    --ion-color-warning-contrast-rgb: 0,0,0;
-    --ion-color-warning-shade: #e0bb2e;
-    --ion-color-warning-tint: #ffd948;
+//     --ion-color-warning: #ffd534;
+//     --ion-color-warning-rgb: 255,213,52;
+//     --ion-color-warning-contrast: #000000;
+//     --ion-color-warning-contrast-rgb: 0,0,0;
+//     --ion-color-warning-shade: #e0bb2e;
+//     --ion-color-warning-tint: #ffd948;
 
-    --ion-color-danger: #ff4961;
-    --ion-color-danger-rgb: 255,73,97;
-    --ion-color-danger-contrast: #ffffff;
-    --ion-color-danger-contrast-rgb: 255,255,255;
-    --ion-color-danger-shade: #e04055;
-    --ion-color-danger-tint: #ff5b71;
+//     --ion-color-danger: #ff4961;
+//     --ion-color-danger-rgb: 255,73,97;
+//     --ion-color-danger-contrast: #ffffff;
+//     --ion-color-danger-contrast-rgb: 255,255,255;
+//     --ion-color-danger-shade: #e04055;
+//     --ion-color-danger-tint: #ff5b71;
 
-    --ion-color-dark: #f4f5f8;
-    --ion-color-dark-rgb: 244,245,248;
-    --ion-color-dark-contrast: #000000;
-    --ion-color-dark-contrast-rgb: 0,0,0;
-    --ion-color-dark-shade: #d7d8da;
-    --ion-color-dark-tint: #f5f6f9;
+//     --ion-color-dark: #f4f5f8;
+//     --ion-color-dark-rgb: 244,245,248;
+//     --ion-color-dark-contrast: #000000;
+//     --ion-color-dark-contrast-rgb: 0,0,0;
+//     --ion-color-dark-shade: #d7d8da;
+//     --ion-color-dark-tint: #f5f6f9;
 
-    --ion-color-medium: #989aa2;
-    --ion-color-medium-rgb: 152,154,162;
-    --ion-color-medium-contrast: #000000;
-    --ion-color-medium-contrast-rgb: 0,0,0;
-    --ion-color-medium-shade: #86888f;
-    --ion-color-medium-tint: #a2a4ab;
+//     --ion-color-medium: #989aa2;
+//     --ion-color-medium-rgb: 152,154,162;
+//     --ion-color-medium-contrast: #000000;
+//     --ion-color-medium-contrast-rgb: 0,0,0;
+//     --ion-color-medium-shade: #86888f;
+//     --ion-color-medium-tint: #a2a4ab;
 
-    --ion-color-light: #222428;
-    --ion-color-light-rgb: 34,36,40;
-    --ion-color-light-contrast: #ffffff;
-    --ion-color-light-contrast-rgb: 255,255,255;
-    --ion-color-light-shade: #1e2023;
-    --ion-color-light-tint: #383a3e;
-  }
+//     --ion-color-light: #222428;
+//     --ion-color-light-rgb: 34,36,40;
+//     --ion-color-light-contrast: #ffffff;
+//     --ion-color-light-contrast-rgb: 255,255,255;
+//     --ion-color-light-shade: #1e2023;
+//     --ion-color-light-tint: #383a3e;
+//   }
 
-  /*
-   * iOS Dark Theme
-   * -------------------------------------------
-   */
+//   /*
+//    * iOS Dark Theme
+//    * -------------------------------------------
+//    */
 
-  .ios body {
-    --ion-background-color: #000000;
-    --ion-background-color-rgb: 0,0,0;
+//   .ios body {
+//     --ion-background-color: #000000;
+//     --ion-background-color-rgb: 0,0,0;
 
-    --ion-text-color: #ffffff;
-    --ion-text-color-rgb: 255,255,255;
+//     --ion-text-color: #ffffff;
+//     --ion-text-color-rgb: 255,255,255;
 
-    --ion-color-step-50: #0d0d0d;
-    --ion-color-step-100: #1a1a1a;
-    --ion-color-step-150: #262626;
-    --ion-color-step-200: #333333;
-    --ion-color-step-250: #404040;
-    --ion-color-step-300: #4d4d4d;
-    --ion-color-step-350: #595959;
-    --ion-color-step-400: #666666;
-    --ion-color-step-450: #737373;
-    --ion-color-step-500: #808080;
-    --ion-color-step-550: #8c8c8c;
-    --ion-color-step-600: #999999;
-    --ion-color-step-650: #a6a6a6;
-    --ion-color-step-700: #b3b3b3;
-    --ion-color-step-750: #bfbfbf;
-    --ion-color-step-800: #cccccc;
-    --ion-color-step-850: #d9d9d9;
-    --ion-color-step-900: #e6e6e6;
-    --ion-color-step-950: #f2f2f2;
+//     --ion-color-step-50: #0d0d0d;
+//     --ion-color-step-100: #1a1a1a;
+//     --ion-color-step-150: #262626;
+//     --ion-color-step-200: #333333;
+//     --ion-color-step-250: #404040;
+//     --ion-color-step-300: #4d4d4d;
+//     --ion-color-step-350: #595959;
+//     --ion-color-step-400: #666666;
+//     --ion-color-step-450: #737373;
+//     --ion-color-step-500: #808080;
+//     --ion-color-step-550: #8c8c8c;
+//     --ion-color-step-600: #999999;
+//     --ion-color-step-650: #a6a6a6;
+//     --ion-color-step-700: #b3b3b3;
+//     --ion-color-step-750: #bfbfbf;
+//     --ion-color-step-800: #cccccc;
+//     --ion-color-step-850: #d9d9d9;
+//     --ion-color-step-900: #e6e6e6;
+//     --ion-color-step-950: #f2f2f2;
 
-    --ion-item-background: #000000;
+//     --ion-item-background: #000000;
 
-    --ion-card-background: #1c1c1d;
-  }
+//     --ion-card-background: #1c1c1d;
+//   }
 
-  .ios ion-modal {
-    --ion-background-color: var(--ion-color-step-100);
-    --ion-toolbar-background: var(--ion-color-step-150);
-    --ion-toolbar-border-color: var(--ion-color-step-250);
-  }
+//   .ios ion-modal {
+//     --ion-background-color: var(--ion-color-step-100);
+//     --ion-toolbar-background: var(--ion-color-step-150);
+//     --ion-toolbar-border-color: var(--ion-color-step-250);
+//   }
 
 
-  /*
-   * Material Design Dark Theme
-   * -------------------------------------------
-   */
+//   /*
+//    * Material Design Dark Theme
+//    * -------------------------------------------
+//    */
 
-  .md body {
-    --ion-background-color: #000000;
-    --ion-background-color-rgb: 18,18,18;
+//   .md body {
+//     --ion-background-color: #000000;
+//     --ion-background-color-rgb: 18,18,18;
 
-    --ion-text-color: #ffffff;
-    --ion-text-color-rgb: 255,255,255;
+//     --ion-text-color: #ffffff;
+//     --ion-text-color-rgb: 255,255,255;
 
-    --ion-border-color: #222222;
+//     --ion-border-color: #222222;
 
-    --ion-color-step-50: #1e1e1e;
-    --ion-color-step-100: #2a2a2a;
-    --ion-color-step-150: #363636;
-    --ion-color-step-200: #414141;
-    --ion-color-step-250: #4d4d4d;
-    --ion-color-step-300: #595959;
-    --ion-color-step-350: #656565;
-    --ion-color-step-400: #717171;
-    --ion-color-step-450: #7d7d7d;
-    --ion-color-step-500: #898989;
-    --ion-color-step-550: #949494;
-    --ion-color-step-600: #a0a0a0;
-    --ion-color-step-650: #acacac;
-    --ion-color-step-700: #b8b8b8;
-    --ion-color-step-750: #c4c4c4;
-    --ion-color-step-800: #d0d0d0;
-    --ion-color-step-850: #dbdbdb;
-    --ion-color-step-900: #e7e7e7;
-    --ion-color-step-950: #f3f3f3;
+//     --ion-color-step-50: #1e1e1e;
+//     --ion-color-step-100: #2a2a2a;
+//     --ion-color-step-150: #363636;
+//     --ion-color-step-200: #414141;
+//     --ion-color-step-250: #4d4d4d;
+//     --ion-color-step-300: #595959;
+//     --ion-color-step-350: #656565;
+//     --ion-color-step-400: #717171;
+//     --ion-color-step-450: #7d7d7d;
+//     --ion-color-step-500: #898989;
+//     --ion-color-step-550: #949494;
+//     --ion-color-step-600: #a0a0a0;
+//     --ion-color-step-650: #acacac;
+//     --ion-color-step-700: #b8b8b8;
+//     --ion-color-step-750: #c4c4c4;
+//     --ion-color-step-800: #d0d0d0;
+//     --ion-color-step-850: #dbdbdb;
+//     --ion-color-step-900: #e7e7e7;
+//     --ion-color-step-950: #f3f3f3;
 
-    --ion-item-background: #1e1e1e;
+//     --ion-item-background: #1e1e1e;
 
-    --ion-toolbar-background: #1f1f1f;
+//     --ion-toolbar-background: #1f1f1f;
 
-    --ion-tab-bar-background: #1f1f1f;
+//     --ion-tab-bar-background: #1f1f1f;
 
-    --ion-card-background: #1e1e1e;
-  }
-  ion-item-sliding{
-    display: block;
-    position: relative;
-    width: auto;
-    overflow: hidden;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    background-color: #1f1f1f;
-    margin-top: 5px;
-    margin-left: 2px;
-    margin-right: 2px;
-    border-radius: 20px;
+//     --ion-card-background: #1e1e1e;
+//   }
+//   ion-item-sliding{
+//     display: block;
+//     position: relative;
+//     width: auto;
+//     overflow: hidden;
+//     -webkit-user-select: none;
+//     -moz-user-select: none;
+//     -ms-user-select: none;
+//     user-select: none;
+//     background-color: #1f1f1f;
+//     margin-top: 5px;
+//     margin-left: 2px;
+//     margin-right: 2px;
+//     border-radius: 20px;
   
+//   }
+// }
+
+ion-content{
+ // margin-top: 100px;
+ // background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.com/svgjs' width='200' height='1000' preserveAspectRatio='none' viewBox='0 0 200 1000'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1014%26quot%3b)' fill='none'%3e%3cpath d='M98.8135957306285 450.5380030811798L115.21367205153375 477.8323136110449 147.95509968587885 439.5850438647545z' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float1'%3e%3c/path%3e%3cpath d='M73.9 843.41 a47.59 47.59 0 1 0 95.18 0 a47.59 47.59 0 1 0 -95.18 0z' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float3'%3e%3c/path%3e%3cpath d='M124.222%2c960.388C141.863%2c959.07%2c158.452%2c952.041%2c167.917%2c937.096C178.126%2c920.977%2c181.963%2c900.562%2c172.662%2c883.902C163.163%2c866.887%2c143.705%2c858.436%2c124.222%2c858.831C105.436%2c859.212%2c89.43%2c870.124%2c79.07%2c885.8C67.268%2c903.657%2c56.453%2c926.284%2c67.538%2c944.595C78.424%2c962.579%2c103.258%2c961.954%2c124.222%2c960.388' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float3'%3e%3c/path%3e%3cpath d='M77.3653719481097 594.1170417895537L134.20192178250045 577.8194233820916 117.90430337503838 520.9828735477008 61.06775354064763 537.2804919551629z' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float1'%3e%3c/path%3e%3cpath d='M113.442%2c522.576C122.5%2c523.406%2c131.391%2c518.474%2c135.896%2c510.572C140.364%2c502.736%2c139.509%2c492.964%2c134.664%2c485.356C130.158%2c478.281%2c121.821%2c474.921%2c113.442%2c475.316C105.739%2c475.679%2c98.952%2c480.348%2c95.425%2c487.206C92.175%2c493.525%2c93.912%2c500.69%2c97.137%2c507.022C100.791%2c514.196%2c105.425%2c521.842%2c113.442%2c522.576' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float3'%3e%3c/path%3e%3cpath d='M27.86 254.74 a63.52 63.52 0 1 0 127.04 0 a63.52 63.52 0 1 0 -127.04 0z' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float1'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1014'%3e%3crect width='200' height='1000' fill='white'%3e%3c/rect%3e%3c/mask%3e%3cstyle%3e %40keyframes float1 %7b 0%25%7btransform: translate(0%2c 0)%7d 50%25%7btransform: translate(-10px%2c 0)%7d 100%25%7btransform: translate(0%2c 0)%7d %7d .triangle-float1 %7b animation: float1 5s infinite%3b %7d %40keyframes float2 %7b 0%25%7btransform: translate(0%2c 0)%7d 50%25%7btransform: translate(-5px%2c -5px)%7d 100%25%7btransform: translate(0%2c 0)%7d %7d .triangle-float2 %7b animation: float2 4s infinite%3b %7d %40keyframes float3 %7b 0%25%7btransform: translate(0%2c 0)%7d 50%25%7btransform: translate(0%2c -10px)%7d 100%25%7btransform: translate(0%2c 0)%7d %7d .triangle-float3 %7b animation: float3 6s infinite%3b %7d %3c/style%3e%3c/defs%3e%3c/svg%3e");
+ //background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.com/svgjs' width='1440' height='1400' preserveAspectRatio='none' viewBox='0 0 1440 1400'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1028%26quot%3b)' fill='none'%3e%3cpath d='M1050.3853384162576 606.5404635833622L1279.2939471414015 933.4558368602868 1606.2093204183261 704.5472281351429 1377.3007116931822 377.63185485821833z' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float3'%3e%3c/path%3e%3cpath d='M992.8044375688933 1232.314939794384L1080.3134292859445 946.0859250957595 794.0844145873201 858.5769333787083 706.5754228702689 1144.8059480773327z' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float3'%3e%3c/path%3e%3cpath d='M223.185%2c754.797C321.288%2c750.991%2c409.338%2c697.12%2c457.818%2c611.748C505.685%2c527.457%2c505.365%2c425.276%2c458.494%2c340.427C409.967%2c252.58%2c323.518%2c189.283%2c223.185%2c187.003C119.013%2c184.636%2c22.48%2c240.111%2c-31.407%2c329.294C-87.259%2c421.728%2c-100.706%2c538.591%2c-45.255%2c631.267C8.95%2c721.861%2c117.692%2c758.89%2c223.185%2c754.797' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float1'%3e%3c/path%3e%3cpath d='M93.54 1268.09 a292.52 292.52 0 1 0 585.04 0 a292.52 292.52 0 1 0 -585.04 0z' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float1'%3e%3c/path%3e%3cpath d='M1125.036425353755 221.44579918967878L1022.760010547912 36.93426264198871 838.2484740002219 139.21067744783173 940.524888806065 323.72221399552177z' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float2'%3e%3c/path%3e%3cpath d='M679.237218903604 710.5041484209023L590.78702045663 967.3821768831897 847.6650489189173 1055.8323753301638 936.1152473658913 798.9543468678764z' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float2'%3e%3c/path%3e%3cpath d='M1503.8653576257361 1393.8098385617768L1406.1055025236244 1163.5020526368799 1175.7977165987274 1261.2619077389916 1273.5575717008392 1491.5696936638885z' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float2'%3e%3c/path%3e%3cpath d='M1448.059%2c1219.395C1584.289%2c1216.806%2c1705.931%2c1132.563%2c1767.468%2c1010.995C1823.738%2c899.832%2c1790.024%2c773.009%2c1729.004%2c664.381C1666.352%2c552.849%2c1575.956%2c445.013%2c1448.059%2c442.388C1316.765%2c439.693%2c1212.885%2c539.173%2c1146.405%2c652.424C1078.904%2c767.414%2c1044.283%2c905.832%2c1106.912%2c1023.546C1172.923%2c1147.615%2c1307.547%2c1222.065%2c1448.059%2c1219.395' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float2'%3e%3c/path%3e%3cpath d='M-246.84546849133642 1292.8639008680123L112.6678682539387 1438.1167174506095-101.59265190873913 933.3505641227371z' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float2'%3e%3c/path%3e%3cpath d='M1194.091%2c1817.87C1312.19%2c1817.644%2c1431.864%2c1779.028%2c1493.837%2c1678.496C1558.647%2c1573.361%2c1561.019%2c1435.96%2c1493.112%2c1332.798C1430.548%2c1237.753%2c1307.626%2c1215.554%2c1194.091%2c1223.133C1094.954%2c1229.751%2c1011.838%2c1285.696%2c957.052%2c1368.584C894.461%2c1463.28%2c839.38%2c1579.253%2c892.348%2c1679.649C947.678%2c1784.522%2c1075.517%2c1818.097%2c1194.091%2c1817.87' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float2'%3e%3c/path%3e%3cpath d='M1212.782459918841 1093.2373766860378L1434.594113541415 1266.5356334530418 1607.8923703084188 1044.7239798304677 1386.080716685845 871.4257230634637z' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float2'%3e%3c/path%3e%3cpath d='M1335.192%2c1106.733C1471.398%2c1112.763%2c1585.11%2c1009.771%2c1648.728%2c889.185C1708.037%2c776.766%2c1701.202%2c643.618%2c1637.567%2c533.589C1574.021%2c423.713%2c1462.093%2c349.747%2c1335.192%2c347.059C1203.518%2c344.27%2c1070.618%2c403.478%2c1009.788%2c520.293C952.408%2c630.482%2c1006.037%2c754.771%2c1066.314%2c863.402C1129.175%2c976.688%2c1205.761%2c1101.003%2c1335.192%2c1106.733' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float3'%3e%3c/path%3e%3cpath d='M150.0152363013335-8.09542367578139L-114.8955118956832 109.850440468077 3.0503522481751872 374.7611886650937 267.96110044519185 256.8153245212353z' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float1'%3e%3c/path%3e%3cpath d='M472.03 130.84 a376.2 376.2 0 1 0 752.4 0 a376.2 376.2 0 1 0 -752.4 0z' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float1'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1028'%3e%3crect width='1440' height='1400' fill='white'%3e%3c/rect%3e%3c/mask%3e%3cstyle%3e %40keyframes float1 %7b 0%25%7btransform: translate(0%2c 0)%7d 50%25%7btransform: translate(-10px%2c 0)%7d 100%25%7btransform: translate(0%2c 0)%7d %7d .triangle-float1 %7b animation: float1 5s infinite%3b %7d %40keyframes float2 %7b 0%25%7btransform: translate(0%2c 0)%7d 50%25%7btransform: translate(-5px%2c -5px)%7d 100%25%7btransform: translate(0%2c 0)%7d %7d .triangle-float2 %7b animation: float2 4s infinite%3b %7d %40keyframes float3 %7b 0%25%7btransform: translate(0%2c 0)%7d 50%25%7btransform: translate(0%2c -10px)%7d 100%25%7btransform: translate(0%2c 0)%7d %7d .triangle-float3 %7b animation: float3 6s infinite%3b %7d %3c/style%3e%3c/defs%3e%3c/svg%3e");
+ background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.com/svgjs' width='1440' height='1400' preserveAspectRatio='none' viewBox='0 0 1440 1400'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1028%26quot%3b)' fill='none'%3e%3cpath d='M1050.3853384162576 606.5404635833622L1279.2939471414015 933.4558368602868 1606.2093204183261 704.5472281351429 1377.3007116931822 377.63185485821833z' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float3'%3e%3c/path%3e%3cpath d='M992.8044375688933 1232.314939794384L1080.3134292859445 946.0859250957595 794.0844145873201 858.5769333787083 706.5754228702689 1144.8059480773327z' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float3'%3e%3c/path%3e%3cpath d='M223.185%2c754.797C321.288%2c750.991%2c409.338%2c697.12%2c457.818%2c611.748C505.685%2c527.457%2c505.365%2c425.276%2c458.494%2c340.427C409.967%2c252.58%2c323.518%2c189.283%2c223.185%2c187.003C119.013%2c184.636%2c22.48%2c240.111%2c-31.407%2c329.294C-87.259%2c421.728%2c-100.706%2c538.591%2c-45.255%2c631.267C8.95%2c721.861%2c117.692%2c758.89%2c223.185%2c754.797' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float1'%3e%3c/path%3e%3cpath d='M93.54 1268.09 a292.52 292.52 0 1 0 585.04 0 a292.52 292.52 0 1 0 -585.04 0z' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float1'%3e%3c/path%3e%3cpath d='M1125.036425353755 221.44579918967878L1022.760010547912 36.93426264198871 838.2484740002219 139.21067744783173 940.524888806065 323.72221399552177z' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float2'%3e%3c/path%3e%3cpath d='M679.237218903604 710.5041484209023L590.78702045663 967.3821768831897 847.6650489189173 1055.8323753301638 936.1152473658913 798.9543468678764z' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float2'%3e%3c/path%3e%3cpath d='M1503.8653576257361 1393.8098385617768L1406.1055025236244 1163.5020526368799 1175.7977165987274 1261.2619077389916 1273.5575717008392 1491.5696936638885z' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float2'%3e%3c/path%3e%3cpath d='M1448.059%2c1219.395C1584.289%2c1216.806%2c1705.931%2c1132.563%2c1767.468%2c1010.995C1823.738%2c899.832%2c1790.024%2c773.009%2c1729.004%2c664.381C1666.352%2c552.849%2c1575.956%2c445.013%2c1448.059%2c442.388C1316.765%2c439.693%2c1212.885%2c539.173%2c1146.405%2c652.424C1078.904%2c767.414%2c1044.283%2c905.832%2c1106.912%2c1023.546C1172.923%2c1147.615%2c1307.547%2c1222.065%2c1448.059%2c1219.395' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float2'%3e%3c/path%3e%3cpath d='M-246.84546849133642 1292.8639008680123L112.6678682539387 1438.1167174506095-101.59265190873913 933.3505641227371z' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float2'%3e%3c/path%3e%3cpath d='M1194.091%2c1817.87C1312.19%2c1817.644%2c1431.864%2c1779.028%2c1493.837%2c1678.496C1558.647%2c1573.361%2c1561.019%2c1435.96%2c1493.112%2c1332.798C1430.548%2c1237.753%2c1307.626%2c1215.554%2c1194.091%2c1223.133C1094.954%2c1229.751%2c1011.838%2c1285.696%2c957.052%2c1368.584C894.461%2c1463.28%2c839.38%2c1579.253%2c892.348%2c1679.649C947.678%2c1784.522%2c1075.517%2c1818.097%2c1194.091%2c1817.87' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float2'%3e%3c/path%3e%3cpath d='M1212.782459918841 1093.2373766860378L1434.594113541415 1266.5356334530418 1607.8923703084188 1044.7239798304677 1386.080716685845 871.4257230634637z' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float2'%3e%3c/path%3e%3cpath d='M1335.192%2c1106.733C1471.398%2c1112.763%2c1585.11%2c1009.771%2c1648.728%2c889.185C1708.037%2c776.766%2c1701.202%2c643.618%2c1637.567%2c533.589C1574.021%2c423.713%2c1462.093%2c349.747%2c1335.192%2c347.059C1203.518%2c344.27%2c1070.618%2c403.478%2c1009.788%2c520.293C952.408%2c630.482%2c1006.037%2c754.771%2c1066.314%2c863.402C1129.175%2c976.688%2c1205.761%2c1101.003%2c1335.192%2c1106.733' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float3'%3e%3c/path%3e%3cpath d='M150.0152363013335-8.09542367578139L-114.8955118956832 109.850440468077 3.0503522481751872 374.7611886650937 267.96110044519185 256.8153245212353z' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float1'%3e%3c/path%3e%3cpath d='M472.03 130.84 a376.2 376.2 0 1 0 752.4 0 a376.2 376.2 0 1 0 -752.4 0z' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float1'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1028'%3e%3crect width='1440' height='1400' fill='white'%3e%3c/rect%3e%3c/mask%3e%3cstyle%3e %40keyframes float1 %7b 0%25%7btransform: translate(0%2c 0)%7d 50%25%7btransform: translate(-10px%2c 0)%7d 100%25%7btransform: translate(0%2c 0)%7d %7d .triangle-float1 %7b animation: float1 5s infinite%3b %7d %40keyframes float2 %7b 0%25%7btransform: translate(0%2c 0)%7d 50%25%7btransform: translate(-5px%2c -5px)%7d 100%25%7btransform: translate(0%2c 0)%7d %7d .triangle-float2 %7b animation: float2 4s infinite%3b %7d %40keyframes float3 %7b 0%25%7btransform: translate(0%2c 0)%7d 50%25%7btransform: translate(0%2c -10px)%7d 100%25%7btransform: translate(0%2c 0)%7d %7d .triangle-float3 %7b animation: float3 6s infinite%3b %7d %3c/style%3e%3c/defs%3e%3c/svg%3e");
+  --background:transperent;
+  background-color:#3ab243 ;
+
+  ion-menu-toggle{
+      background-color: transparent;
+      ion-item{
+
+          --background:transperent;
+          ion-label{
+              color: white;
+          }
+      }
   }
 }
 
 
+ion-toolbar{
+  --background:transperent;
+ // background:#3ab243;
+  color: white;
+}

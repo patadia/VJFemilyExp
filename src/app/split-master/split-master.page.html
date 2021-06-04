@@ -1,6 +1,6 @@
 <ion-split-pane contentId="menu">
   <ion-menu contentId="menu" side="start" type="overlay">
-    <ion-header>
+    <ion-header class="ion-no-border" translucent="true">
       <ion-toolbar>
         <ion-title>Family Expenses</ion-title>
       </ion-toolbar>
@@ -8,21 +8,27 @@
     <ion-content>
       <ion-menu-toggle autoHide="false">
 
-        <ion-item (click)="GotoMenu('expenses')">
+        <ion-item (click)="GotoMenu('expenses')" lines="none">
           <ion-label>Expenses</ion-label>
         </ion-item>
       </ion-menu-toggle>
       <ion-menu-toggle autoHide="false" *ngIf="!ishidden">
-        <ion-item (click)="GotoMenu('familytree')">
+        <ion-item (click)="GotoMenu('familytree')" lines="none">
           <ion-label>Family Tree</ion-label>
         </ion-item>
       </ion-menu-toggle>
       <ion-menu-toggle autoHide="false">
 
-        <ion-item (click)="GotoMenu('home')">
+        <ion-item (click)="GotoMenu('home')" lines="none">
           <ion-label>Logout</ion-label>
         </ion-item>
       </ion-menu-toggle>
+      <!-- <ion-menu-toggle>
+        <ion-item lines="none">
+          <ion-label>Theme Dark / Light</ion-label>
+          <ion-toggle (ionChange)="ChangeColor($event)" slot="end"></ion-toggle>
+        </ion-item>
+      </ion-menu-toggle> -->
     </ion-content>
   </ion-menu>
   <ion-router-outlet id="menu"></ion-router-outlet>

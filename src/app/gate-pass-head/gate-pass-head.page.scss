@@ -11,3 +11,27 @@ form{
         align-items: center;
     }
 }
+
+ion-item{
+    border-radius: 20px;
+    height: 65px;
+    background: no-repeat;
+    margin: 10px 1px;
+    color: #f2efd9;
+    --background: #208891;
+  }
+
+  ion-content{
+      position: fixed;
+  }
+
+  form{
+    margin: 40% 10%;
+    padding: 10px;
+    background: #fdfdfd75;
+    border-radius: 20px;
+  }
+
+  .toolbardiv{
+    display: flex;
+  }

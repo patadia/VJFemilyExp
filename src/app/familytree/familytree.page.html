@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header translucent="false"  class="ion-no-border">
   <ion-toolbar>
     <div class="toolbarhead">
 <ion-buttons>
@@ -11,8 +11,8 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
-  <div>
+<ion-content fullscreen="true" class="ion-no-padding">
+  <div class="keydivclass">
     <ion-label class="fkey">Your family key is <p> {{Familykey}} </p>
     </ion-label>
   </div>
@@ -36,23 +36,22 @@
     </ion-button>
 
   </form>
-  <hr>
-  <div class="listtitle">
-    <label>Family Tree 😍</label>
-  </div>
   <div class="listmemberlist">
-   
+    <div class="listtitle">
+      
+      <label>Family Tree 😍</label>
+    </div>
       <ion-list class="listmember" lines="full">
         <ion-item-sliding *ngFor="let m of Members">
           <ion-item-options side="end">
             <!-- <ion-item-option (click)="favorite(item)">Favorite</ion-item-option> -->
             <ion-item-option color="danger" (click)="Delete(m)">Delete</ion-item-option>
           </ion-item-options>
-        <ion-item >
+        <ion-item lines="none">
 
           <div >  
             <!-- (click)="OnclickMember(m)" -->
-            <label>{{m.Name}}</label>
+            <label class="userlabel">{{m.Name}}</label>
           </div>
 
         </ion-item>

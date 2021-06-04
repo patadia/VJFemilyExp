@@ -5,10 +5,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomePage } from './home.page';
 
 import { HomePageRoutingModule } from './home-routing.module';
+import{LottieModule} from 'ngx-lottie'
+import player from 'lottie-web'
 
+export function Playerfn(){
+  return player;
+}
 
 @NgModule({
   imports: [
+    LottieModule.forRoot({player:Playerfn}),
     CommonModule,
     FormsModule,
     IonicModule,

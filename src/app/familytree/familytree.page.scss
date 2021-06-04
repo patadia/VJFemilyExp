@@ -17,27 +17,29 @@
 .btnadmember {
     margin-left: 50%;
 }
-ion-item::part(native) {
-    background: transparent;
-}
+
 
 .listtitle{
     text-align: center;
     margin: 10px;
+    font-size: 20px;
+    color: #208891;
 }
 .listmemberlist {
    overflow-y: scroll;
-   max-height: 40%;
+   max-height: 93%;
+   min-height: 93%;
+   margin-top: 10px;
    .listmember{
        background-color: transparent;
    }
+   background-color:#ffffff ;
+   z-index: 100;
+   border-top-right-radius: 20px;
+   border-top-left-radius: 20px;
     // border: 1px solid snow;
 }
-form {
-    border: silver 1px solid;
-    border-radius: 25px;
-    padding: 10px;
-}
+
 
 .bottomlabel{
     position: fixed;
@@ -45,3 +47,37 @@ form {
     text-align: center;
     opacity: 0.3;
 }
+
+ion-content{
+    position: fixed;
+}
+
+.keydivclass{
+    margin-top:65px;
+    margin-bottom: 5px;
+    color:#ffffff;
+    display: flex;
+    justify-content: space-around;
+}
+
+form{
+    // margin: 40% 10%;
+    padding: 10px;
+    background: #fdfdfd75;
+    border-radius: 20px;
+    margin: 0px 20px;
+    ion-item{
+        border-radius: 20px;
+        height: 65px;
+        background: no-repeat;
+        margin: 10px 1px;
+        color: #f2efd9;
+        --background: #208891;
+      }
+  }
+
+  .userlabel{
+      text-transform: capitalize;
+      font-size: 20px;
+    color: #208891;
+  }

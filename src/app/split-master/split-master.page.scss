@@ -1,0 +1,23 @@
+ion-content{
+    margin-top: 100px;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.com/svgjs' width='200' height='1000' preserveAspectRatio='none' viewBox='0 0 200 1000'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1014%26quot%3b)' fill='none'%3e%3cpath d='M98.8135957306285 450.5380030811798L115.21367205153375 477.8323136110449 147.95509968587885 439.5850438647545z' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float1'%3e%3c/path%3e%3cpath d='M73.9 843.41 a47.59 47.59 0 1 0 95.18 0 a47.59 47.59 0 1 0 -95.18 0z' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float3'%3e%3c/path%3e%3cpath d='M124.222%2c960.388C141.863%2c959.07%2c158.452%2c952.041%2c167.917%2c937.096C178.126%2c920.977%2c181.963%2c900.562%2c172.662%2c883.902C163.163%2c866.887%2c143.705%2c858.436%2c124.222%2c858.831C105.436%2c859.212%2c89.43%2c870.124%2c79.07%2c885.8C67.268%2c903.657%2c56.453%2c926.284%2c67.538%2c944.595C78.424%2c962.579%2c103.258%2c961.954%2c124.222%2c960.388' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float3'%3e%3c/path%3e%3cpath d='M77.3653719481097 594.1170417895537L134.20192178250045 577.8194233820916 117.90430337503838 520.9828735477008 61.06775354064763 537.2804919551629z' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float1'%3e%3c/path%3e%3cpath d='M113.442%2c522.576C122.5%2c523.406%2c131.391%2c518.474%2c135.896%2c510.572C140.364%2c502.736%2c139.509%2c492.964%2c134.664%2c485.356C130.158%2c478.281%2c121.821%2c474.921%2c113.442%2c475.316C105.739%2c475.679%2c98.952%2c480.348%2c95.425%2c487.206C92.175%2c493.525%2c93.912%2c500.69%2c97.137%2c507.022C100.791%2c514.196%2c105.425%2c521.842%2c113.442%2c522.576' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float3'%3e%3c/path%3e%3cpath d='M27.86 254.74 a63.52 63.52 0 1 0 127.04 0 a63.52 63.52 0 1 0 -127.04 0z' fill='rgba(14%2c 105%2c 202%2c 0.58)' class='triangle-float1'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1014'%3e%3crect width='200' height='1000' fill='white'%3e%3c/rect%3e%3c/mask%3e%3cstyle%3e %40keyframes float1 %7b 0%25%7btransform: translate(0%2c 0)%7d 50%25%7btransform: translate(-10px%2c 0)%7d 100%25%7btransform: translate(0%2c 0)%7d %7d .triangle-float1 %7b animation: float1 5s infinite%3b %7d %40keyframes float2 %7b 0%25%7btransform: translate(0%2c 0)%7d 50%25%7btransform: translate(-5px%2c -5px)%7d 100%25%7btransform: translate(0%2c 0)%7d %7d .triangle-float2 %7b animation: float2 4s infinite%3b %7d %40keyframes float3 %7b 0%25%7btransform: translate(0%2c 0)%7d 50%25%7btransform: translate(0%2c -10px)%7d 100%25%7btransform: translate(0%2c 0)%7d %7d .triangle-float3 %7b animation: float3 6s infinite%3b %7d %3c/style%3e%3c/defs%3e%3c/svg%3e");
+    --background:transperent;
+    background-color:#3ab243 ;
+
+    ion-menu-toggle{
+        background-color: transparent;
+        ion-item{
+
+            --background:transperent;
+            ion-label{
+                color: white;
+            }
+        }
+    }
+}
+
+ion-toolbar{
+    --background:transperent;
+    background:#3ab243;
+    color: white;
+}

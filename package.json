@@ -33,6 +33,8 @@
     "cordova-plugin-datepicker": "^0.9.3",
     "firebase": "^8.6.2",
     "jquery": "^3.6.0",
+    "lottie-web": "^5.7.11",
+    "ngx-lottie": "^7.0.1",
     "popper": "^1.0.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",

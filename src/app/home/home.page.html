@@ -1,10 +1,3 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Family Expenses
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
@@ -12,8 +5,12 @@
       <ion-title size="large">Femily Expenses</ion-title>
     </ion-toolbar>
   </ion-header>
+<div class="lottiediv">
+  <ng-lottie [options]="options" (animationCreated)="Created($event)">
 
-  <div id="container" style="text-align: center;">
+  </ng-lottie>
+</div>
+  <div id="container " class="condiv" style="text-align: center;">
     <strong>Wanna start !! <br> Create Family Tree first </strong><br>
 
     <button class="btn btn-primary" (click)="gotofamilytreecreate()">Create Family Tree</button>

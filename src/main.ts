@@ -10,6 +10,7 @@ if (environment.production) {
 fetch('https://firestoreconfig.herokuapp.com/confg').then(resp => resp.json()).then(config => {
   window['firebase_config'] = config.firebase;
   window['config'] = config;
+  console.log(config,config.firebase);
   platformBrowserDynamic().bootstrapModule(AppModule).catch(err => console.error(err));
 });
 // platformBrowserDynamic().bootstrapModule(AppModule)

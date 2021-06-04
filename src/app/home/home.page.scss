@@ -25,3 +25,39 @@
 #container a {
   text-decoration: none;
 }
+
+strong{
+  color:#ffffff;
+}
+
+.condiv{
+  padding: 10px;
+    background: #fdfdfd75;
+    border-radius: 20px;
+    position: fixed;
+    bottom: 20px;
+    margin: 20px 20px;
+    min-width: 90%;
+ 
+}
+
+ion-item{
+  border-radius: 20px;
+  height: 65px;
+  background: no-repeat;
+  margin: 10px 1px;
+  color: #f2efd9;
+  --background: #208891;
+}
+
+.lottiediv{
+  height: 45%;
+}
+
+.btn-primary{
+  border-color: #a07ef4;
+  background-color: #a07ef4;
+}
+ion-label{
+  --color:var(--background)
+}

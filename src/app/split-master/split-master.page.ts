@@ -8,19 +8,19 @@ import { StorageService } from '../services/storage.service';
   styleUrls: ['./split-master.page.scss'],
 })
 export class SplitMasterPage implements OnInit {
- 
+
   ishidden: boolean = true;
   constructor(public route: Router,
-    private Store: StorageService) { 
-      this.Store.init().then(()=>{
+    private Store: StorageService) {
+    this.Store.init().then(() => {
 
-        this.init(); 
-      })  
-    }
+      this.init();
+    })
+  }
 
   GotoMenu(path) {
     if (path === 'home') {
-     this.Store.ClearStore();
+      this.Store.ClearStore();
       this.route.navigate(['./home']);
     } else {
 
@@ -30,7 +30,7 @@ export class SplitMasterPage implements OnInit {
 
   async init() {
     // If using, define drivers here: await this.storage.defineDriver(/*...*/);
-   
+
     let check = await this.Store.GetStorevalue('ISKeyUser');
     if (check === 'HeadLogedin')
       this.ishidden = false;
@@ -40,4 +40,31 @@ export class SplitMasterPage implements OnInit {
   ngOnInit() {
   }
 
+  ChangeColor(event) {
+
+    let systemDark = window.matchMedia("(prefers-color-scheme: dark)");
+    systemDark.addEventListener('change', this.colorTest);
+    console.log(systemDark);
+    if (event.detail.checked) {
+      document.body.setAttribute('data-theme', 'dark');
+      console.log('dark')
+    }
+    else {
+      document.body.setAttribute('data-theme', 'light');
+      console.log('light')
+    }
+  }
+
+  colorTest(systemInitiatedDark) {
+    console.log('colottest');
+    if (systemInitiatedDark.matches) {
+      console.log('dark')
+      document.body.setAttribute('data-theme', 'dark');
+    } else {
+      console.log('light')
+      document.body.setAttribute('data-theme', 'light');
+    }
+  }
 }
+
+
