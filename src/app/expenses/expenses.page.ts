@@ -9,6 +9,9 @@ import { StorageService } from '../services/storage.service';
 import { DatePipe } from '@angular/common';
 import { App } from '@capacitor/app';
 import { Router } from '@angular/router';
+import { ExpenseAddPopupPage } from '../expense-add-popup/expense-add-popup.page';
+import { DataService,TExpenes } from '../services/data.service';
+
 
 @Component({
   selector: 'app-expenses',
@@ -28,6 +31,8 @@ export class ExpensesPage implements OnInit {
   paramID: string = '';
   setdate: any;
   private readExpdataSub: Subscription;
+  private Fkey: string;
+  Syncdate: any;
 
   constructor(private route: ActivatedRoute,
     private popover: PopoverController,
@@ -37,7 +42,8 @@ export class ExpensesPage implements OnInit {
     private platform: Platform,
     private rou: Router,
     private routerOutlet: IonRouterOutlet,
-    private actionSheetCtrl: ActionSheetController
+    private actionSheetCtrl: ActionSheetController,
+    private db: DataService
   ) {
     this.Store.init().then(() => {
 
@@ -59,6 +65,40 @@ export class ExpensesPage implements OnInit {
 
 
     this.name = await this.Store.GetStorevalue('name_user');
+    this.Fkey = await this.Store.GetStorevalue('familykeyID');
+  
+    this.getdata_expense('');
+    let nedate = new Date(this.datepick);
+    this.GetDBexpense(nedate.getFullYear(), nedate.getMonth(), this.Fkey);
+  }
+  GetDBexpense(Year: any, month: any, Fkey: string) {
+    console.log('date retrive',Year+''+month+''+Fkey);
+    this.db.fetchExpenses(Year,month,Fkey).subscribe((data) => {
+      this.Creditbal = 0.0;
+        this.Debitbal = 0.0;
+      this.ExpennseList = [];
+      data.forEach(e => {
+        let pusher = {
+          id: e.EFCM_ID,
+          Title: e.Title,
+          Amount: e.Amount,
+          Transaction_Type: e.Transaction_type,
+          date_on: e.date_on,
+          Date_unix: e.Date_unix,
+          byName: e.byName,
+          Syncdate: e.Syncdate
+        }
+        this.ExpennseList.push(pusher);
+        console.log(JSON.stringify(pusher));
+        if (e.Transaction_type == 'debit') {
+          this.Debitbal += e.Amount;
+        }
+        else {
+          this.Creditbal += e.Amount;
+        }
+
+      })
+    })
   }
 
   // async Logout() {
@@ -72,56 +112,54 @@ export class ExpensesPage implements OnInit {
       console.log(params) //log the entire params object
       console.log(params['ID']) //log the value of id
       this.paramID = params['ID'];
-      this.getdata_expense(params['ID']);
+
       console.log('initcall');
     });
   }
 
-  getdata_expense(ID) {
+ async getdata_expense(ID) {
     try {
-      this.ExpennseList = [];
-      // this.fire.read_expense().subscribe((data)=> {
-      //   // this.ExpennseList =  data.map(e => {
-      //   //    return {
-      //   //      id: e.payload.doc.id,
-      //   //      Title: e.payload.doc.data()['Title'],
-      //   //      Amount: e.payload.doc.data()['Amount'],
-      //   //      Transaction_Type: e.payload.doc.data()['Transaction_Type'],
-      //   //      date_on:e.payload.doc.data()['date_on'],
-      //   //      byName:e.payload.doc.data()['byName'],
-      //   //      Date_unix:e.payload.doc.data()['Date_unix']
-      //   //    };
-      //   //  })
-      //   console.log('document load',data);
-      //  });
+      this.Syncdate = Number(await this.Store.GetSyncDate('Expense'));
+      console.log(this.Fkey);
+      //this.ExpennseList = [];
       console.log('getdata_call');
       let nedate = new Date(this.datepick);
-
-      this.readExpdataSub = this.fire.Read_expbyMonth(nedate.getFullYear(), nedate.getMonth()).subscribe((edata: any) => {
+      //read_expense_Sync
+      // this.readExpdataSub = this.fire.Read_expbyMonth(nedate.getFullYear(), nedate.getMonth(),this.Fkey).subscribe((edata: any) => {
+      this.readExpdataSub = this.fire.read_expense_Sync(this.Syncdate, this.Fkey).subscribe((edata: any) => {
         console.log('check', edata);
-        this.ExpennseList = [];
-        this.Creditbal = 0.0;
-        this.Debitbal = 0.0;
+        //this.ExpennseList = [];
+        // this.Creditbal = 0.0;
+        // this.Debitbal = 0.0;
         edata.forEach(e => {
-          let pusher = {
-            id: e.payload.doc.id,
+          let pusher : TExpenes= {
+            EFCM_ID: e.payload.doc.id,
             Title: e.payload.doc.data()['Title'],
-            Amount: e.payload.doc.data()['Amount'],
-            Transaction_Type: e.payload.doc.data()['Transaction_Type'],
+            Amount: Number(e.payload.doc.data()['Amount']),
+            Transaction_type: e.payload.doc.data()['Transaction_Type'],
             date_on: e.payload.doc.data()['date_on'],
-            Date_unix: e.payload.doc.data()['Date_unix'],
-            full_date: e.payload.doc.data()['full_date'],
+            Date_unix: Number(e.payload.doc.data()['Date_unix']),
             byName: e.payload.doc.data()['byName'],
+            Syncdate: Number(e.payload.doc.data()['Syncdate']),
+             FamilyKey : this.Fkey,
+             isDelete:false,
+             id:0
           }
-          this.ExpennseList.push(pusher);
-          if (e.payload.doc.data()['Transaction_Type'] == 'debit') {
-            this.Debitbal += parseFloat(e.payload.doc.data()['Amount']);
-          }
-          else {
-            this.Creditbal += parseFloat(e.payload.doc.data()['Amount']);
-          }
-          //  this.Subscription_release();
+          //this.ExpennseList.push(pusher);
+          this.db.AddExpense(pusher as TExpenes).then(()=>{
+              console.log('Exp added ',JSON.stringify(pusher))
+          })
+          // if (e.payload.doc.data()['Transaction_Type'] == 'debit') {
+          //   this.Debitbal += parseFloat(e.payload.doc.data()['Amount']);
+          // }
+          // else {
+          //   this.Creditbal += parseFloat(e.payload.doc.data()['Amount']);
+          // }
         });
+        var setnew = this.Store.SetSyncDate(new Date().toUTCString(), 'Expense');
+        console.log(setnew);
+        this.GetDBexpense(nedate.getFullYear(), nedate.getMonth(),this.Fkey);
+        this.Subscription_release();
 
       })
 
@@ -149,12 +187,15 @@ export class ExpensesPage implements OnInit {
     // });
 
     const popo = await this.popover.create({
-      component: CPopoverComponent
+      component: ExpenseAddPopupPage
     })
     popo.onDidDismiss().then((data: any) => {
-      console.log(data.data.Add_data);
-      //this.ExpennseList.push(data.data.Add_data);
-      this.Create_newdata(data.data.Add_data);
+      console.log(data.data?.Add_data);
+      if (data.data?.Add_data) {
+
+        //this.ExpennseList.push(data.data.Add_data);
+        this.Create_newdata(data.data.Add_data);
+      }
       //console.log(this.ExpennseList);
     });
     return await popo.present();
@@ -164,7 +205,7 @@ export class ExpensesPage implements OnInit {
     try {
       this.fire.Create_expense(Add_data).then((data) => {
         console.log('add data', data);
-        //  this.getdata_expense(this.paramID);
+         this.getdata_expense(this.paramID);
 
       });
     } catch (error) {
@@ -174,8 +215,10 @@ export class ExpensesPage implements OnInit {
 
   ChangedDate(Monthdater) {
     console.log('datechanges')
-    this.Subscription_release();
-    this.getdata_expense(this.paramID);
+    //this.Subscription_release();
+   // this.getdata_expense(this.paramID);
+   
+    
   }
 
   Subscription_release() {
@@ -186,8 +229,11 @@ export class ExpensesPage implements OnInit {
     console.log(datepick);
     this.setdate = new Date(datepick);
     console.log('datechanges_picker', this.setdate);
-    this.Subscription_release();
-    this.getdata_expense(this.paramID);
+    //this.Subscription_release();
+    //this.getdata_expense(this.paramID);
+    let nedate = new Date(this.datepick);
+    this.db.ReadExpense(nedate.getFullYear(),nedate.getMonth(),this.Fkey);
+
   }
 
   opendatepicker() {
@@ -203,11 +249,14 @@ export class ExpensesPage implements OnInit {
           header: 'Are you sure, you wants to delete this expense?',
           buttons: [{
             text: 'Delete',
-            handler: async() => {
+            handler: async () => {
 
               var del = await this.fire.delete_Expense(id);
-              this.Subscription_release();
-              this.getdata_expense(this.paramID);
+             // this.Subscription_release();
+              //this.getdata_expense(this.paramID);
+              this.db.UpdateExpense(id).then(()=>{
+                console.log('delete',id);
+              });
               let navTransition = actionSheet.dismiss();
               return false;
             },
@@ -228,6 +277,18 @@ export class ExpensesPage implements OnInit {
     } else {
       alert('You do not have permission to delete!');
     }
+
+  }
+
+  async View(e) {
+    const popo = await this.popover.create({
+      component: ExpenseAddPopupPage,
+      componentProps: {
+        'ExpenseData': e
+      }
+    });
+
+    return await popo.present();
 
   }
 

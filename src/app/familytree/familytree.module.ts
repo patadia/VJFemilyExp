@@ -7,6 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { FamilytreePageRoutingModule } from './familytree-routing.module';
 
 import { FamilytreePage } from './familytree.page';
+import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 @NgModule({
   imports: [
@@ -14,8 +16,10 @@ import { FamilytreePage } from './familytree.page';
     FormsModule,
     IonicModule,
     ReactiveFormsModule,
-    FamilytreePageRoutingModule
+    FamilytreePageRoutingModule,
+    NgxIntlTelInputModule,
+    BsDropdownModule,
   ],
-  declarations: [FamilytreePage]
+  declarations: [FamilytreePage],
 })
 export class FamilytreePageModule {}

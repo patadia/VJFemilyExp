@@ -27,6 +27,10 @@ const routes: Routes = [
     path: 'split-master',
     loadChildren: () => import('./split-master/split-master.module').then( m => m.SplitMasterPageModule)
   },
+  {
+    path: 'expense-add-popup',
+    loadChildren: () => import('./expense-add-popup/expense-add-popup.module').then( m => m.ExpenseAddPopupPageModule)
+  },
 ];
 
 @NgModule({

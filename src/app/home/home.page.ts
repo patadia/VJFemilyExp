@@ -123,23 +123,23 @@ export class HomePage {
     // } catch (error) {
     //   console.warn(error)
     // }
+    this.route.navigate(['./gate-pass-head']);
+  //  const pauth_popover = await this.popoverc.create({
+  //     component:PasswordAdminComponent
+  //   });
+  //   pauth_popover.onDidDismiss().then((data:any)=>{
+  //     //console.log(data);
+  //     console.log(data.data.login);
+  //     try {
+  //       if(data.data.login === 'Success'){
 
-   const pauth_popover = await this.popoverc.create({
-      component:PasswordAdminComponent
-    });
-    pauth_popover.onDidDismiss().then((data:any)=>{
-      //console.log(data);
-      console.log(data.data.login);
-      try {
-        if(data.data.login === 'Success'){
-
-          this.route.navigate(['./gate-pass-head']);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    });
-    return await pauth_popover.present(); 
+         
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   });
+  //   return await pauth_popover.present(); 
 
   }
 

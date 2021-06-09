@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {  PopoverController } from '@ionic/angular';
+import {  NavParams, PopoverController } from '@ionic/angular';
 import{StorageService} from '../services/storage.service';
 
 @Component({
@@ -15,13 +15,17 @@ public title:string ;
 public amount:any ;
 public type:any;
 public byName:string='';
+private Fkey:string;
+public AddBtn:boolean= true;
 
   constructor(private popover:PopoverController, 
+    private navParams: NavParams,
     private Store:StorageService) { 
 
       this.Store.init().then(()=>{
 
         this.init();
+      //  this.AddBtn = true;
       })
   }
   
@@ -30,11 +34,18 @@ public byName:string='';
     // If using, define drivers here: await this.storage.defineDriver(/*...*/);
 
     this.byName =  await this.Store.GetStorevalue('name_user');
-
+this.Fkey = await this.Store.GetStorevalue('familykeyID');
  
   }
   ngOnInit() {
-   
+    console.log(this.navParams.data.ExpenseData);
+    if (this.navParams)
+    {
+      console.log('navparam',this.navParams);
+      this.AddBtn= false;
+      (<HTMLInputElement>document.getElementById('title')).value = this.navParams.data.ExpenseData.Title;
+      ((<HTMLInputElement>document.getElementById('amount')).value)= this.navParams.data.ExpenseData.Amount
+    }
   }
 
   Add_data(){
@@ -45,8 +56,8 @@ public byName:string='';
       Transaction_Type : this.type,
       date_on: new Date().toLocaleString(),
       Date_unix: parseInt((new Date().getTime() / 1000).toFixed(0)),
-      full_date: new Date(),
-      byName:this.byName
+      byName:this.byName,
+      FamilyKey:this.Fkey
     }
 
     //console.log(data);

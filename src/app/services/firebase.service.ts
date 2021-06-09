@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import * as firebase from 'firebase';
 import { environment } from 'src/environments/environment';
+import {StorageService} from '../services/storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,10 +16,21 @@ export class FirebaseService {
   expensetable= "Expensetable"
 
   constructor(
-    private firestore: AngularFirestore
-  ) { }
+    private firestore: AngularFirestore,
+    private storage:StorageService
+  ) { 
+    
+  }
 
-  create_Member(record) {
+  veryfin_member_Exist_user(record:any){
+    return this.firestore.collection(this.Membercollection,ref=> ref.where('username','==',record.username)).valueChanges();
+  }
+
+  veryfin_member_Exist_mobile(record:any){
+    return this.firestore.collection(this.Membercollection,ref=> ref.where('Mobile','==',record.Mobile)).valueChanges();
+  }
+
+  create_Member(record:any) {
     console.log(record);
     console.log('call create');
     return this.firestore.collection(this.Membercollection).add(record);
@@ -28,9 +40,13 @@ export class FirebaseService {
     return this.firestore.collection(this.Membercollection,ref=> ref.where('FamilyKey','==',familykey).where('isDelete','==',false)).snapshotChanges();
   }
 
+  read_Members_sync(familykey,syncDate) {
+    return this.firestore.collection(this.Membercollection,ref=> ref.where('FamilyKey','==',familykey).where('isDelete','==',false).where('Syncdate','>=',syncDate)).snapshotChanges();
+  }
+
   varify_Members(record:any) {
     return this.firestore.collection(this.Membercollection,ref=> ref.where('username','==',record.username)
-    .where('password','==',record.password)).snapshotChanges();
+    .where('password','==',record.password).where('Mobile','==',record.Mobile)).snapshotChanges();
   }
 
   varify_user(record:any) {
@@ -64,7 +80,13 @@ export class FirebaseService {
     return this.firestore.collection(this.expensetable).snapshotChanges();
   }
 
-  Read_expbyMonth(year:number,Month:number){
+
+  read_expense_Sync(date:number,FamilyKey){
+    return this.firestore.collection(this.expensetable,ref=>  ref.where('Syncdate','>=',date)
+    .where('FamilyKey','==',FamilyKey)).snapshotChanges();
+  }
+
+  Read_expbyMonth(year:number,Month:number,FamilyKey){
     let month = Month ;
     const start = new Date(year,month,1);
     const daysinmonth = new Date(year,month+1,0).getDate();
@@ -79,6 +101,7 @@ export class FirebaseService {
     // console.log(start_unix);
      //console.log(End_unix);
     return this.firestore.collection(this.expensetable, ref => ref
+      .where('FamilyKey','==',FamilyKey)
     .where('Date_unix', '>=',  start_unix)
     .where('Date_unix', '<=',  End_unix).orderBy('Date_unix','desc')).snapshotChanges()
     

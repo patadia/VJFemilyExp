@@ -1,9 +1,9 @@
-<ion-header  translucent="true"  class="ion-no-border">
+<ion-header translucent="true" class="ion-no-border">
   <ion-toolbar>
     <div class="toolbardiv">
 
       <ion-icon name="arrow-back-outline" class="ion-padding" [routerLink]="['/home']">back</ion-icon>
-      <ion-title>Head Gate Pass</ion-title>
+      <ion-title>Registration</ion-title>
     </div>
   </ion-toolbar>
 </ion-header>
@@ -16,29 +16,48 @@
     </ion-item>
 
     <ion-item>
-      <ion-label position="floating">Username</ion-label>
+      <ion-label position="floating">Email</ion-label>
       <ion-input formControlName="username"></ion-input>
     </ion-item>
+    
+<div class="intldiv">
+
+
+    <!-- <ion-label class="phlabel" position="floating">phone</ion-label> -->
+    <ngx-intl-tel-input class="custom"
+    
+    [enableAutoCountrySelect]="false"
+    [enablePlaceholder]="true"
+    [searchCountryFlag]="true"
+    [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]" 
+    [selectFirstCountry]="false" placeholder="mobile number"
+    [selectedCountryISO]="CountryISO.India" [maxLength]="10" 
+    [phoneValidation]="true" [inputId]="my-input-id"
+    name="phone" formControlName="phone"></ngx-intl-tel-input>
+</div>
+  
+    
 
     <ion-item>
       <ion-label position="floating">Password</ion-label>
       <ion-input formControlName="password" type="password"></ion-input>
-    </ion-item> 
+    </ion-item>
 
-<div class="btnlr">
+    <div class="btnlr">
 
-  <ion-button (click)="LoginRegister()" [disabled]="FormLoginregister.invalid">
-    Login or Register
-  </ion-button>
-</div>
+      <ion-button (click)="LoginRegister()" [disabled]="FormLoginregister.invalid">
+        Login or Register
+      </ion-button>
+    </div>
 
     <div class="regdiv">
 
-  
+
       {{registerNote}}
-      <button *ngIf="ishidden" class="btn btn-dark" (click)="register()" [disabled]="FormLoginregister.invalid">Register</button>
-    
-  </div>  
+      <button *ngIf="ishidden" class="btn btn-dark" (click)="register()"
+        [disabled]="FormLoginregister.invalid">Register</button>
+
+    </div>
 
   </form>
 

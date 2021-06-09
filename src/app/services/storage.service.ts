@@ -7,7 +7,7 @@ import { Storage } from '@ionic/storage'
 export class StorageService {
   private _storage: Storage | null = null;
   constructor(private storage: Storage) {
-      this.init();
+    this.init();
   }
 
   async init() {
@@ -17,19 +17,50 @@ export class StorageService {
     console.log(this._storage);
   }
 
-  async GetStorevalue(st:string){
+  async GetStorevalue(st: string) {
     console.log(st);
     console.log(await this._storage?.get(st));
     return await this._storage?.get(st);
   }
 
-  async SetStorageData(st:string,Data:any){
-    let store = await this._storage.set(st,Data);
+  async SetStorageData(st: string, Data: any) {
+    let store = await this._storage.set(st, Data);
     return store;
   }
 
-  async ClearStore(){
-   await this._storage.clear();
+  async ClearStore() {
+    var fcmid = await this._storage.get('fcmID');
+    var syncdate_mem = await this._storage.get('SyncDate-Member-'+fcmid);
+    var syncdate_exp = await this._storage.get('SyncDate-Expense-'+fcmid);
+
+    await this._storage.clear();
+
+    var syncsetup = await this._storage.set('SyncDate-Member-'+fcmid,syncdate_mem);
+    var syncsetup_e = await this._storage.set('SyncDate-Expense-'+fcmid,syncdate_exp);
+  }
+
+  async SetSyncDate(date: any,type:any) {
+    var syncdate = new Date(date);
+    var unixsync = parseInt((syncdate.getTime() / 1000).toFixed(0));
+    var fcmid = await this._storage.get('fcmID');
+    console.log('set sync' + fcmid + '--> ',syncdate);
+
+    let storedate = await this._storage.set('SyncDate-'+type+'-'+fcmid, unixsync);
+    return storedate;
+  }
+
+  async GetSyncDate(type:any) {
+    var fcmid = await this._storage.get('fcmID');
+    let storedate = await this._storage?.get('SyncDate-'+type+'-'+fcmid);
+    console.log('get-'+fcmid,storedate);
+    if (!storedate) {
+      var syncdate = new Date(1990, 1, 1);
+      console.log('getafter new setup',syncdate);
+      var unixsync = parseInt((syncdate.getTime() / 1000).toFixed(0));
+      return await this._storage.set('SyncDate-'+type+'-'+fcmid, unixsync);
+    }
+    else
+      return storedate;
   }
 
 }

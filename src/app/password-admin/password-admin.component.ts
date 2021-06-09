@@ -22,13 +22,13 @@ export class PasswordAdminComponent implements OnInit {
   PasswordAuth(){
       let passauth = (<HTMLInputElement>document.getElementById('passinput')).value;
       console.log(this.inputpass);
-    if(passauth === environment.headpass){
-      this.popoverc.dismiss({
-        "login":"Success"
-      });
-    }else{
-      alert('offfo Wrong Password, please Try again !!');
-    }
+    // if(passauth === environment.headpass){
+    //   this.popoverc.dismiss({
+    //     "login":"Success"
+    //   });
+    // }else{
+    //   alert('offfo Wrong Password, please Try again !!');
+    // }
   }
 
   onchanhe(ent){

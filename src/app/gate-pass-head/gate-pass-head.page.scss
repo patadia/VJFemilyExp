@@ -35,3 +35,58 @@ ion-item{
   .toolbardiv{
     display: flex;
   }
+
+
+  .custom{
+    z-index: 1000;
+    border: 0px;
+    background: transparent;
+   // height: 60px;
+   .iti *{
+     color: red;
+   }
+    /* margin: -1px; */
+    border-radius: 20px;
+  }
+
+
+  // .phlabel{
+  //   position: fixed;
+  //   margin-bottom: 20px;
+  // }
+
+  .intldiv{
+    height: 60px;
+    background: #208891;
+    width: 100%;
+    margin: 2px 2px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    input{
+      background: transparent;
+    }
+  }
+
+  ///ngx-intl-input
+  ngx-intl-tel-input {
+    div{
+      div{
+        input{
+          background:red;
+        }
+      }
+    }
+   
+  }
+
+  #my-input-id{
+    background: gray;
+  }
+ 
+
+
+  /////
+
+ 

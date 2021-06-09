@@ -88,7 +88,7 @@
     <ion-list class="listmain" >
       <ion-item-sliding *ngFor="let e of ExpennseList">
         <ion-item-options side="end">
-          <!-- <ion-item-option (click)="favorite(item)">Favorite</ion-item-option> -->
+           <ion-item-option color="success" (click)="View(e)">View</ion-item-option>
           <ion-item-option color="danger" (click)="Delete(e.id)">Delete</ion-item-option>
         </ion-item-options>
       <ion-item lines="none" class="ion-no-padding">

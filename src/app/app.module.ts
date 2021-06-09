@@ -4,13 +4,16 @@ import { RouteReuseStrategy } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { AngularFireModule,FirebaseApp,FirebaseOptions, FIREBASE_OPTIONS } from '@angular/fire';
+import { AngularFireModule, FirebaseApp, FirebaseOptions, FIREBASE_OPTIONS } from '@angular/fire';
 import { environment } from 'src/environments/environment';
 import { AngularFirestoreModule, SETTINGS } from '@angular/fire/firestore'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Storage } from '@ionic/storage';
 import { DatePipe } from '@angular/common';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import { SQLite } from '@ionic-native/sqlite/ngx'
+import { SQLitePorter } from '@ionic-native/sqlite-porter/ngx'
+import { HttpClientModule } from '@angular/common/http'
 
 export class AppConfigService {
   static settings: IAppConfig;
@@ -43,7 +46,11 @@ export function initializeApp(appConfig: AppConfigService) {
     AppRoutingModule,
     FormsModule, ReactiveFormsModule,
     BrowserModule,
-    AngularFireModule, AngularFirestoreModule], //
+    AngularFireModule,
+    AngularFirestoreModule,
+    BrowserAnimationsModule,
+    HttpClientModule
+    ], //
   providers: [
     AppConfigService,
     {
@@ -51,11 +58,13 @@ export function initializeApp(appConfig: AppConfigService) {
       deps: [AppConfigService],
       useFactory: initializeApp
     },
-      {
-        provide: RouteReuseStrategy,
-        useClass: IonicRouteStrategy
-      }, Storage, DatePipe],
-    bootstrap: [AppComponent],
+    {
+      provide: RouteReuseStrategy,
+      useClass: IonicRouteStrategy
+    }, Storage, DatePipe,
+    SQLitePorter,
+    SQLite],
+  bootstrap: [AppComponent],
 })
 
 

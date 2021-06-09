@@ -81,3 +81,50 @@ form{
       font-size: 20px;
     color: #208891;
   }
+
+  .familymemberdiv{
+      width: 100%;
+      display: flex;
+
+  }
+
+  .iconsetup{
+      background: #208891;
+      text-transform: capitalize;
+      padding: 10px;
+      font-size: 25px;
+      color: white;
+      text-align: center;
+      width: 50px;
+      height: 50px;
+      border-radius: 25px;
+      
+  }
+
+  .intldiv{
+    height: 60px;
+    background: #208891;
+    width: 100%;
+    margin: 2px 2px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    input{
+      background: transparent;
+    }
+  }
+  ngx-intl-tel-input {
+    div{
+      div{
+        input{
+          background:red;
+        }
+      }
+    }
+   
+  }
+
+  #my-input-id{
+    background: gray;
+  }

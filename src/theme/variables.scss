@@ -317,3 +317,19 @@ ion-toolbar{
  // background:#3ab243;
   color: white;
 }
+
+.item-has-focus.label-stacked.sc-ion-label-md-h:not(.ion-color), .item-has-focus .label-stacked.sc-ion-label-md-h:not(.ion-color), .item-has-focus.label-floating.sc-ion-label-md-h:not(.ion-color), .item-has-focus .label-floating.sc-ion-label-md-h:not(.ion-color){
+  color: white;
+}
+
+input[type="tel"]{
+  padding-right: 6px;
+  padding-left: 52px;
+  margin-left: 0;
+  background: transparent;
+  border: 0px;
+  color: white;
+  
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-touch-callout: none;
+}

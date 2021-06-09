@@ -9,10 +9,9 @@
   </ion-item>
   <ion-item>
     <ion-label position="floating">
-      Ammount
+      Amount
     </ion-label>
-    <ion-input placeholder='Ammount' type="numeric" [(ngModel)]="amount"
-    id="amount">
+    <ion-input placeholder='Amount' type="numeric" [(ngModel)]="amount" id="amount">
 
     </ion-input>
   </ion-item>
@@ -20,8 +19,7 @@
     <ion-label position="floating">
       Type of transaction
     </ion-label>
-    <ion-select  interface="popover" 
-    [(ng-model)]="mySelect" (ionChange)="onChange($event)">
+    <ion-select interface="popover" [(ngModel)]="mySelect" (ionChange)="onChange($event)">
       <ion-select-option value="credit">
         Credit
       </ion-select-option>
@@ -30,5 +28,5 @@
       </ion-select-option>
     </ion-select>
   </ion-item>
-  <button *ngIf="AddBtn" class="itemaddbtn" (click)="Add_data()">Add</button>
+  <ion-button *ngIf="AddBtn" class="itemaddbtn" (click)="Add_data()">Add</ion-button>
 </ion-content>

@@ -31,13 +31,14 @@ strong{
 }
 
 .condiv{
-  padding: 10px;
-    background: #fdfdfd75;
-    border-radius: 20px;
-    position: fixed;
-    bottom: 20px;
-    margin: 20px 20px;
-    min-width: 90%;
+  background: #fdfdfd75;
+  border-radius: 20px;
+  position: fixed;
+  bottom: 50px;
+  left: 20px;
+  /* margin: 20px 20px; */
+  /* min-width: 95%; */
+  right: 20px;
  
 }
 
@@ -60,4 +61,13 @@ ion-item{
 }
 ion-label{
   --color:var(--background)
+}
+
+.reachus{
+  position: fixed;
+  bottom: 0px;
+  text-align: center;
+  color:white;
+  background: rgba(255, 255, 255, 0.507);
+  width: 100%;
 }
