@@ -10,7 +10,7 @@ import { DatePipe } from '@angular/common';
 import { App } from '@capacitor/app';
 import { Router } from '@angular/router';
 import { ExpenseAddPopupPage } from '../expense-add-popup/expense-add-popup.page';
-import { DataService,TExpenes } from '../services/data.service';
+import { DataService, TExpenes } from '../services/data.service';
 
 
 @Component({
@@ -31,6 +31,7 @@ export class ExpensesPage implements OnInit {
   paramID: string = '';
   setdate: any;
   private readExpdataSub: Subscription;
+  private expenseFetchsub: Subscription;
   private Fkey: string;
   Syncdate: any;
 
@@ -54,11 +55,6 @@ export class ExpensesPage implements OnInit {
     console.log('date new', this.datepick);
     this.setdate = new Date(this.datepick);
 
-    this.platform.backButton.subscribeWithPriority(-1, () => {
-      if (this.routerOutlet.canGoBack()) {
-        App.exitApp();
-      }
-    });
   }
 
   async init() {
@@ -66,16 +62,16 @@ export class ExpensesPage implements OnInit {
 
     this.name = await this.Store.GetStorevalue('name_user');
     this.Fkey = await this.Store.GetStorevalue('familykeyID');
-  
+
     this.getdata_expense('');
     let nedate = new Date(this.datepick);
     this.GetDBexpense(nedate.getFullYear(), nedate.getMonth(), this.Fkey);
   }
   GetDBexpense(Year: any, month: any, Fkey: string) {
-    console.log('date retrive',Year+''+month+''+Fkey);
-    this.db.fetchExpenses(Year,month,Fkey).subscribe((data) => {
+    console.log('date retrive', Year + '' + month + '' + Fkey);
+   this.expenseFetchsub =  this.db.fetchExpenses(Year, month, Fkey).subscribe((data) => {
       this.Creditbal = 0.0;
-        this.Debitbal = 0.0;
+      this.Debitbal = 0.0;
       this.ExpennseList = [];
       data.forEach(e => {
         let pusher = {
@@ -86,7 +82,8 @@ export class ExpensesPage implements OnInit {
           date_on: e.date_on,
           Date_unix: e.Date_unix,
           byName: e.byName,
-          Syncdate: e.Syncdate
+          Syncdate: e.Syncdate,
+          isDelete:e.isDelete
         }
         this.ExpennseList.push(pusher);
         console.log(JSON.stringify(pusher));
@@ -117,13 +114,14 @@ export class ExpensesPage implements OnInit {
     });
   }
 
- async getdata_expense(ID) {
+  async getdata_expense(ID) {
     try {
       this.Syncdate = Number(await this.Store.GetSyncDate('Expense'));
       console.log(this.Fkey);
       //this.ExpennseList = [];
       console.log('getdata_call');
       let nedate = new Date(this.datepick);
+   
       //read_expense_Sync
       // this.readExpdataSub = this.fire.Read_expbyMonth(nedate.getFullYear(), nedate.getMonth(),this.Fkey).subscribe((edata: any) => {
       this.readExpdataSub = this.fire.read_expense_Sync(this.Syncdate, this.Fkey).subscribe((edata: any) => {
@@ -132,22 +130,38 @@ export class ExpensesPage implements OnInit {
         // this.Creditbal = 0.0;
         // this.Debitbal = 0.0;
         edata.forEach(e => {
-          let pusher : TExpenes= {
-            EFCM_ID: e.payload.doc.id,
-            Title: e.payload.doc.data()['Title'],
-            Amount: Number(e.payload.doc.data()['Amount']),
-            Transaction_type: e.payload.doc.data()['Transaction_Type'],
-            date_on: e.payload.doc.data()['date_on'],
-            Date_unix: Number(e.payload.doc.data()['Date_unix']),
-            byName: e.payload.doc.data()['byName'],
-            Syncdate: Number(e.payload.doc.data()['Syncdate']),
-             FamilyKey : this.Fkey,
-             isDelete:false,
-             id:0
+         let deleteLog = false;
+          console.log(e.isDelete);
+          if( e.isDelete !== undefined){
+            deleteLog = e.isDelete;
+          }
+          let pusher: TExpenes = {
+            // EFCM_ID: e.payload.doc.id,
+            // Title: e.payload.doc.data()['Title'],
+            // Amount: Number(e.payload.doc.data()['Amount']),
+            // Transaction_type: e.payload.doc.data()['Transaction_Type'],
+            // date_on: e.payload.doc.data()['date_on'],
+            // Date_unix: Number(e.payload.doc.data()['Date_unix']),
+            // byName: e.payload.doc.data()['byName'],
+            // Syncdate: Number(e.payload.doc.data()['Syncdate']),
+            //  FamilyKey : this.Fkey,
+            //  isDelete:false,
+            //  id:0
+            EFCM_ID: e.id,
+            Title: e.Title,
+            Amount: Number(e.Amount),
+            Transaction_type: e.Transaction_Type,
+            date_on: e.date_on,
+            Date_unix: Number(e.Date_unix),
+            byName: e.byName,
+            Syncdate: Number(e.Syncdate),
+            FamilyKey: this.Fkey,
+            isDelete:deleteLog,
+            id: 0
           }
           //this.ExpennseList.push(pusher);
-          this.db.AddExpense(pusher as TExpenes).then(()=>{
-              console.log('Exp added ',JSON.stringify(pusher))
+          this.db.AddExpense(pusher as TExpenes).then(() => {
+            console.log('Exp added ', JSON.stringify(pusher))
           })
           // if (e.payload.doc.data()['Transaction_Type'] == 'debit') {
           //   this.Debitbal += parseFloat(e.payload.doc.data()['Amount']);
@@ -156,10 +170,15 @@ export class ExpensesPage implements OnInit {
           //   this.Creditbal += parseFloat(e.payload.doc.data()['Amount']);
           // }
         });
-        var setnew = this.Store.SetSyncDate(new Date().toUTCString(), 'Expense');
-        console.log(setnew);
-        this.GetDBexpense(nedate.getFullYear(), nedate.getMonth(),this.Fkey);
-        this.Subscription_release();
+
+        if (edata.length > 0) {
+          this.Subscription_release();
+          this.expenseFetchsub.unsubscribe();
+          var setnew = this.Store.SetSyncDate(new Date(), 'Expense');
+          //console.log(setnew);
+          this.ExpenseReset();
+        }
+
 
       })
 
@@ -167,9 +186,21 @@ export class ExpensesPage implements OnInit {
       console.log(error);
     }
   }
+
+ async ExpenseReset(){
+   let nedate = new Date(this.datepick);
+  setTimeout(() => 
+  {
+    this.GetDBexpense(nedate.getFullYear(), nedate.getMonth(), this.Fkey);
+    this.getdata_expense('');
+  },
+  1500);
+  }
+
   ngOnDestroy() {
     this.routeSub.unsubscribe();
     this.Subscription_release();
+    this.expenseFetchsub.unsubscribe();
   }
   async getdate() {
     var datetoday = new Date().toISOString();
@@ -190,22 +221,70 @@ export class ExpensesPage implements OnInit {
       component: ExpenseAddPopupPage
     })
     popo.onDidDismiss().then((data: any) => {
-      console.log(data.data?.Add_data);
+      console.log(JSON.stringify(data.data));
       if (data.data?.Add_data) {
+        console.log(data.data?.Add_data);
 
         //this.ExpennseList.push(data.data.Add_data);
         this.Create_newdata(data.data.Add_data);
+      }
+
+      if(data.data?.Edit_data){
+        console.log(data.data?.Edit_data);
+        this.Edit_Expensedata(data.data.Edit_data);
       }
       //console.log(this.ExpennseList);
     });
     return await popo.present();
   }
 
+ async Edit_Expensedata(expense: any) {
+   
+
+    try {
+      let actionSheet = await this.actionSheetCtrl.create({
+        header: 'Are you sure, you wants to delete this expense?',
+        buttons: [{
+          text: 'Edit',
+          handler: async () => {
+           // expense.isDelete = true;
+            //expense.Syncdate = parseInt((new Date().getTime()/1000).toFixed(0))
+            var del = await this.fire.update_Expense(expense);
+            // this.Subscription_release();
+            //this.getdata_expense(this.paramID);
+            // this.db.UpdateExpense_edit(expense).then(() => {
+            //   console.log('edited', expense.id);
+            // });
+            let navTransition = actionSheet.dismiss();
+            return false;
+          },
+        },
+        {
+          text: 'No keep it!',
+          handler: () => {
+            let navTransition = actionSheet.dismiss();
+            return false;
+          },
+        }]
+      });
+
+      await actionSheet.present();
+    } catch (error) {
+      console.log(error);
+    }
+    //update in firebase
+    
+
+    
+
+  
+  }
+
   Create_newdata(Add_data: any) {
     try {
       this.fire.Create_expense(Add_data).then((data) => {
         console.log('add data', data);
-         this.getdata_expense(this.paramID);
+        //  this.getdata_expense(this.paramID);
 
       });
     } catch (error) {
@@ -216,13 +295,14 @@ export class ExpensesPage implements OnInit {
   ChangedDate(Monthdater) {
     console.log('datechanges')
     //this.Subscription_release();
-   // this.getdata_expense(this.paramID);
-   
-    
+    // this.getdata_expense(this.paramID);
+
+
   }
 
   Subscription_release() {
     this.readExpdataSub.unsubscribe();
+
   }
 
   changenewdate(datepick) {
@@ -232,7 +312,7 @@ export class ExpensesPage implements OnInit {
     //this.Subscription_release();
     //this.getdata_expense(this.paramID);
     let nedate = new Date(this.datepick);
-    this.db.ReadExpense(nedate.getFullYear(),nedate.getMonth(),this.Fkey);
+    this.db.ReadExpense(nedate.getFullYear(), nedate.getMonth(), this.Fkey);
 
   }
 
@@ -240,22 +320,23 @@ export class ExpensesPage implements OnInit {
 
   }
 
-  async Delete(id) {
+  async Delete(expense) {
     let check = await this.Store.GetStorevalue('ISKeyUser');
     if (check === 'HeadLogedin') {
-      console.log(id);
+      console.log(expense);
       try {
         let actionSheet = await this.actionSheetCtrl.create({
           header: 'Are you sure, you wants to delete this expense?',
           buttons: [{
             text: 'Delete',
             handler: async () => {
-
-              var del = await this.fire.delete_Expense(id);
-             // this.Subscription_release();
+              expense.isDelete = true;
+              expense.Syncdate = parseInt((new Date().getTime()/1000).toFixed(0))
+              var del = await this.fire.update_Expense(expense);
+              // this.Subscription_release();
               //this.getdata_expense(this.paramID);
-              this.db.UpdateExpense(id).then(()=>{
-                console.log('delete',id);
+              this.db.UpdateExpense(expense.id).then(() => {
+                console.log('delete', expense.id);
               });
               let navTransition = actionSheet.dismiss();
               return false;
@@ -287,9 +368,24 @@ export class ExpensesPage implements OnInit {
         'ExpenseData': e
       }
     });
-
+    popo.onDidDismiss().then((data: any) => {
+      console.log(JSON.stringify(data.data));
+      if(data.data?.Edit_data){
+        console.log(data.data?.Edit_data);
+        this.Edit_Expensedata(data.data.Edit_data);
+      }
+      //console.log(this.ExpennseList);
+    });
     return await popo.present();
 
+  }
+
+  Refresh_items(){
+    let nedate = new Date(this.datepick);
+    this.expenseFetchsub.unsubscribe();
+    this.Subscription_release();
+    this.GetDBexpense(nedate.getFullYear(), nedate.getMonth(), this.Fkey);
+    this.getdata_expense('');
   }
 
 }

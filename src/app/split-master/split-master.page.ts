@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { IonRouterOutlet, Platform } from '@ionic/angular';
 import { StorageService } from '../services/storage.service';
+import { App } from '@capacitor/app';
 
 @Component({
   selector: 'app-split-master',
@@ -11,11 +13,20 @@ export class SplitMasterPage implements OnInit {
 
   ishidden: boolean = true;
   constructor(public route: Router,
-    private Store: StorageService) {
+    private Store: StorageService,
+    private platform:Platform,
+    private routerOutlet: IonRouterOutlet) {
     this.Store.init().then(() => {
 
       this.init();
     })
+
+    
+    this.platform.backButton.subscribeWithPriority(-1, () => {
+      if (this.routerOutlet.canGoBack()) {
+        App.exitApp();
+      }
+    });
   }
 
   GotoMenu(path) {

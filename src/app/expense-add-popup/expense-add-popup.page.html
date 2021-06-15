@@ -1,6 +1,14 @@
 <ion-content>
   <ion-item>
     <ion-label position="floating">
+      Date
+    </ion-label>
+    <ion-input placeholder='Date' type="date" [(ngModel)]="dateonadd" id="amount">
+
+    </ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">
       Title
     </ion-label>
     <ion-input placeholder='Title' [(ngModel)]="title" id="title">
@@ -11,7 +19,7 @@
     <ion-label position="floating">
       Amount
     </ion-label>
-    <ion-input placeholder='Amount' type="numeric" [(ngModel)]="amount" id="amount">
+    <ion-input placeholder='Amount' type="number" [(ngModel)]="amount" id="amount">
 
     </ion-input>
   </ion-item>
@@ -29,4 +37,5 @@
     </ion-select>
   </ion-item>
   <ion-button *ngIf="AddBtn" class="itemaddbtn" (click)="Add_data()">Add</ion-button>
+  <ion-button *ngIf="!AddBtn" class="itemaddbtn" (click)="Edit_data()">Edit</ion-button>
 </ion-content>

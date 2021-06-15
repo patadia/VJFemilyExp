@@ -1,5 +1,5 @@
 {
-  "name": "Family Expenses",
+  "name": "Expense Manager",
   "integrations": {
     "capacitor": {}
   },

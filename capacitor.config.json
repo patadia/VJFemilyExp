@@ -1,6 +1,6 @@
 {
 	"appId": "com.vj.familyexpense",
-	"appName": "Family Expenses",
+	"appName": "Expense Manager",
 	"webDir": "www",
 	"bundledWebRuntime": false
 }

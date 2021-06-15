@@ -62,7 +62,7 @@ export class FamilytreePage implements OnInit {
   }
 
   getfromdb() {
-  var readdata = this.db.fetchMembers().subscribe((s) => {
+  var readdata = this.db.fetchMembers(this.Familykey).subscribe((s) => {
       console.log('dataread from json', JSON.stringify(s));
       this.Members = s.map(e => {
 
@@ -70,7 +70,8 @@ export class FamilytreePage implements OnInit {
           id: e.MFCM_ID,
           Name: e.m_name,
           username: e.Email,
-          ishead: e.ishead
+          ishead: e.ishead,
+          FamilyKey: e.FamilyKey
         };
       })
     //  readdata.unsubscribe();

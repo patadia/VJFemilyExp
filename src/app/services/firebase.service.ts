@@ -60,8 +60,8 @@ export class FirebaseService {
 
  
 
-  delete_Expense(record_id) {
-    this.firestore.doc(this.expensetable + '/' + record_id).delete();
+  update_Expense(record) {
+    this.firestore.doc(this.expensetable + '/' + record.id).update(record);
   }
 
   create_Linkmember(token:string,id:string){
@@ -83,7 +83,7 @@ export class FirebaseService {
 
   read_expense_Sync(date:number,FamilyKey){
     return this.firestore.collection(this.expensetable,ref=>  ref.where('Syncdate','>=',date)
-    .where('FamilyKey','==',FamilyKey)).snapshotChanges();
+    .where('FamilyKey','==',FamilyKey).orderBy('Syncdate','desc')).valueChanges({ idField: 'id' });
   }
 
   Read_expbyMonth(year:number,Month:number,FamilyKey){
