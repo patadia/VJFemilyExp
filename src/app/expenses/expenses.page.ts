@@ -69,7 +69,7 @@ export class ExpensesPage implements OnInit {
   }
   GetDBexpense(Year: any, month: any, Fkey: string) {
     console.log('date retrive', Year + '' + month + '' + Fkey);
-   this.expenseFetchsub =  this.db.fetchExpenses(Year, month, Fkey).subscribe((data) => {
+    this.expenseFetchsub = this.db.fetchExpenses(Year, month, Fkey).subscribe((data) => {
       this.Creditbal = 0.0;
       this.Debitbal = 0.0;
       this.ExpennseList = [];
@@ -83,7 +83,7 @@ export class ExpensesPage implements OnInit {
           Date_unix: e.Date_unix,
           byName: e.byName,
           Syncdate: e.Syncdate,
-          isDelete:e.isDelete
+          isDelete: e.isDelete
         }
         this.ExpennseList.push(pusher);
         console.log(JSON.stringify(pusher));
@@ -121,7 +121,7 @@ export class ExpensesPage implements OnInit {
       //this.ExpennseList = [];
       console.log('getdata_call');
       let nedate = new Date(this.datepick);
-   
+
       //read_expense_Sync
       // this.readExpdataSub = this.fire.Read_expbyMonth(nedate.getFullYear(), nedate.getMonth(),this.Fkey).subscribe((edata: any) => {
       this.readExpdataSub = this.fire.read_expense_Sync(this.Syncdate, this.Fkey).subscribe((edata: any) => {
@@ -130,9 +130,9 @@ export class ExpensesPage implements OnInit {
         // this.Creditbal = 0.0;
         // this.Debitbal = 0.0;
         edata.forEach(e => {
-         let deleteLog = false;
+          let deleteLog = false;
           console.log(e.isDelete);
-          if( e.isDelete !== undefined){
+          if (e.isDelete !== undefined) {
             deleteLog = e.isDelete;
           }
           let pusher: TExpenes = {
@@ -156,7 +156,7 @@ export class ExpensesPage implements OnInit {
             byName: e.byName,
             Syncdate: Number(e.Syncdate),
             FamilyKey: this.Fkey,
-            isDelete:deleteLog,
+            isDelete: deleteLog,
             id: 0
           }
           //this.ExpennseList.push(pusher);
@@ -173,12 +173,15 @@ export class ExpensesPage implements OnInit {
 
         if (edata.length > 0) {
           this.Subscription_release();
-          this.expenseFetchsub.unsubscribe();
+          // this.expenseFetchsub.unsubscribe();
           var setnew = this.Store.SetSyncDate(new Date(), 'Expense');
           //console.log(setnew);
           this.ExpenseReset();
         }
 
+        this.db.ReadExpense(nedate.getFullYear(), nedate.getMonth(), this.Fkey);
+
+        // this.GetDBexpense(nedate.getFullYear(), nedate.getMonth(), this.Fkey);
 
       })
 
@@ -187,14 +190,12 @@ export class ExpensesPage implements OnInit {
     }
   }
 
- async ExpenseReset(){
-   let nedate = new Date(this.datepick);
-  setTimeout(() => 
-  {
-    this.GetDBexpense(nedate.getFullYear(), nedate.getMonth(), this.Fkey);
-    this.getdata_expense('');
-  },
-  1500);
+  async ExpenseReset() {
+    let nedate = new Date(this.datepick);
+    setTimeout(() => {
+      this.getdata_expense('');
+    },
+      1500);
   }
 
   ngOnDestroy() {
@@ -229,8 +230,9 @@ export class ExpensesPage implements OnInit {
         this.Create_newdata(data.data.Add_data);
       }
 
-      if(data.data?.Edit_data){
+      if (data.data?.Edit_data) {
         console.log(data.data?.Edit_data);
+
         this.Edit_Expensedata(data.data.Edit_data);
       }
       //console.log(this.ExpennseList);
@@ -238,46 +240,50 @@ export class ExpensesPage implements OnInit {
     return await popo.present();
   }
 
- async Edit_Expensedata(expense: any) {
-   
-
-    try {
-      let actionSheet = await this.actionSheetCtrl.create({
-        header: 'Are you sure, you wants to delete this expense?',
-        buttons: [{
-          text: 'Edit',
-          handler: async () => {
-           // expense.isDelete = true;
-            //expense.Syncdate = parseInt((new Date().getTime()/1000).toFixed(0))
-            var del = await this.fire.update_Expense(expense);
-            // this.Subscription_release();
-            //this.getdata_expense(this.paramID);
-            // this.db.UpdateExpense_edit(expense).then(() => {
-            //   console.log('edited', expense.id);
-            // });
-            let navTransition = actionSheet.dismiss();
-            return false;
+  async Edit_Expensedata(expense: any) {
+    let check = await this.Store.GetStorevalue('ISKeyUser');
+    let checkname = await this.Store.GetStorevalue('name_user')
+    if (check === 'HeadLogedin' || checkname === expense.byName) {
+      try {
+        let actionSheet = await this.actionSheetCtrl.create({
+          header: 'Are you sure, you wants to delete this expense?',
+          buttons: [{
+            text: 'Edit',
+            handler: async () => {
+              // expense.isDelete = true;
+              //expense.Syncdate = parseInt((new Date().getTime()/1000).toFixed(0))
+              var del = await this.fire.update_Expense(expense);
+              // this.Subscription_release();
+              //this.getdata_expense(this.paramID);
+              // this.db.UpdateExpense_edit(expense).then(() => {
+              //   console.log('edited', expense.id);
+              // });
+              let navTransition = actionSheet.dismiss();
+              return false;
+            },
           },
-        },
-        {
-          text: 'No keep it!',
-          handler: () => {
-            let navTransition = actionSheet.dismiss();
-            return false;
-          },
-        }]
-      });
+          {
+            text: 'No keep it!',
+            handler: () => {
+              let navTransition = actionSheet.dismiss();
+              return false;
+            },
+          }]
+        });
 
-      await actionSheet.present();
-    } catch (error) {
-      console.log(error);
+        await actionSheet.present();
+      } catch (error) {
+        console.log(error);
+      }
+    }else{
+      alert('You do not have permission to edit other members expense data');
     }
     //update in firebase
-    
 
-    
 
-  
+
+
+
   }
 
   Create_newdata(Add_data: any) {
@@ -331,7 +337,7 @@ export class ExpensesPage implements OnInit {
             text: 'Delete',
             handler: async () => {
               expense.isDelete = true;
-              expense.Syncdate = parseInt((new Date().getTime()/1000).toFixed(0))
+              expense.Syncdate = parseInt((new Date().getTime() / 1000).toFixed(0))
               var del = await this.fire.update_Expense(expense);
               // this.Subscription_release();
               //this.getdata_expense(this.paramID);
@@ -370,7 +376,7 @@ export class ExpensesPage implements OnInit {
     });
     popo.onDidDismiss().then((data: any) => {
       console.log(JSON.stringify(data.data));
-      if(data.data?.Edit_data){
+      if (data.data?.Edit_data) {
         console.log(data.data?.Edit_data);
         this.Edit_Expensedata(data.data.Edit_data);
       }
@@ -380,12 +386,21 @@ export class ExpensesPage implements OnInit {
 
   }
 
-  Refresh_items(){
+  Refresh_items() {
     let nedate = new Date(this.datepick);
-    this.expenseFetchsub.unsubscribe();
+    //this.expenseFetchsub.unsubscribe();
     this.Subscription_release();
-    this.GetDBexpense(nedate.getFullYear(), nedate.getMonth(), this.Fkey);
+    // this.db.ReadExpense(nedate.getFullYear(), nedate.getMonth(), this.Fkey);
     this.getdata_expense('');
+  }
+
+  ExpenseList(event) {
+    console.log('Begin refresh operation');
+
+    setTimeout(() => {
+      this.Refresh_items();
+      event.target.complete();
+    }, 1000);
   }
 
 }

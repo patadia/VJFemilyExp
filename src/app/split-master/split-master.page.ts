@@ -12,6 +12,7 @@ import { App } from '@capacitor/app';
 export class SplitMasterPage implements OnInit {
 
   ishidden: boolean = true;
+  fkey:string ='';
   constructor(public route: Router,
     private Store: StorageService,
     private platform:Platform,
@@ -45,6 +46,8 @@ export class SplitMasterPage implements OnInit {
     let check = await this.Store.GetStorevalue('ISKeyUser');
     if (check === 'HeadLogedin')
       this.ishidden = false;
+    
+    this.fkey = await this.Store.GetStorevalue('familykeyID');
 
 
   }

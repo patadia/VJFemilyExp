@@ -14,7 +14,8 @@
       </ion-menu-toggle>
       <ion-menu-toggle autoHide="false" *ngIf="!ishidden">
         <ion-item (click)="GotoMenu('familytree')" lines="none">
-          <ion-label>Family Tree</ion-label>
+          <ion-label>Family Members</ion-label>
+          <ion-label class="keydis">{{fkey}}</ion-label>
         </ion-item>
       </ion-menu-toggle>
       <ion-menu-toggle autoHide="false">

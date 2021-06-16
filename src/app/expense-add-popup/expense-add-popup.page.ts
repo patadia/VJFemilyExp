@@ -51,6 +51,7 @@ public dateonadd :any;
         this.type = this.navParams.data.ExpenseData.Transaction_Type;
         this.mySelect = this.navParams.data.ExpenseData.Transaction_Type;
         this.dateonadd =  this.datepipe.transform(this.navParams.data.ExpenseData.date_on, 'yyyy-MM-dd'); 
+        this.byName = this.navParams.data.ExpenseData.byName;
       }
     }
   
@@ -97,7 +98,7 @@ public dateonadd :any;
           Transaction_Type : this.type,
           date_on: new Date(this.dateonadd).toDateString(),
           Date_unix: parseInt((new Date(this.dateonadd).getTime() / 1000).toFixed(0)),
-          byName:this.byName,
+          byName:this.navParams.data.ExpenseData.byName,
           FamilyKey:this.Fkey,
           Syncdate:parseInt((new Date().getTime()/1000).toFixed(0)),
           isDelete:false,
