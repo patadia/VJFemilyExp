@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { IonRouterOutlet, Platform } from '@ionic/angular';
+import { ActionSheetController, IonRouterOutlet, Platform } from '@ionic/angular';
 import { StorageService } from '../services/storage.service';
 import { App } from '@capacitor/app';
 
@@ -16,17 +16,38 @@ export class SplitMasterPage implements OnInit {
   constructor(public route: Router,
     private Store: StorageService,
     private platform:Platform,
-    private routerOutlet: IonRouterOutlet) {
+    private routerOutlet: IonRouterOutlet,
+    private actionSheetCtrl: ActionSheetController) {
     this.Store.init().then(() => {
 
       this.init();
     })
 
     
-    this.platform.backButton.subscribeWithPriority(-1, () => {
-      if (this.routerOutlet.canGoBack()) {
-        App.exitApp();
-      }
+    this.platform.backButton.subscribeWithPriority(20, async() => {
+       if (this.routerOutlet.canGoBack()) {
+        let actionSheet = await this.actionSheetCtrl.create({
+          header: 'Are you sure, you wants to Exit?',
+          buttons: [{
+            text: 'Exit',
+            handler: async () => {
+              App.exitApp();
+              let navTransition = actionSheet.dismiss();
+              return false;
+            },
+          },
+          {
+            text: 'No',
+            handler: () => {
+              let navTransition = actionSheet.dismiss();
+              return false;
+            },
+          }]
+        });
+
+        await actionSheet.present();
+      
+       }
     });
   }
 

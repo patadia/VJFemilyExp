@@ -162,7 +162,7 @@ export class DataService {
     let start_unix = parseInt((start.getTime() / 1000).toFixed(0));
     let End_unix = parseInt((end.getTime() / 1000).toFixed(0));
 
-    return this.database.executeSql('SELECT * FROM TExpensesData where isDelete = ? and Date_unix >= ? and Date_unix <= ? and FamilyKey = ? Order by Syncdate DESC', [false, start_unix, End_unix, FamilyKey]).then(data => {
+    return this.database.executeSql('SELECT * FROM TExpensesData where isDelete = ? and Date_unix >= ? and Date_unix <= ? and FamilyKey = ? Order by Date_unix DESC', [false, start_unix, End_unix, FamilyKey]).then(data => {
       let exp: TExpenes[] = [];
       //   console.log('readsql', data);
       if (data.rows.length > 0) {

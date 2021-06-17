@@ -11,13 +11,13 @@
   </ng-lottie>
 </div>
   <div id="container " class="condiv" style="text-align: center;">
-    <strong>Wanna start !! <br> Create Family Tree first </strong><br>
+    <strong>Welcome to Expense Manager </strong><br>
 
-    <button class="btn btn-primary" (click)="gotofamilytreecreate()">Registration and get Family Key</button>
+    <button class="btn btn-primary" (click)="gotofamilytreecreate()">Register and get your Key </button>
    
     <div class="container-fluid">
       <div class="container">
-          <strong>Already have Family Key</strong><br>
+          <strong>Already have a Key ?</strong><br>
      <div class="">
 
     </div>
@@ -30,14 +30,15 @@
         </ion-item>
     
         <ion-item>
-          <ion-label position="floating">Family Key</ion-label>
-          <ion-input formControlName="FamilyKey"></ion-input>
+          <ion-label position="floating">Key Or Password</ion-label>
+          <ion-input formControlName="FamilyKey_password" type="password"></ion-input>
         </ion-item>
     
     
-        <ion-button class="btnadmember" (click)="verifyRecord()" [disabled]="Formverify.invalid">
+        <ion-button *ngIf="!processing" class="btnadmember" (click)="verifyRecord()" [disabled]="Formverify.invalid">
         Verify
         </ion-button>
+        <ion-spinner *ngIf="processing" name="dots"></ion-spinner>
     
       </form>
     </div>

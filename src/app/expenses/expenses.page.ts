@@ -246,7 +246,7 @@ export class ExpensesPage implements OnInit {
     if (check === 'HeadLogedin' || checkname === expense.byName) {
       try {
         let actionSheet = await this.actionSheetCtrl.create({
-          header: 'Are you sure, you wants to delete this expense?',
+          header: 'Are you sure, you wants to edit this expense?',
           buttons: [{
             text: 'Edit',
             handler: async () => {

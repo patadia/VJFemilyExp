@@ -15,6 +15,7 @@ import { SQLite } from '@ionic-native/sqlite/ngx'
 import { SQLitePorter } from '@ionic-native/sqlite-porter/ngx'
 import { HttpClientModule } from '@angular/common/http'
 
+
 export class AppConfigService {
   static settings: IAppConfig;
   constructor() { }

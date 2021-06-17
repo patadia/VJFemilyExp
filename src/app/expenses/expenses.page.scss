@@ -147,6 +147,10 @@ hr {
 }
 .titleDiv {
     margin-top: 10px;
+    text-overflow: ellipsis;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
 }
 .creditUp {
     margin-right: 20px;
@@ -159,6 +163,7 @@ hr {
     display: flex;
     justify-content: center;
     box-shadow: 1px 2px #68c989;
+   
 }
 
 .debitdown {

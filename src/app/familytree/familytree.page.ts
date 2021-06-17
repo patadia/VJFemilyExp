@@ -7,6 +7,8 @@ import { ActionSheetController } from '@ionic/angular';
 import { DataService, TMember } from '../services/data.service';
 import { from, Observable } from 'rxjs';
 import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
+import {Share} from '@capacitor/share';
+
 
 interface Familytree {
   Name: string;
@@ -256,6 +258,19 @@ export class FamilytreePage implements OnInit {
 
     } catch (error) {
       console.log(error);
+    }
+  }
+  
+ async Sharekey(){
+
+    try {
+      await Share.share({
+        //title: 'Hey, Try out this Expense Manager App',
+        text: this.Familykey+' will be your key to get start, Try this out new amazing Expense Manager app',
+        url: 'https://play.google.com/store/apps/details?id=com.vj.familyexpense',
+      });
+    } catch (error) {
+      
     }
   }
 

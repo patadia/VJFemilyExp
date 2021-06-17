@@ -35,7 +35,7 @@ export class GatePassHeadPage implements OnInit {
   CountryISO = CountryISO;
   PhoneNumberFormat = PhoneNumberFormat;
   preferredCountries: CountryISO[] = [CountryISO.UnitedStates, CountryISO.UnitedKingdom];
-
+  
 
   constructor(private firebaseService: FirebaseService,
     public fb: FormBuilder,
@@ -74,6 +74,7 @@ export class GatePassHeadPage implements OnInit {
 
   LoginRegister() {
     try {
+
       //console.log(this.FormLoginregister.value);
       const data = this.FormLoginregister.value;
       var dataobj = data as headMember;
@@ -106,6 +107,7 @@ export class GatePassHeadPage implements OnInit {
   }
 
   async register() {
+    
     try {
       var data = this.FormLoginregister.value;
       var dataobj = {} as headMember;
@@ -120,11 +122,13 @@ export class GatePassHeadPage implements OnInit {
       console.log('regobj', dataobj);
 
       var userexist = this.firebaseService.veryfin_member_Exist_user(dataobj).subscribe((s) => {
+        
         console.log('verifyuseremail', s.length);
   
         if (s.length == 0) {
   
           var mobileexist = this.firebaseService.veryfin_member_Exist_mobile(dataobj).subscribe((s) => {
+            
             userexist.unsubscribe();
             console.log('verifyusermobile', s.length);
             if (s.length == 0) {
@@ -136,30 +140,38 @@ export class GatePassHeadPage implements OnInit {
                 let userid = await this.Store.SetStorageData("KeyUserID", account.id);
                 this._headmem = this.FormLoginregister.value as headMember;
                 this.gotoMemberListPage();
+               
               })
+              
               mobileexist.unsubscribe();
             }
             else {
+              
               alert('Already exist user');
               
               mobileexist.unsubscribe();
             }
           })
         } else {
+         
           alert('Already exist user');
          
           userexist.unsubscribe();
         }
-  
+      
       })
 
-    
+     
+       
+    //this.processing = false;
 
     } catch (error) {
       console.log('registration error', error);
+      
     }
   }
 
+  
   async gotoMemberListPage() {
     try {
       let ID = await this.Store.SetStorageData('familykeyID', this._headmem.FamilyKey);

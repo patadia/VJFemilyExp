@@ -51,7 +51,12 @@ export class FirebaseService {
 
   varify_user(record:any) {
     return this.firestore.collection(this.Membercollection,ref=> ref.where('username','==',record.username)
-    .where('FamilyKey','==',record.FamilyKey)).snapshotChanges();
+    .where('FamilyKey','==',record.FamilyKey_password)).snapshotChanges();
+  }
+
+  varify_user_password(record:any){
+    return this.firestore.collection(this.Membercollection,ref=> ref.where('username','==',record.username)
+    .where('password','==',record.FamilyKey_password)).snapshotChanges();
   }
 
   update_Member(recordID, record) {

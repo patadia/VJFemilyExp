@@ -57,7 +57,11 @@ ion-content{
     margin-bottom: 5px;
     color:#ffffff;
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
+}
+.shareicon{
+  margin: 5px;
+  font-size: 20px;
 }
 
 form{

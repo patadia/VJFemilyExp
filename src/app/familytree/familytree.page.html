@@ -5,7 +5,7 @@
   <ion-menu-button></ion-menu-button>
 </ion-buttons>
       <!-- <ion-icon name="arrow-back-outline" class="ion-padding" [routerLink]="['/home']">back</ion-icon> -->
-      <ion-title>Family Members</ion-title>
+      <ion-title>Members</ion-title>
       <!-- <ion-icon name="calculator" class="ion-padding" [routerLink]="['/expenses']"></ion-icon> -->
     </div>
   </ion-toolbar>
@@ -13,8 +13,9 @@
 
 <ion-content fullscreen="true" class="ion-no-padding">
   <div class="keydivclass">
-    <ion-label class="fkey">Your family key is <p> {{Familykey}} </p>
+    <ion-label class="fkey" (click)="Sharekey()">Your key is <p> {{Familykey}} </p>
     </ion-label>
+    <ion-icon class="shareicon" (click)="Sharekey()" slot="end" name="share"></ion-icon>
   </div>
 
   <form [formGroup]="FormCreateFamilyHead" (ngSubmit)="CreateRecord()">
@@ -53,7 +54,7 @@
   <div class="listmemberlist">
     <div class="listtitle">
       
-      <label>Family Members 😍</label>
+      <label>Members 😍</label>
     </div>
       <ion-list class="listmember" lines="full">
         <ion-item-sliding *ngFor="let m of Members">

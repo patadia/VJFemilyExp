@@ -26,6 +26,7 @@
     "@capacitor/core": "3.0.0",
     "@capacitor/haptics": "1.0.0",
     "@capacitor/keyboard": "1.0.0",
+    "@capacitor/share": "^1.0.1",
     "@ionic-native/core": "^5.33.0",
     "@ionic-native/date-picker": "^5.33.0",
     "@ionic-native/sqlite": "^5.33.1",
