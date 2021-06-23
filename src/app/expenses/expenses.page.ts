@@ -11,6 +11,7 @@ import { App } from '@capacitor/app';
 import { Router } from '@angular/router';
 import { ExpenseAddPopupPage } from '../expense-add-popup/expense-add-popup.page';
 import { DataService, TExpenes } from '../services/data.service';
+import { FilterPagePage } from '../filter-page/filter-page.page';
 
 
 @Component({
@@ -387,6 +388,7 @@ export class ExpensesPage implements OnInit {
   }
 
   Refresh_items() {
+
     let nedate = new Date(this.datepick);
     //this.expenseFetchsub.unsubscribe();
     this.Subscription_release();
@@ -395,12 +397,47 @@ export class ExpensesPage implements OnInit {
   }
 
   ExpenseList(event) {
+  
     console.log('Begin refresh operation');
 
     setTimeout(() => {
       this.Refresh_items();
       event.target.complete();
     }, 1000);
+  }
+
+
+ async Filter_items(){
+   
+    const popo = await this.popover.create({
+      component: FilterPagePage,
+      componentProps: {
+      }
+    });
+    popo.onDidDismiss().then(async (data: any) => {
+      console.log(JSON.stringify(data.data?.Filterdata)); 
+      if(data.data?.Filterdata){
+        let startobj = new Date(data.data?.Filterdata.Sdate);
+        let startobjdec = new Date(startobj.getFullYear(),startobj.getMonth(),startobj.getDate(),0,0,0)
+        let endobj = new Date(data.data?.Filterdata.Edate);
+        let Endobjdec = new Date(endobj.getFullYear(),endobj.getMonth(),endobj.getDate(),23,59,59);
+
+        let sdate = parseInt((new Date(startobjdec).getTime() / 1000).toFixed(0)); 
+        let edate = parseInt((new Date(Endobjdec).getTime() / 1000).toFixed(0)); 
+        let Name = data.data?.Filterdata.ByName;
+        let _data = {
+          Sdate : sdate,
+          Edate: edate,
+          ByName : Name,
+          FamilyKey : this.Fkey
+        }
+        console.log(_data);
+
+        await this.db.FilterExpense(_data);
+      }
+      
+    });
+    return await popo.present();
   }
 
 }

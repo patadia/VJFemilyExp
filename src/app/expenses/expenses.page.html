@@ -86,9 +86,9 @@
     </div>
     
   <div class="listdiv">
-    <!-- <ion-item class="refreshicon">
-      <ion-icon slot="end" name="refresh" (click)="Refresh_items()"></ion-icon>
-    </ion-item>  -->
+    <ion-item class="filtericon">
+      <ion-icon slot="end" name="funnel" (click)="Filter_items()"></ion-icon>
+    </ion-item> 
     <ion-refresher slot="fixed" (ionRefresh)="ExpenseList($event)" pullMin="100" pullMax="200">
       <ion-refresher-content 
         pullingIcon="arrow-down-outline" 

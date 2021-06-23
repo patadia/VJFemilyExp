@@ -31,6 +31,10 @@ const routes: Routes = [
     path: 'expense-add-popup',
     loadChildren: () => import('./expense-add-popup/expense-add-popup.module').then( m => m.ExpenseAddPopupPageModule)
   },
+  {
+    path: 'filter-page',
+    loadChildren: () => import('./filter-page/filter-page.module').then( m => m.FilterPagePageModule)
+  },
 ];
 
 @NgModule({

@@ -240,4 +240,36 @@ export class DataService {
   }
 
 
+  async FilterExpense(f:any){
+    try {
+      let dataf = [f.FamilyKey,f.Sdate,f.Edate]
+      return await this.database.executeSql(`select * from TExpensesData where FamilyKey =? and Date_unix >= ? and Date_unix <= ? and byName like '%${f.ByName}%'`, dataf).then(data=>{
+        let exp: TExpenes[] = [];
+        if (data.rows.length > 0) {
+          for (var i = 0; i < data.rows.length; i++) {
+            var dataread = data.rows.item(i);
+            exp.push({
+              id: dataread.id,
+              Amount: dataread.Amount,
+              Date_unix: dataread.Date_unix,
+              EFCM_ID: dataread.EFCM_ID,
+              FamilyKey: dataread.FamilyKey,
+              Title: dataread.Title,
+              Transaction_type: dataread.Transaction_type,
+              byName: dataread.byName,
+              date_on: dataread.date_on,
+              isDelete: dataread.isDelete,
+              Syncdate: dataread.Syncdate
+            });
+          }
+        }
+        this.Expenses.next(exp);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
+  }
+
+
 }

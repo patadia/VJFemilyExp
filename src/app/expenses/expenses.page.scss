@@ -163,7 +163,6 @@ hr {
     display: flex;
     justify-content: center;
     box-shadow: 1px 2px #68c989;
-   
 }
 
 .debitdown {
@@ -218,7 +217,7 @@ ion-toolbar {
     text-align: center;
 }
 
-.refreshicon {
+.filtericon {
     position: absolute;
     margin-top: -20px;
     right: -15px;
@@ -234,15 +233,17 @@ ion-toolbar {
     align-items: center;
     ion-icon {
         background: #208891;
-        border-radius: 20px;
+        border-radius: 30px;
         color: white;
+        font-size: 30px;
+        padding: 5px;
     }
 }
 
-ion-icon{
-    color:white;
+ion-icon {
+    color: white;
 }
 
-ion-spinner{
-    color:white;
+ion-spinner {
+    color: white;
 }

@@ -1,0 +1,20 @@
+.btnadmember {
+    margin-left: 50%;
+}
+
+ion-item {
+    border-radius: 20px;
+    height: 65px;
+    background: no-repeat;
+    margin: 10px 10px;
+    color: #f2efd9;
+    --background: #208891;
+}
+ 
+.errorlabel {
+    color: red;
+    text-align: center;
+    display: flex;
+    justify-content: space-evenly;
+    font-size: 10px;
+}
