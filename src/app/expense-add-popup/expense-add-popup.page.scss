@@ -11,3 +11,42 @@ ion-item{
     color: #f2efd9;
     --background: #208891;
   }
+
+  .imageview{
+     
+      height: 100px;
+      background-color: gray;
+  }
+
+  .innerdiv{
+    // height: 350px;
+    max-height: 350px;
+    overflow-y: scroll;
+  }
+
+  ion-fab{
+      background-color: transparent;
+  }
+
+  ion-card{
+      ion-card-content{
+        display: flex;
+        justify-content: space-evenly;
+        padding: 2px;
+      }
+      background-color: transparent;
+      display: flex;
+      justify-content: space-evenly;
+  }
+
+  .attachmentbtn{
+    display: flex;
+  }
+
+  .trashicon{
+    position: absolute;
+    border-radius: 20px;
+    padding: 3px;
+    right: 0;
+    bottom: 0;
+  }

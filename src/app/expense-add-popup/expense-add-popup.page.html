@@ -1,4 +1,7 @@
 <ion-content>
+  <div class="innerdiv">
+
+ 
   <ion-item>
     <ion-label position="floating">
       Date
@@ -36,6 +39,27 @@
       </ion-select-option>
     </ion-select>
   </ion-item>
+  
+
+    <ion-button class="attachmentbtn" (click)="UploadAttachment();">
+      <ion-icon size="small" slot="icon-only" name="images"></ion-icon>
+      &nbsp; Add Attachments
+    </ion-button>
+
+
+  <div *ngIf="Photoes">
+    <ion-card *ngFor="let p of Photoes">   
+  
+      <ion-card-content>
+        <img class="imageview" [src]="p.image">
+        <ion-icon name="trash" class="trashicon" (click)="Deleteimage(p.id)" slot="icon-only" size="small" style="background-color: red;"></ion-icon>
+      </ion-card-content>
+    </ion-card>
+  </div>
   <ion-button *ngIf="AddBtn" class="itemaddbtn" (click)="Add_data()">Add</ion-button>
-  <ion-button *ngIf="!AddBtn" class="itemaddbtn" (click)="Edit_data()">Edit</ion-button>
+    <ion-button *ngIf="!AddBtn" class="itemaddbtn" (click)="Edit_data()">Edit</ion-button>
+</div>
+
+
+
 </ion-content>

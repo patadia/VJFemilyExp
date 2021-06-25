@@ -1,7 +1,15 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { NavParams, PopoverController } from '@ionic/angular';
 import { StorageService } from '../services/storage.service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+
+interface TPhotoes {
+  image: SafeResourceUrl,
+  filename: string,
+  id:number
+}
 
 @Component({
   selector: 'app-expense-add-popup',
@@ -18,13 +26,14 @@ export class ExpenseAddPopupPage implements OnInit {
   private Fkey: string;
   public AddBtn: boolean = true;
   public dateonadd: any;
-
-
+  Photoes:TPhotoes[] = [];
+  counter: number = 0;
 
   constructor(private popover: PopoverController,
     private navParams: NavParams,
     private Store: StorageService,
-    public datepipe: DatePipe,) {
+    public datepipe: DatePipe,
+    private sanitizer: DomSanitizer) {
     this.dateonadd = this.datepipe.transform(new Date(), 'yyyy-MM-dd');
     this.Store.init().then(() => {
 
@@ -68,13 +77,16 @@ export class ExpenseAddPopupPage implements OnInit {
       isDelete: false
     }
 
+    const images = {
+      photoes : this.Photoes
+    }
     //console.log(data);
     if (!data.Title || !data.Amount || !data.Transaction_Type) {
       alert('Add All the Field');
       return;
     }
     this.popover.dismiss({
-      "Add_data": data
+      "Add_data": {data,images}
     })
   }
 
@@ -123,6 +135,31 @@ export class ExpenseAddPopupPage implements OnInit {
     } catch (error) {
       console.log('edit error', error);
     }
+  }
+
+ 
+  async UploadAttachment() {
+  
+
+    const image = await Camera.getPhoto({
+      quality: 80,
+      allowEditing: false,
+      resultType: CameraResultType.DataUrl,
+      source: CameraSource.Prompt
+    });
+
+    let attachment = {
+      image: this.sanitizer.bypassSecurityTrustResourceUrl(image && (image.dataUrl)),
+      filename: image.format,
+      id:this.counter
+    };
+    this.counter = this.counter+1;
+    console.log(attachment);
+    this.Photoes.push(attachment as TPhotoes);
+  }
+
+  async Deleteimage(id:any){
+    this.Photoes = this.Photoes.filter(e => e.id !== id);
   }
 
 }
