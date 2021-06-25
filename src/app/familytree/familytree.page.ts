@@ -41,7 +41,6 @@ export class FamilytreePage implements OnInit {
     public Store: StorageService,
     private route: Router,
     public actionSheetCtrl: ActionSheetController,
-
     private db: DataService
   ) {
     this._familydata = {} as Familytree;

@@ -31,6 +31,9 @@ export interface TExpenes {
   Syncdate: number
 }
 
+export interface TName{
+  byName:string;
+}
 
 
 
@@ -43,6 +46,7 @@ export class DataService {
 
   Members = new BehaviorSubject([]);
   Expenses = new BehaviorSubject([]);
+  Name_member = new BehaviorSubject([]);
   constructor(private plt: Platform,
     private sqlitePorter: SQLitePorter,
     private sqlite: SQLite,
@@ -243,7 +247,7 @@ export class DataService {
   async FilterExpense(f:any){
     try {
       let dataf = [f.FamilyKey,f.Sdate,f.Edate]
-      return await this.database.executeSql(`select * from TExpensesData where FamilyKey =? and Date_unix >= ? and Date_unix <= ? and byName like '%${f.ByName}%'`, dataf).then(data=>{
+      return await this.database.executeSql(`select * from TExpensesData where FamilyKey =? and Date_unix >= ? and Date_unix <= ? and byName like '%${f.ByName}%' Order by Date_unix DESC`, dataf).then(data=>{
         let exp: TExpenes[] = [];
         if (data.rows.length > 0) {
           for (var i = 0; i < data.rows.length; i++) {
@@ -271,5 +275,31 @@ export class DataService {
 
   }
 
+   Fetchnames(familykey:string): Observable<TName[]>{
+    this.FetchMemberNames(familykey);
+    return this.Name_member.asObservable();
+  }
+ FetchMemberNames(familyKey:string){
+    try {
+      console.log(familyKey);
+      let datam = [familyKey];
+      return this.database.executeSql(`select Distinct byName from TExpensesData where FamilyKey = ?`,datam).then((data)=>{
+        let names : TName[] = [];
+        console.log('in array names -> ',JSON.stringify(data));
+        if (data.rows.length > 0) {
+          for (var i = 0; i < data.rows.length; i++) {
+            var dataread = data.rows.item(i);
+            names.push({
+              byName :  dataread.byName,
+            });
+          }
+        }
+        this.Name_member.next(names);
+        //return names;
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
 }

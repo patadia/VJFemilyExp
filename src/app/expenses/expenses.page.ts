@@ -397,7 +397,7 @@ export class ExpensesPage implements OnInit {
   }
 
   ExpenseList(event) {
-  
+
     console.log('Begin refresh operation');
 
     setTimeout(() => {
@@ -408,34 +408,40 @@ export class ExpensesPage implements OnInit {
 
 
  async Filter_items(){
-   
+
     const popo = await this.popover.create({
       component: FilterPagePage,
       componentProps: {
       }
     });
     popo.onDidDismiss().then(async (data: any) => {
-      console.log(JSON.stringify(data.data?.Filterdata)); 
+      console.log(JSON.stringify(data.data?.Filterdata));
       if(data.data?.Filterdata){
         let startobj = new Date(data.data?.Filterdata.Sdate);
         let startobjdec = new Date(startobj.getFullYear(),startobj.getMonth(),startobj.getDate(),0,0,0)
         let endobj = new Date(data.data?.Filterdata.Edate);
         let Endobjdec = new Date(endobj.getFullYear(),endobj.getMonth(),endobj.getDate(),23,59,59);
 
-        let sdate = parseInt((new Date(startobjdec).getTime() / 1000).toFixed(0)); 
-        let edate = parseInt((new Date(Endobjdec).getTime() / 1000).toFixed(0)); 
-        let Name = data.data?.Filterdata.ByName;
+        let sdate = parseInt((new Date(startobjdec).getTime() / 1000).toFixed(0));
+        let edate = parseInt((new Date(Endobjdec).getTime() / 1000).toFixed(0));
+        let Name = '';
+        if(data.data?.Filterdata.Bynameselect !== 'default'){
+          Name = data.data?.Filterdata.Bynameselect;
+            // console.log('name of selected membetr -- >    >> ',Name);
+        }
+
+
         let _data = {
           Sdate : sdate,
           Edate: edate,
           ByName : Name,
           FamilyKey : this.Fkey
         }
-        console.log(_data);
+        // console.log(_data);
 
         await this.db.FilterExpense(_data);
       }
-      
+
     });
     return await popo.present();
   }
