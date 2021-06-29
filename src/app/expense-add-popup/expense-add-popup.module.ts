@@ -14,6 +14,7 @@ import { ExpenseAddPopupPage } from './expense-add-popup.page';
     FormsModule,
     IonicModule,
     ExpenseAddPopupPageRoutingModule
+    
   ],
   declarations: [ExpenseAddPopupPage]
 })

@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { ExpenseAddPopupPage } from '../expense-add-popup/expense-add-popup.page';
 import { DataService, TExpenes } from '../services/data.service';
 import { FilterPagePage } from '../filter-page/filter-page.page';
+import {Ng2ImgMaxService} from 'ng2-img-max'
 
 
 @Component({
@@ -45,7 +46,8 @@ export class ExpensesPage implements OnInit {
     private rou: Router,
     private routerOutlet: IonRouterOutlet,
     private actionSheetCtrl: ActionSheetController,
-    private db: DataService
+    private db: DataService,
+    private conimg : Ng2ImgMaxService
   ) {
     this.Store.init().then(() => {
 
@@ -84,7 +86,8 @@ export class ExpensesPage implements OnInit {
           Date_unix: e.Date_unix,
           byName: e.byName,
           Syncdate: e.Syncdate,
-          isDelete: e.isDelete
+          isDelete: e.isDelete,
+          Images : e.Images
         }
         this.ExpennseList.push(pusher);
         console.log(JSON.stringify(pusher));
@@ -136,6 +139,11 @@ export class ExpensesPage implements OnInit {
           if (e.isDelete !== undefined) {
             deleteLog = e.isDelete;
           }
+          let image = 0
+          if(e?.Images){
+            image = e.Images
+          }
+
           let pusher: TExpenes = {
             // EFCM_ID: e.payload.doc.id,
             // Title: e.payload.doc.data()['Title'],
@@ -158,6 +166,7 @@ export class ExpensesPage implements OnInit {
             Syncdate: Number(e.Syncdate),
             FamilyKey: this.Fkey,
             isDelete: deleteLog,
+            Images : image,
             id: 0
           }
           //this.ExpennseList.push(pusher);
@@ -232,6 +241,7 @@ export class ExpensesPage implements OnInit {
       }
 
       if (data.data?.Edit_data) {
+
         console.log(data.data?.Edit_data);
 
         this.Edit_Expensedata(data.data.Edit_data);
@@ -241,10 +251,12 @@ export class ExpensesPage implements OnInit {
     return await popo.present();
   }
 
+  
+
   async Edit_Expensedata(expense: any) {
     let check = await this.Store.GetStorevalue('ISKeyUser');
     let checkname = await this.Store.GetStorevalue('name_user')
-    if (check === 'HeadLogedin' || checkname === expense.byName) {
+    if (check === 'HeadLogedin' || checkname === expense.data.byName) {
       try {
         let actionSheet = await this.actionSheetCtrl.create({
           header: 'Are you sure, you wants to edit this expense?',
@@ -253,7 +265,8 @@ export class ExpensesPage implements OnInit {
             handler: async () => {
               // expense.isDelete = true;
               //expense.Syncdate = parseInt((new Date().getTime()/1000).toFixed(0))
-              var del = await this.fire.update_Expense(expense);
+              var del = await this.fire.update_Expense(expense.data);
+              this.Editimages(expense);
               // this.Subscription_release();
               //this.getdata_expense(this.paramID);
               // this.db.UpdateExpense_edit(expense).then(() => {
@@ -287,6 +300,29 @@ export class ExpensesPage implements OnInit {
 
   }
 
+  Editimages(imgdata : any){
+    try {
+      if(imgdata.images?.photoes.length > 0){
+        let pics = imgdata.images.photoes.filter(i=> i.type === 'dataurl');
+        if(pics.length > 0){
+
+          this.uploadAttachment(pics,imgdata.data.id);
+        } 
+      }
+
+      if(imgdata.images?.delphotoes.length > 0){
+        let delpics = imgdata.images.delphotoes.filter(i=> i.type === 'frombase');
+        delpics.forEach(e => {
+         let del =  this.fire.deleteattachement(imgdata.data.id,e.filename);
+         console.log(del);
+        });
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   Create_newdata(Add_data: any) {
     try {
       // console.log('imagealist',Add_data?.images.photoes.length);
@@ -294,10 +330,10 @@ export class ExpensesPage implements OnInit {
       //       this.uploadAttachment(Add_data.images.photoes)
       //     }
       this.fire.Create_expense(Add_data.data).then((data) => {
-       // console.log('add data', data);
+        console.log('add data', data);
        // console.log('imagealist',Add_data?.images);
         if(Add_data?.images?.photoes.length >0){
-          this.uploadAttachment(Add_data.images.photoes)
+          this.uploadAttachment(Add_data.images.photoes,data.id)
         }
         //  this.getdata_expense(this.paramID);
       });
@@ -307,12 +343,20 @@ export class ExpensesPage implements OnInit {
   }
 
 
- async uploadAttachment(IMAGE_data:any){
+ async uploadAttachment(IMAGE_data:any,id){
     try {
       IMAGE_data.forEach(i => {
+       
         // console.log(i.image.changingThisBreaksApplicationSecurity);
         let imblob = dataURItoBlob(i.image.changingThisBreaksApplicationSecurity);
-        console.log(imblob);
+        var file = new File([imblob],new Date().getTime().toString()+'.png',{type: 'image/png'});
+        this.conimg.compressImage(file,0.070).subscribe(res=>{
+          let files = new File([res],res.name);
+          console.log(files);
+          this.fire.UploadBlobs(files,id);
+        });
+       // console.log(imblob);
+      
       });
     } catch (error) {
       console.log(error);
@@ -470,6 +514,7 @@ export class ExpensesPage implements OnInit {
 
 
 function dataURItoBlob(dataURI) {
+
   // convert base64 to raw binary data held in a string
   // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
   var byteString = atob(dataURI.split(',')[1]);

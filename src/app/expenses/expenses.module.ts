@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { ExpensesPageRoutingModule } from './expenses-routing.module';
 
 import { ExpensesPage } from './expenses.page';
+import { Ng2ImgMaxModule } from 'ng2-img-max';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ExpensesPageRoutingModule
+    ExpensesPageRoutingModule,
+    Ng2ImgMaxModule
   ],
   declarations: [ExpensesPage]
 })

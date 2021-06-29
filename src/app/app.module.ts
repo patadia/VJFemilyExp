@@ -14,6 +14,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { SQLite } from '@ionic-native/sqlite/ngx'
 import { SQLitePorter } from '@ionic-native/sqlite-porter/ngx'
 import { HttpClientModule } from '@angular/common/http'
+import {AngularFireStorageModule} from '@angular/fire/storage';
 
 
 export class AppConfigService {
@@ -49,6 +50,7 @@ export function initializeApp(appConfig: AppConfigService) {
     BrowserModule,
     AngularFireModule,
     AngularFirestoreModule,
+    AngularFireStorageModule,
     BrowserAnimationsModule,
     HttpClientModule
     ], //

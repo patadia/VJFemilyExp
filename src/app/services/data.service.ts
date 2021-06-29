@@ -28,7 +28,8 @@ export interface TExpenes {
   byName: string,
   FamilyKey: string,
   isDelete: boolean,
-  Syncdate: number
+  Syncdate: number,
+  Images:number
 }
 
 export interface TName{
@@ -53,7 +54,7 @@ export class DataService {
     private http: HttpClient) {
     this.plt.ready().then(() => {
       this.sqlite.create({
-        name: 'ExpensesSqlitedb.db',
+        name: 'ExpensesSqlitedbv1.db',
         location: 'default'
       })
         .then((db: SQLiteObject) => {
@@ -67,7 +68,7 @@ export class DataService {
   CreateDatabase() {
     try {
       let sql = 'create table IF NOT EXISTS TMembersdata(id integer primary key AUTOINCREMENT,m_name Text,Email Text,Mobile Text,MFCM_ID Text,ishead boolean,FamilyKey Text,isDelete boolean,Syncdate string);';
-      sql = sql + 'create table IF NOT EXIStS TExpensesData (id integer primary key Autoincrement,EFCM_ID Text,Title Text,Amount real,Transaction_type Text,date_on Text,Date_unix integer,byName Text,FamilyKey Text,isDelete boolean,Syncdate integer);'
+      sql = sql + 'create table IF NOT EXIStS TExpensesData (id integer primary key Autoincrement,EFCM_ID Text,Title Text,Amount real,Transaction_type Text,date_on Text,Date_unix integer,byName Text,FamilyKey Text,isDelete boolean,Syncdate integer,Images integer);'
 
       this.sqlitePorter.importSqlToDb(this.database, sql)
         .then(_ => {
@@ -184,7 +185,8 @@ export class DataService {
             byName: dataread.byName,
             date_on: dataread.date_on,
             isDelete: dataread.isDelete,
-            Syncdate: dataread.Syncdate
+            Syncdate: dataread.Syncdate,
+            Images: dataread.Images
           });
         }
       }
@@ -201,14 +203,14 @@ export class DataService {
       let checkExist = await this.database.executeSql('select * from TExpensesData where EFCM_ID =?', [m.EFCM_ID]);
       console.log('read data from addexpense ', JSON.stringify(checkExist));
       if (checkExist.rows.length > 0) {
-        let DataM = [m.isDelete, m.Syncdate, m.Amount, m.Date_unix, m.FamilyKey, m.Title, m.Transaction_type, m.byName, m.date_on, m.EFCM_ID];
-        let stored = await this.database.executeSql(`Update TExpensesData set isDelete = ?,Syncdate = ?,Amount =?,Date_unix =?,FamilyKey =?,Title =?,Transaction_type =?,byName =?,date_on=?  where EFCM_ID =?`, DataM)
+        let DataM = [m.isDelete, m.Syncdate, m.Amount, m.Date_unix, m.FamilyKey, m.Title, m.Transaction_type, m.byName, m.date_on,m.Images, m.EFCM_ID];
+        let stored = await this.database.executeSql(`Update TExpensesData set isDelete = ?,Syncdate = ?,Amount =?,Date_unix =?,FamilyKey =?,Title =?,Transaction_type =?,byName =?,date_on=?,Images = ?  where EFCM_ID =?`, DataM)
         console.log('read data from update before add ', JSON.stringify(stored));
       }
       else {
-        let DataM = [m.Amount, m.Date_unix, m.EFCM_ID, m.FamilyKey, m.Title, m.Transaction_type, m.byName, m.date_on, m.isDelete, m.Syncdate];
+        let DataM = [m.Amount, m.Date_unix, m.EFCM_ID, m.FamilyKey, m.Title, m.Transaction_type, m.byName, m.date_on, m.isDelete, m.Syncdate,m.Images];
         console.log('add->Expense', DataM);
-        const data = await this.database.executeSql('INSERT OR IGNORE INTO TExpensesData (Amount,Date_unix,EFCM_ID,FamilyKey,Title,Transaction_type,byName,date_on,isDelete,Syncdate) VALUES (?,?,?,?,?,?,?,?,?,?)', DataM).then(() => {
+        const data = await this.database.executeSql('INSERT OR IGNORE INTO TExpensesData (Amount,Date_unix,EFCM_ID,FamilyKey,Title,Transaction_type,byName,date_on,isDelete,Syncdate,Images) VALUES (?,?,?,?,?,?,?,?,?,?,?)', DataM).then(() => {
           console.log('data added expense');
         })
       }
@@ -233,10 +235,10 @@ export class DataService {
   async UpdateExpense_edit(m: any) {
     try {
 
-      let DataM = [m.isDelete, m.Syncdate, m.Amount, m.Date_unix, m.FamilyKey, m.Title, m.Transaction_type, m.byName, m.date_on, m.EFCM_ID];
+      let DataM = [m.isDelete, m.Syncdate, m.Amount, m.Date_unix, m.FamilyKey, m.Title, m.Transaction_type, m.byName, m.date_on,m.Images, m.EFCM_ID];
       console.log('edit->Expense  ',JSON.stringify(DataM));
 
-      let stored = await this.database.executeSql(`Update TExpensesData set isDelete = ?,Syncdate = ?,Amount =?,Date_unix =?,FamilyKey =?,Title =?,Transaction_type =?,byName =?,date_on=?  where EFCM_ID =?`, DataM)
+      let stored = await this.database.executeSql(`Update TExpensesData set isDelete = ?,Syncdate = ?,Amount =?,Date_unix =?,FamilyKey =?,Title =?,Transaction_type =?,byName =?,date_on=?, Images = ?  where EFCM_ID =?`, DataM)
       console.log(JSON.stringify('edit review ',stored));
     } catch (error) {
         console.log(error);
@@ -263,7 +265,8 @@ export class DataService {
               byName: dataread.byName,
               date_on: dataread.date_on,
               isDelete: dataread.isDelete,
-              Syncdate: dataread.Syncdate
+              Syncdate: dataread.Syncdate,
+              Images : dataread.Images
             });
           }
         }

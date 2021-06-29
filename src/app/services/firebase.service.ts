@@ -5,6 +5,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import * as firebase from 'firebase';
 import { environment } from 'src/environments/environment';
 import {StorageService} from '../services/storage.service';
+import {AngularFireStorage} from '@angular/fire/storage';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,8 @@ export class FirebaseService {
 
   constructor(
     private firestore: AngularFirestore,
-    private storage:StorageService
+    private storage:StorageService,
+    private firestorage:AngularFireStorage
   ) { 
     
   }
@@ -110,6 +112,33 @@ export class FirebaseService {
     .where('Date_unix', '>=',  start_unix)
     .where('Date_unix', '<=',  End_unix).orderBy('Date_unix','desc')).snapshotChanges()
     
+  }
+
+
+  UploadBlobs(blob,id){
+    const uploadTask = this.firestorage.upload(
+      `files/${id}/${new Date().getTime()}.png`,
+      blob
+    );
+    
+    uploadTask.percentageChanges().subscribe(c=>{
+      console.log(c);
+    })
+
+  }
+
+  GetImages(id){
+    const imageback = this.firestorage.ref(`files/${id}/`);
+    console.log(imageback);
+    return imageback;
+  }
+
+  deleteattachement(id,fname){
+    const delfile = this.firestorage.ref(`files/${id}/${fname}`);
+    let delsub = delfile.delete().subscribe((data)=>{
+      console.log('delete image',data);
+       delsub.unsubscribe();
+    });
   }
 
   

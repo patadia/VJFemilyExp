@@ -4,11 +4,14 @@ import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { NavParams, PopoverController } from '@ionic/angular';
 import { StorageService } from '../services/storage.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { FirebaseService } from '../services/firebase.service';
+
 
 interface TPhotoes {
   image: SafeResourceUrl,
   filename: string,
-  id:number
+  id:number,
+  type:string
 }
 
 @Component({
@@ -26,22 +29,31 @@ export class ExpenseAddPopupPage implements OnInit {
   private Fkey: string;
   public AddBtn: boolean = true;
   public dateonadd: any;
+  public imagecount: number;
+  
   Photoes:TPhotoes[] = [];
+  delPhotoes:TPhotoes[] = [];
   counter: number = 0;
-
+  
   constructor(private popover: PopoverController,
     private navParams: NavParams,
     private Store: StorageService,
     public datepipe: DatePipe,
-    private sanitizer: DomSanitizer) {
+    private sanitizer: DomSanitizer,
+    private fire:FirebaseService,
+   ) {
     this.dateonadd = this.datepipe.transform(new Date(), 'yyyy-MM-dd');
     this.Store.init().then(() => {
 
       this.init();
       //  this.AddBtn = true;
     })
-  }
 
+    
+
+
+  }
+  
   async init() {
     // If using, define drivers here: await this.storage.defineDriver(/*...*/);
 
@@ -60,6 +72,33 @@ export class ExpenseAddPopupPage implements OnInit {
       this.mySelect = this.navParams.data.ExpenseData.Transaction_Type;
       this.dateonadd = this.datepipe.transform(this.navParams.data.ExpenseData.date_on, 'yyyy-MM-dd');
       this.byName = this.navParams.data.ExpenseData.byName;
+      this.imagecount = this.navParams.data.ExpenseData.Images;
+      if(this.imagecount > 0){
+        this.getImages(this.navParams.data.ExpenseData.id);
+      }
+    }
+  }
+
+  getImages(id){
+    try {
+      let sc = this.fire.GetImages(id);
+        console.log(sc);
+        sc.listAll().forEach(async (res)=>{
+          res.items.forEach(async(ref) =>{
+              let urlget = await ref.getDownloadURL();
+              let attachment = {
+                image: this.sanitizer.bypassSecurityTrustResourceUrl(urlget),
+                filename: ref.name,
+                id:this.counter,
+                type:'frombase'
+
+              };
+              this.Photoes.push(attachment);
+              this.counter = this.counter + 1;
+          })
+        })
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -74,7 +113,8 @@ export class ExpenseAddPopupPage implements OnInit {
       byName: this.byName,
       FamilyKey: this.Fkey,
       Syncdate: parseInt((new Date().getTime() / 1000).toFixed(0)),
-      isDelete: false
+      isDelete: false,
+      Images: this.Photoes.length
     }
 
     const images = {
@@ -121,7 +161,13 @@ export class ExpenseAddPopupPage implements OnInit {
         FamilyKey: this.Fkey,
         Syncdate: parseInt((new Date().getTime() / 1000).toFixed(0)),
         isDelete: false,
-        id: this.navParams.data.ExpenseData.id
+        id: this.navParams.data.ExpenseData.id,
+        Images:this.Photoes.length
+      }
+
+      const images = {
+        photoes : this.Photoes,
+        delphotoes: this.delPhotoes
       }
 
       console.log('edit data', JSON.stringify(data));
@@ -130,7 +176,7 @@ export class ExpenseAddPopupPage implements OnInit {
         return;
       }
       this.popover.dismiss({
-        "Edit_data": data
+        "Edit_data": {data,images}
       })
     } catch (error) {
       console.log('edit error', error);
@@ -151,7 +197,8 @@ export class ExpenseAddPopupPage implements OnInit {
     let attachment = {
       image: this.sanitizer.bypassSecurityTrustResourceUrl(image && (image.dataUrl)),
       filename: image.format,
-      id:this.counter
+      id:this.counter,
+      type:'dataurl'
     };
     this.counter = this.counter+1;
     console.log(attachment);
@@ -159,7 +206,27 @@ export class ExpenseAddPopupPage implements OnInit {
   }
 
   async Deleteimage(id:any){
+
+    let delp = this.Photoes.filter(e=> e.id === id);
+    this.delPhotoes.push(delp[0]);
     this.Photoes = this.Photoes.filter(e => e.id !== id);
+  }
+
+  async Downloadimage(img:any){
+    try {
+      // console.log('image----> --> ',JSON.stringify(img));
+      // var xhr = new XMLHttpRequest();
+      // xhr.responseType = 'blob';
+      // xhr.onload = (event) => {
+      //   var blob = xhr.response;
+      // };
+      // xhr.open('GET', img.changingThisBreaksApplicationSecurity);
+      // xhr.send();
+      window.open(img.changingThisBreaksApplicationSecurity);
+     
+    } catch (error) {
+      console.log(error);
+    }
   }
 
 }
