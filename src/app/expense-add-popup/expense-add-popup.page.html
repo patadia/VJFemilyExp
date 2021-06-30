@@ -50,10 +50,12 @@
   <div *ngIf="Photoes">
     <ion-card *ngFor="let p of Photoes">   
   
+     
       <ion-card-content>
         <img class="imageview" [src]="p.image">
         <ion-icon name="trash" class="trashicon" (click)="Deleteimage(p.id)" slot="icon-only" size="small"></ion-icon>
         <ion-icon name="download" class="doqnloadicon" (click)="Downloadimage(p.image)" *ngIf="p.type == 'frombase'" slot="icon-only" size="small"></ion-icon> 
+        <ion-icon name="expand" class="expandicon" (click)="fullimage(p.image)" slot="icon-only" size="small"></ion-icon> 
       </ion-card-content>
     </ion-card>
   </div>

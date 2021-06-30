@@ -5,7 +5,7 @@ import { NavParams, PopoverController } from '@ionic/angular';
 import { StorageService } from '../services/storage.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { FirebaseService } from '../services/firebase.service';
-
+import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
 
 interface TPhotoes {
   image: SafeResourceUrl,
@@ -41,6 +41,7 @@ export class ExpenseAddPopupPage implements OnInit {
     public datepipe: DatePipe,
     private sanitizer: DomSanitizer,
     private fire:FirebaseService,
+    private phview:PhotoViewer
    ) {
     this.dateonadd = this.datepipe.transform(new Date(), 'yyyy-MM-dd');
     this.Store.init().then(() => {
@@ -224,6 +225,14 @@ export class ExpenseAddPopupPage implements OnInit {
       // xhr.send();
       window.open(img.changingThisBreaksApplicationSecurity);
      
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async fullimage(img){
+    try {
+      this.phview.show(img.changingThisBreaksApplicationSecurity,'',{share: true});
     } catch (error) {
       console.log(error);
     }

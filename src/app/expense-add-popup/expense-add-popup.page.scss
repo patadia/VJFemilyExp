@@ -14,7 +14,7 @@ ion-item{
 
   .imageview{
      
-      height: 100px;
+      height: 150px;
       background-color: gray;
   }
 
@@ -59,4 +59,13 @@ ion-item{
     right: 0;
     top: 0;
     background-color: palegreen;
+  }
+
+  .expandicon{
+    position: absolute;
+    border-radius: 20px;
+    padding: 3px;
+    right: 0;
+    top: 35%;
+    background-color: rgb(108, 193, 219);
   }

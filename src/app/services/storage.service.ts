@@ -30,13 +30,13 @@ export class StorageService {
 
   async ClearStore() {
     var fcmid = await this._storage.get('fcmID');
-    var syncdate_mem = await this._storage.get('SyncDate-Member-'+fcmid);
-    var syncdate_exp = await this._storage.get('SyncDate-Expense-'+fcmid);
+    var syncdate_mem = await this._storage.get('SyncDate_-Member-'+fcmid);
+    var syncdate_exp = await this._storage.get('SyncDate_-Expense-'+fcmid);
 
     await this._storage.clear();
 
-    var syncsetup = await this._storage.set('SyncDate-Member-'+fcmid,syncdate_mem);
-    var syncsetup_e = await this._storage.set('SyncDate-Expense-'+fcmid,syncdate_exp);
+    var syncsetup = await this._storage.set('SyncDate_-Member-'+fcmid,syncdate_mem);
+    var syncsetup_e = await this._storage.set('SyncDate_-Expense-'+fcmid,syncdate_exp);
   }
 
   async SetSyncDate(date: any,type:any) {
@@ -45,19 +45,19 @@ export class StorageService {
     var fcmid = await this._storage.get('fcmID');
     console.log('set sync' + fcmid + '--> ',syncdate);
 
-    let storedate = await this._storage.set('SyncDate-'+type+'-'+fcmid, unixsync);
+    let storedate = await this._storage.set('SyncDate_-'+type+'-'+fcmid, unixsync);
     return storedate;
   }
 
   async GetSyncDate(type:any) {
     var fcmid = await this._storage.get('fcmID');
-    let storedate = await this._storage?.get('SyncDate-'+type+'-'+fcmid);
+    let storedate = await this._storage?.get('SyncDate_-'+type+'-'+fcmid);
     console.log('get-'+fcmid,storedate);
     if (!storedate) {
       var syncdate = new Date(1990, 1, 1);
       console.log('getafter new setup',syncdate);
       var unixsync = parseInt((syncdate.getTime() / 1000).toFixed(0));
-      return await this._storage.set('SyncDate-'+type+'-'+fcmid, unixsync);
+      return await this._storage.set('SyncDate_-'+type+'-'+fcmid, unixsync);
     }
     else
       return storedate;
