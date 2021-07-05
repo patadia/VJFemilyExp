@@ -14,7 +14,8 @@ export class FirebaseService {
 
   Membercollection = 'FamilytreeData';
   linkcollection = 'TokenLinker';
-  expensetable= "Expensetable"
+  expensetable= "Expensetable";
+  Type_Exp_table = "TypeOfExpense";
 
   constructor(
     private firestore: AngularFirestore,
@@ -142,6 +143,9 @@ export class FirebaseService {
   }
 
   
+  GetTypes_Exp(Syncdate){
+   return this.firestore.collection(this.Type_Exp_table,ref => ref.where('Syncdate','>=',Syncdate)).valueChanges();
+  }
 
 
   

@@ -17,7 +17,7 @@
     </ion-item> -->
 
     <ion-item>
-      <ion-label>By Name</ion-label>
+      <ion-label position="floating">By Name</ion-label>
       <ion-select value="default" placeholder="Select Name" formControlName="Bynameselect">
         <ion-select-option value="default">Select name</ion-select-option>
         <ion-select-option *ngFor="let n of names" [value]="n">{{n}}</ion-select-option>

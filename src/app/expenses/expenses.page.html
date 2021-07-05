@@ -53,7 +53,7 @@
     </ion-item> -->
   <div class="balance">
 
-    <ion-slides mode="md" pager="md" scrollbar="md" slidepreview="1.5">
+    <ion-slides mode="ios" pager="ios" scrollbar="ios" [options]="slideOpts">
       <ion-slide>
         <ion-card>
           <ion-card-header class="ccard">
@@ -64,6 +64,8 @@
             {{Creditbal}}
           </ion-card-content>
         </ion-card>
+      </ion-slide>
+      <ion-slide>
         <ion-card>
           <ion-card-header class="dcard">
             <ion-card-subtitle>Debit</ion-card-subtitle>
@@ -73,6 +75,8 @@
             {{Debitbal}}
           </ion-card-content>
         </ion-card>
+      </ion-slide>
+      <ion-slide>
         <ion-card>
           <ion-card-header class="bcard">
             <ion-card-subtitle>Balance</ion-card-subtitle>
@@ -80,6 +84,39 @@
           </ion-card-header>
           <ion-card-content>
             {{Creditbal - Debitbal}}
+          </ion-card-content>
+        </ion-card>
+      </ion-slide>
+      <ion-slide>
+        <ion-card>
+          <ion-card-header class="ccard">
+            <ion-card-subtitle>Total Credit</ion-card-subtitle>
+            <!-- <ion-card-title>Awesome Title</ion-card-title> -->
+          </ion-card-header>
+          <ion-card-content>
+            {{TotalCreditbal}}
+          </ion-card-content>
+        </ion-card>
+      </ion-slide>
+      <ion-slide>
+        <ion-card>
+          <ion-card-header class="dcard">
+            <ion-card-subtitle>Total Debit</ion-card-subtitle>
+            <!-- <ion-card-title>Awesome Title</ion-card-title> -->
+          </ion-card-header>
+          <ion-card-content>
+            {{TotalDebitbal}}
+          </ion-card-content>
+        </ion-card>
+      </ion-slide>
+      <ion-slide>
+        <ion-card>
+          <ion-card-header class="bcard">
+            <ion-card-subtitle>Total Balance</ion-card-subtitle>
+            <!-- <ion-card-title>Awesome Title</ion-card-title> -->
+          </ion-card-header>
+          <ion-card-content>
+            {{TotalCreditbal - TotalDebitbal}}
           </ion-card-content>
         </ion-card>
       </ion-slide>

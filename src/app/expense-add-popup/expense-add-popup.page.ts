@@ -6,6 +6,7 @@ import { StorageService } from '../services/storage.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { FirebaseService } from '../services/firebase.service';
 import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
+import { DataService,TType_Exp } from '../services/data.service';
 
 interface TPhotoes {
   image: SafeResourceUrl,
@@ -21,6 +22,10 @@ interface TPhotoes {
 })
 export class ExpenseAddPopupPage implements OnInit {
 
+  slideOpts = {
+    slidesPerView: 2,
+    spaceBetween: 0 
+  };
   public title: string = '';
   public amount: any;
   public type: any;
@@ -30,10 +35,13 @@ export class ExpenseAddPopupPage implements OnInit {
   public AddBtn: boolean = true;
   public dateonadd: any;
   public imagecount: number;
-  
+  public typeselect:any
+  public type_exp:any;
   Photoes:TPhotoes[] = [];
   delPhotoes:TPhotoes[] = [];
   counter: number = 0;
+  typesofExp = [];
+  public Syncdate:number;
   
   constructor(private popover: PopoverController,
     private navParams: NavParams,
@@ -41,7 +49,8 @@ export class ExpenseAddPopupPage implements OnInit {
     public datepipe: DatePipe,
     private sanitizer: DomSanitizer,
     private fire:FirebaseService,
-    private phview:PhotoViewer
+    private phview:PhotoViewer,
+    private db:DataService
    ) {
     this.dateonadd = this.datepipe.transform(new Date(), 'yyyy-MM-dd');
     this.Store.init().then(() => {
@@ -50,9 +59,6 @@ export class ExpenseAddPopupPage implements OnInit {
       //  this.AddBtn = true;
     })
 
-    
-
-
   }
   
   async init() {
@@ -60,8 +66,50 @@ export class ExpenseAddPopupPage implements OnInit {
 
     this.byName = await this.Store.GetStorevalue('name_user');
     this.Fkey = await this.Store.GetStorevalue('familykeyID');
+    this.Syncdate = Number(await this.Store.GetSyncDate('typeExpense'));
+    this.gettypes_Expenses();
+    this.type_exp = 'default'
 
   }
+  async gettypes_Expenses(){
+   let firete =   this.fire.GetTypes_Exp(this.Syncdate).subscribe((edata:any)=>{
+     
+      edata.forEach(e=>{
+        let typeexp:TType_Exp = {
+           Type : e.Type,
+          Syncdate:e.Syncdate
+        }
+
+        this.db.AddType_Expenses(typeexp).then(() => {
+          console.log('TypesExp added ', JSON.stringify(typeexp))
+        })
+      });
+      this.Store.SetSyncDate(new Date(), 'typeExpense');
+      this.getDBTypeExp();
+      firete.unsubscribe();
+   })
+    // this.typeselect = this.navParams.data.ExpenseData?.Type_expense;
+    //   this.type_exp = this.navParams.data.ExpenseData?.Type_expense;
+  }
+
+
+  getDBTypeExp(){
+    console.log('call types started');
+    try {
+      this.db.FetchTypesOfexpense().subscribe((s)=>{
+        console.log('types of data exp',JSON.stringify(s));
+        s.forEach(t=>{
+          this.typesofExp.push(t.Type);
+        })
+
+        this.typeselect = this.navParams.data.ExpenseData?.Type_expense;
+      this.type_exp = this.navParams.data.ExpenseData?.Type_expense;
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  
   ngOnInit() {
     console.log(this.navParams.data.ExpenseData);
     if (this.navParams.data?.ExpenseData) {
@@ -77,6 +125,7 @@ export class ExpenseAddPopupPage implements OnInit {
       if(this.imagecount > 0){
         this.getImages(this.navParams.data.ExpenseData.id);
       }
+      
     }
   }
 
@@ -115,7 +164,8 @@ export class ExpenseAddPopupPage implements OnInit {
       FamilyKey: this.Fkey,
       Syncdate: parseInt((new Date().getTime() / 1000).toFixed(0)),
       isDelete: false,
-      Images: this.Photoes.length
+      Images: this.Photoes.length,
+      Type_expense:this.type_exp
     }
 
     const images = {
@@ -148,6 +198,12 @@ export class ExpenseAddPopupPage implements OnInit {
     //console.log(mySelect.detail.value);
   }
 
+  onChangetype(s){
+   this.type_exp= s.detail.value
+  }
+
+
+
 
   Edit_data() {
     try {
@@ -163,7 +219,8 @@ export class ExpenseAddPopupPage implements OnInit {
         Syncdate: parseInt((new Date().getTime() / 1000).toFixed(0)),
         isDelete: false,
         id: this.navParams.data.ExpenseData.id,
-        Images:this.Photoes.length
+        Images:this.Photoes.length,
+        Type_expense:this.type_exp
       }
 
       const images = {
@@ -207,7 +264,7 @@ export class ExpenseAddPopupPage implements OnInit {
   }
 
   async Deleteimage(id:any){
-
+console.log(id);
     let delp = this.Photoes.filter(e=> e.id === id);
     this.delPhotoes.push(delp[0]);
     this.Photoes = this.Photoes.filter(e => e.id !== id);
@@ -237,5 +294,8 @@ export class ExpenseAddPopupPage implements OnInit {
       console.log(error);
     }
   }
-
+  
+  popupclose(){
+    this.popover.dismiss();
+  }
 }

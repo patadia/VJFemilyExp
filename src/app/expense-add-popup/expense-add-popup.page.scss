@@ -14,15 +14,20 @@ ion-item{
 
   .imageview{
      
-      height: 150px;
+      height: 100px;
       background-color: gray;
   }
-
-  .innerdiv{
-    // height: 350px;
-    max-height: 350px;
-    overflow-y: scroll;
+  ion-content{
+    position: absolute;
   }
+  ion-toolbar{
+    background-color: #208891;
+  }
+  //.innerdiv{
+    // height: 350px;
+    // max-height: 350px;
+    // overflow-y: scroll;
+  // }
 
   ion-fab{
       background-color: transparent;
@@ -48,7 +53,7 @@ ion-item{
     border-radius: 20px;
     padding: 3px;
     right: 0;
-    bottom: 0;
+    bottom: 15px;
     background-color: red;
   }
 
@@ -68,4 +73,12 @@ ion-item{
     right: 0;
     top: 35%;
     background-color: rgb(108, 193, 219);
+  }
+
+  .toolbar_head{
+    display: flex;
+    justify-content: flex-end;
+  }
+  .closeicon{
+    padding: 4px;
   }

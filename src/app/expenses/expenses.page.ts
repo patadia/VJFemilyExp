@@ -36,7 +36,12 @@ export class ExpensesPage implements OnInit {
   private expenseFetchsub: Subscription;
   private Fkey: string;
   Syncdate: any;
-
+  TotalCreditbal : any = 0.0;
+  TotalDebitbal : any = 0.0;
+  slideOpts = {
+    slidesPerView: 3,
+    spaceBetween: 0
+  };
   constructor(private route: ActivatedRoute,
     private popover: PopoverController,
     private fire: FirebaseService,
@@ -73,6 +78,7 @@ export class ExpensesPage implements OnInit {
   GetDBexpense(Year: any, month: any, Fkey: string) {
     console.log('date retrive', Year + '' + month + '' + Fkey);
     this.expenseFetchsub = this.db.fetchExpenses(Year, month, Fkey).subscribe((data) => {
+      console.log(JSON.stringify(data))
       this.Creditbal = 0.0;
       this.Debitbal = 0.0;
       this.ExpennseList = [];
@@ -87,7 +93,8 @@ export class ExpensesPage implements OnInit {
           byName: e.byName,
           Syncdate: e.Syncdate,
           isDelete: e.isDelete,
-          Images : e.Images
+          Images : e.Images,
+          Type_expense: e.Type_expense
         }
         this.ExpennseList.push(pusher);
         console.log(JSON.stringify(pusher));
@@ -118,6 +125,43 @@ export class ExpensesPage implements OnInit {
     });
   }
 
+ async ReadExpense_filter(){
+  let Month =  new Date().getMonth();
+  let year = new Date().getFullYear();
+  let month = Month;
+  const start = new Date(year, month, 1);
+  const daysinmonth = new Date(year, month + 1, 0).getDate();
+  //console.log(daysinmonth,month,year);
+  const end = new Date(year, month, daysinmonth, 23, 59, 59);
+  //console.log(start);
+  //console.log(end);
+  //var start_u =  firebase.default.firestore.Timestamp.fromDate(start);
+  //var end_u =  firebase.default.firestore.Timestamp.fromDate(end);
+  let start_unix = parseInt((start.getTime() / 1000).toFixed(0));
+  let End_unix = parseInt((end.getTime() / 1000).toFixed(0));
+    let _data = {
+      Sdate : start_unix,
+      Edate: End_unix,
+      ByName : '',
+      FamilyKey : this.Fkey
+    }
+    // console.log(_data);
+
+    await this.db.FilterExpense(_data);
+    this.TOTAL_bal();
+  }
+ 
+  async TOTAL_bal(){
+    this.db.FetchexpensesTotalbalCred(this.Fkey).subscribe((data)=>{
+      console.log(JSON.stringify(data));
+      this.TotalCreditbal = data;
+    })
+    this.db.FetchexpensesTotalbalDebit(this.Fkey).subscribe((data)=>{
+      console.log(JSON.stringify(data));
+      this.TotalDebitbal = data;
+    })
+
+  }
   async getdata_expense(ID) {
     try {
       this.Syncdate = Number(await this.Store.GetSyncDate('Expense'));
@@ -143,7 +187,10 @@ export class ExpensesPage implements OnInit {
           if(e?.Images){
             image = e.Images
           }
-
+          let Type_expenses = 'default';
+          if(e.Type_expense !== undefined){
+            Type_expenses = e.Type_expense;
+          }
           let pusher: TExpenes = {
             // EFCM_ID: e.payload.doc.id,
             // Title: e.payload.doc.data()['Title'],
@@ -167,7 +214,8 @@ export class ExpensesPage implements OnInit {
             FamilyKey: this.Fkey,
             isDelete: deleteLog,
             Images : image,
-            id: 0
+            id: 0,
+            Type_expense:Type_expenses
           }
           //this.ExpennseList.push(pusher);
           this.db.AddExpense(pusher as TExpenes).then(() => {
@@ -189,8 +237,8 @@ export class ExpensesPage implements OnInit {
           this.ExpenseReset();
         }
 
-        this.db.ReadExpense(nedate.getFullYear(), nedate.getMonth(), this.Fkey);
-
+       // this.db.ReadExpense(nedate.getFullYear(), nedate.getMonth(), this.Fkey);
+        this.ReadExpense_filter();
         // this.GetDBexpense(nedate.getFullYear(), nedate.getMonth(), this.Fkey);
 
       })
@@ -229,7 +277,8 @@ export class ExpensesPage implements OnInit {
     // });
 
     const popo = await this.popover.create({
-      component: ExpenseAddPopupPage
+      component: ExpenseAddPopupPage,
+      cssClass: 'my-custom-class'
     })
     popo.onDidDismiss().then((data: any) => {
       console.log(JSON.stringify(data.data));
@@ -383,8 +432,8 @@ export class ExpensesPage implements OnInit {
     //this.Subscription_release();
     //this.getdata_expense(this.paramID);
     let nedate = new Date(this.datepick);
-    this.db.ReadExpense(nedate.getFullYear(), nedate.getMonth(), this.Fkey);
-
+    //this.db.ReadExpense(nedate.getFullYear(), nedate.getMonth(), this.Fkey);
+    this.ReadExpense_filter();
   }
 
   opendatepicker() {
@@ -435,6 +484,7 @@ export class ExpensesPage implements OnInit {
   async View(e) {
     const popo = await this.popover.create({
       component: ExpenseAddPopupPage,
+      cssClass: 'my-custom-class',
       componentProps: {
         'ExpenseData': e
       }

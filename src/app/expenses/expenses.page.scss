@@ -59,13 +59,13 @@ ion-item::part(native) {
     display: flex;
 }
 .balance {
-    display: flex;
-    justify-content: space-between;
+   // display: flex;
+    //justify-content: space-between;
     padding-left: 5px;
     padding-right: 5px;
     font-size: 15px;
-    height: 25%;
-    margin-top: 15px;
+    // height: 25%;
+    margin-top: 35px;
     label {
         p {
             font-size: larger;
@@ -75,7 +75,7 @@ ion-item::part(native) {
 
 .selfcontent {
     ion-card {
-        width: 100%;
+       
 
         box-shadow: 2px 1px #c3e7c3;
         .ccard {
@@ -88,10 +88,16 @@ ion-item::part(native) {
             background: linear-gradient(77deg, #c8f6c9, #f5cb7e);
         }
     }
-    ion-slides {
-        width: 100%;
-    }
+    // ion-slides {
+        
+       
+        
+    // }
     position: fixed !important;
+}
+
+ion-slide{
+    width: auto !important;
 }
 
 hr {
@@ -256,3 +262,4 @@ ion-spinner {
     padding: 5px;
     border-radius: 20px;
 }
+

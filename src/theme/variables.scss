@@ -341,3 +341,11 @@ ion-spinner, ion-icon{
 ion-card-subtitle{
   font-weight:bolder;
 }
+
+.my-custom-class .popover-content {
+  left: 10px !important;
+  right: 10px !important;
+  top: 40px !important;
+  --width: 95%;
+  --height: 95%;
+}
