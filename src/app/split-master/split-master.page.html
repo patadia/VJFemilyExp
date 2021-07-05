@@ -12,6 +12,12 @@
           <ion-label>Expenses</ion-label>
         </ion-item>
       </ion-menu-toggle>
+      <ion-menu-toggle autoHide="false">
+
+        <ion-item (click)="GotoMenu('setting')" lines="none">
+          <ion-label>Settings</ion-label>
+        </ion-item>
+      </ion-menu-toggle>
       <ion-menu-toggle autoHide="false" *ngIf="!ishidden">
         <ion-item (click)="GotoMenu('familytree')" lines="none">
           <ion-label>Members</ion-label>

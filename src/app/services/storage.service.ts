@@ -65,4 +65,17 @@ export class StorageService {
       return storedate;
   }
 
+  async GetPbalFlag(){
+    let pbf = await this._storage?.get('showpbal');
+    if(!pbf){
+      await this._storage.set('showpbal',false);
+      return false;
+    }
+    return pbf
+  }
+
+  async SetPbfalg(flg){
+    await this._storage.set('showpbal',flg)
+  }
+
 }

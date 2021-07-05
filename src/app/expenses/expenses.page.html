@@ -87,11 +87,11 @@
           </ion-card-content>
         </ion-card>
       </ion-slide>
-      <ion-slide>
+      <!-- <ion-slide>
         <ion-card>
           <ion-card-header class="ccard">
             <ion-card-subtitle>Total Credit</ion-card-subtitle>
-            <!-- <ion-card-title>Awesome Title</ion-card-title> -->
+           
           </ion-card-header>
           <ion-card-content>
             {{TotalCreditbal}}
@@ -102,17 +102,17 @@
         <ion-card>
           <ion-card-header class="dcard">
             <ion-card-subtitle>Total Debit</ion-card-subtitle>
-            <!-- <ion-card-title>Awesome Title</ion-card-title> -->
+           
           </ion-card-header>
           <ion-card-content>
             {{TotalDebitbal}}
           </ion-card-content>
         </ion-card>
-      </ion-slide>
-      <ion-slide>
+      </ion-slide> -->
+      <ion-slide *ngIf="ShowPbalance">
         <ion-card>
           <ion-card-header class="bcard">
-            <ion-card-subtitle>Total Balance</ion-card-subtitle>
+            <ion-card-subtitle>Pre Balance</ion-card-subtitle>
             <!-- <ion-card-title>Awesome Title</ion-card-title> -->
           </ion-card-header>
           <ion-card-content>

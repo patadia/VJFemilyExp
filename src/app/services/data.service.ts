@@ -354,7 +354,7 @@ console.log(JSON.stringify(datam));
  Read_Type_Exp(){
     try {
      
-      return this.database.executeSql(`select * from TypeExpense`,[]).then(data=>{
+      return this.database.executeSql(`select distinc Type from TypeExpense`,[]).then(data=>{
         let tp:typeexp[] = [];
         console.log('types data',JSON.stringify(data));
         if (data.rows.length > 0) {
@@ -385,7 +385,20 @@ console.log(JSON.stringify(datam));
 
   CalculateCreditSumExpense(Fkey:string){
     try {
-      return this.database.executeSql(`select SUM(Amount) as CreditBal from ExpenseData where FamilyKey = ? and Transaction_type = 'credit' and isDelete = ?`,[Fkey,false]).then((data)=>{
+
+      let Month =  new Date().getMonth();
+      let year = new Date().getFullYear();
+      let month = Month -1;
+      if(month === -1){
+        year = year -1;
+      }
+      const start = new Date(year, month, 1);
+      const daysinmonth = new Date(year, month + 1, 0).getDate();
+      const end = new Date(year, month, daysinmonth, 23, 59, 59);
+      let start_unix = parseInt((start.getTime() / 1000).toFixed(0));
+      let End_unix = parseInt((end.getTime() / 1000).toFixed(0));
+
+      return this.database.executeSql(`select SUM(Amount) as CreditBal from ExpenseData where FamilyKey = ? and Transaction_type = 'credit' and isDelete = ? and Date_unix >= ? and Date_unix <=?`,[Fkey,false,start_unix,End_unix]).then((data)=>{
           if(data.rows.length > 0){
             for (let i = 0; i < data.rows.length; i++) {
               var dataread = data.rows.item(i);
@@ -401,7 +414,18 @@ console.log(JSON.stringify(datam));
 
   CalculatedebitSumExpense(Fkey:string){
     try {
-      return this.database.executeSql(`select SUM(Amount) as DebitBal from ExpenseData where FamilyKey = ? and Transaction_type = 'debit' and isDelete = ?`,[Fkey,false]).then((data)=>{
+      let Month =  new Date().getMonth();
+      let year = new Date().getFullYear();
+      let month = Month -1;
+      if(month === -1){
+        year = year -1;
+      }
+      const start = new Date(year, month, 1);
+      const daysinmonth = new Date(year, month + 1, 0).getDate();
+      const end = new Date(year, month, daysinmonth, 23, 59, 59);
+      let start_unix = parseInt((start.getTime() / 1000).toFixed(0));
+      let End_unix = parseInt((end.getTime() / 1000).toFixed(0));
+      return this.database.executeSql(`select SUM(Amount) as DebitBal from ExpenseData where FamilyKey = ? and Transaction_type = 'debit' and isDelete = ?  and Date_unix >= ? and Date_unix <=?`,[Fkey,false,start_unix,End_unix]).then((data)=>{
           if(data.rows.length > 0){
             for (let i = 0; i < data.rows.length; i++) {
               var dataread = data.rows.item(i);

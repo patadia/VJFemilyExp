@@ -13,6 +13,7 @@ import { ExpenseAddPopupPage } from '../expense-add-popup/expense-add-popup.page
 import { DataService, TExpenes } from '../services/data.service';
 import { FilterPagePage } from '../filter-page/filter-page.page';
 import {Ng2ImgMaxService} from 'ng2-img-max'
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 
 @Component({
@@ -38,6 +39,7 @@ export class ExpensesPage implements OnInit {
   Syncdate: any;
   TotalCreditbal : any = 0.0;
   TotalDebitbal : any = 0.0;
+  ShowPbalance:boolean = false;
   slideOpts = {
     slidesPerView: 3,
     spaceBetween: 0
@@ -70,7 +72,8 @@ export class ExpensesPage implements OnInit {
 
     this.name = await this.Store.GetStorevalue('name_user');
     this.Fkey = await this.Store.GetStorevalue('familykeyID');
-
+    let Pbal = await this.Store.GetPbalFlag();
+    this.ShowPbalance = Pbal;
     this.getdata_expense('');
     let nedate = new Date(this.datepick);
     this.GetDBexpense(nedate.getFullYear(), nedate.getMonth(), this.Fkey);
@@ -126,17 +129,13 @@ export class ExpensesPage implements OnInit {
   }
 
  async ReadExpense_filter(){
-  let Month =  new Date().getMonth();
-  let year = new Date().getFullYear();
+   console.log('date for datepick',this.datepick)
+  let Month =  new Date(this.datepick).getMonth();
+  let year = new Date(this.datepick).getFullYear();
   let month = Month;
   const start = new Date(year, month, 1);
   const daysinmonth = new Date(year, month + 1, 0).getDate();
-  //console.log(daysinmonth,month,year);
   const end = new Date(year, month, daysinmonth, 23, 59, 59);
-  //console.log(start);
-  //console.log(end);
-  //var start_u =  firebase.default.firestore.Timestamp.fromDate(start);
-  //var end_u =  firebase.default.firestore.Timestamp.fromDate(end);
   let start_unix = parseInt((start.getTime() / 1000).toFixed(0));
   let End_unix = parseInt((end.getTime() / 1000).toFixed(0));
     let _data = {
@@ -501,13 +500,14 @@ export class ExpensesPage implements OnInit {
 
   }
 
-  Refresh_items() {
+async  Refresh_items() {
 
     let nedate = new Date(this.datepick);
     //this.expenseFetchsub.unsubscribe();
     this.Subscription_release();
     // this.db.ReadExpense(nedate.getFullYear(), nedate.getMonth(), this.Fkey);
     this.getdata_expense('');
+    this.ShowPbalance = await this.Store.GetPbalFlag();
   }
 
   ExpenseList(event) {

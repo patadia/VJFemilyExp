@@ -101,9 +101,11 @@ export class ExpenseAddPopupPage implements OnInit {
         s.forEach(t=>{
           this.typesofExp.push(t.Type);
         })
+        if(this.navParams.data.ExpenseData?.Type_expense){
 
-        this.typeselect = this.navParams.data.ExpenseData?.Type_expense;
-      this.type_exp = this.navParams.data.ExpenseData?.Type_expense;
+          this.typeselect = this.navParams.data.ExpenseData?.Type_expense;
+          this.type_exp = this.navParams.data.ExpenseData?.Type_expense;
+        }
       })
     } catch (error) {
       console.log(error);

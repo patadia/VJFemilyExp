@@ -20,6 +20,10 @@ pathMatch: 'full'
         path: 'expenses',
         loadChildren: () => import('../expenses/expenses.module').then( m => m.ExpensesPageModule)
       },
+      {
+        path: 'setting',
+        loadChildren: () => import('../setting/setting.module').then( m => m.SettingPageModule)
+      },
     ]
   }
 ];

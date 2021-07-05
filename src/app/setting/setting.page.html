@@ -1,0 +1,18 @@
+<ion-header translucent="false">
+  <ion-toolbar>
+    <div class="toolbarSetting">
+
+      <ion-buttons>
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+      <ion-title>Settings</ion-title>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item class="spbcls">
+    <ion-label>Show Previous Balance</ion-label>
+    <ion-toggle [ngModel]="showbal" (ionChange)="Showbalactivity($event)"></ion-toggle>
+  </ion-item>
+</ion-content>

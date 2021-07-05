@@ -1,0 +1,19 @@
+
+
+
+  .toolbarSetting{
+    display: flex;
+  }
+  
+
+  ion-content{
+    position: fixed;
+}
+ion-item::part(native) {
+    background: transparent;
+}
+
+.spbcls{
+    margin-top: 55px;
+    color: white;
+}

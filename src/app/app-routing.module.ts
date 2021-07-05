@@ -35,6 +35,10 @@ const routes: Routes = [
     path: 'filter-page',
     loadChildren: () => import('./filter-page/filter-page.module').then( m => m.FilterPagePageModule)
   },
+  {
+    path: 'setting',
+    loadChildren: () => import('./setting/setting.module').then( m => m.SettingPageModule)
+  },
 ];
 
 @NgModule({
