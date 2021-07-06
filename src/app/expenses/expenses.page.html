@@ -7,7 +7,7 @@
           <ion-menu-button class="menubtn"></ion-menu-button>
         </ion-buttons>
       </ion-col>
-      <ion-col size="5">
+      <ion-col size="4">
         <div class="titleDiv">
 
           <ion-label class="titlelabel">Hi, {{name}} </ion-label>
@@ -22,15 +22,20 @@
           <!-- <ion-datetime displayFormat="MMMM, YYYY" value="" [(ngModel)]="monthDate" (ionChange)="ChangedDate(monthDate)"></ion-datetime> -->
           <!-- <div> -->
           <!-- <label>{{setdate | date:'MMMM yy'}}</label> -->
-          <label class="labelDate">{{setdate | date:'dd MMM yyyy'}}</label>
+          <!-- <label class="labelDate">{{setdate | date:'dd MMM yyyy'}}</label> -->
           <!-- <ion-icon class="iconcal" name="md-calculator"></ion-icon> -->
-          <input class="btn btn-dark form-controll cdatepick" type="date" id="pickdate" [(ngModel)]="datepick"
-            (change)="changenewdate(datepick)">
+          <!-- <input class="btn btn-dark form-controll cdatepick" type="date" id="pickdate" [(ngModel)]="datepick"
+            (change)="changenewdate(datepick)"> -->
+            <ion-datetime class="btn btn-dark form-controll cdatepick" id="pickdate" [(ngModel)]="datepick" display-format="DD MMM YYYY"
+            (ionChange)="changenewdate(datepick)"></ion-datetime>
           <!-- <ion-icon name="log-out-outline" (click)="Logout()" class="logoutbtn"></ion-icon> -->
           <!-- </div> -->
-          <ion-icon name="Funnel" class="filtercls" (click)="Filter_items()"></ion-icon>
+          
         </ion-item>
       
+      </ion-col>
+      <ion-col size="1">
+        <ion-icon name="Funnel" class="filtercls" (click)="Filter_items()"></ion-icon>
       </ion-col>
     </div>
 
