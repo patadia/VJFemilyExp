@@ -13,7 +13,7 @@ import { ExpenseAddPopupPage } from '../expense-add-popup/expense-add-popup.page
 import { DataService, TExpenes } from '../services/data.service';
 import { FilterPagePage } from '../filter-page/filter-page.page';
 import {Ng2ImgMaxService} from 'ng2-img-max'
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import {ExportService} from '../services/export.service'
 
 
 @Component({
@@ -54,7 +54,8 @@ export class ExpensesPage implements OnInit {
     private routerOutlet: IonRouterOutlet,
     private actionSheetCtrl: ActionSheetController,
     private db: DataService,
-    private conimg : Ng2ImgMaxService
+    private conimg : Ng2ImgMaxService,
+    private exp : ExportService
   ) {
     this.Store.init().then(() => {
 
@@ -559,6 +560,11 @@ async  Refresh_items() {
     });
     return await popo.present();
   }
+
+  Export(){
+    this.exp.exportToExcel(this.ExpennseList,'explist');
+  }
+  
 
 }
 

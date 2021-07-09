@@ -15,7 +15,7 @@
 
 
       </ion-col>
-      <ion-col size="5">
+      <ion-col size="4">
 
         <ion-item lines="none" class="ion-no-border">
           <!-- <ion-icon name="calendar-outline"></ion-icon> -->
@@ -34,8 +34,11 @@
         </ion-item>
       
       </ion-col>
-      <ion-col size="1">
-        <ion-icon name="Funnel" class="filtercls" (click)="Filter_items()"></ion-icon>
+      <ion-col size="2">
+        <div class="funel_down">
+          <ion-icon name="Funnel" class="filtercls" size="large" (click)="Filter_items()"></ion-icon>
+          <ion-icon name="download" class="filtercls" (click)="Export()"></ion-icon>
+        </div>
       </ion-col>
     </div>
 

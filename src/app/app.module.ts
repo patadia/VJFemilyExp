@@ -15,7 +15,10 @@ import { SQLite } from '@ionic-native/sqlite/ngx'
 import { SQLitePorter } from '@ionic-native/sqlite-porter/ngx'
 import { HttpClientModule } from '@angular/common/http'
 import {AngularFireStorageModule} from '@angular/fire/storage';
-import {PhotoViewer}from '@ionic-native/photo-viewer/ngx'
+import {PhotoViewer}from '@ionic-native/photo-viewer/ngx';
+import {File} from '@ionic-native/file/ngx';
+import {SocialSharing} from '@ionic-native/social-sharing/ngx'
+
 
 export class AppConfigService {
   static settings: IAppConfig;
@@ -53,7 +56,6 @@ export function initializeApp(appConfig: AppConfigService) {
     AngularFireStorageModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    
     ], //
   providers: [
     AppConfigService,
@@ -67,7 +69,8 @@ export function initializeApp(appConfig: AppConfigService) {
       useClass: IonicRouteStrategy
     }, Storage, DatePipe,
     SQLitePorter,
-    SQLite,PhotoViewer],
+    SQLite,PhotoViewer,
+    File,SocialSharing],
   bootstrap: [AppComponent],
 })
 

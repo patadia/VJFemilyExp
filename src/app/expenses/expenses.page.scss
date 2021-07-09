@@ -273,9 +273,14 @@ ion-spinner {
 
 .filtercls{
     font-size: 25px;
-    position: fixed;
+  //  position: fixed;
     right: 5px;
     padding: 3px;
     border-radius: 20px;
+}
+
+.funel_down{
+    display: flex;
+    justify-content: space-between;
 }
 
