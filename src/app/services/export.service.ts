@@ -29,8 +29,8 @@ export class ExportService {
          // console.log('TO parser ------------>>> ',JSON.stringify(result))
           this.HeaderRow = result.data.splice(0, 1)[0];
           this.csvData = result.data;
-          console.log(JSON.stringify(this.HeaderRow))
-          console.log(JSON.stringify(this.csvData))
+          //console.log(JSON.stringify(this.HeaderRow))
+          //console.log(JSON.stringify(this.csvData))
           this.Unparse();
         }
       });
@@ -44,13 +44,16 @@ export class ExportService {
       data: this.csvData
     });
 
-    this.file.writeFile(this.file.dataDirectory,'export.csv',csv,{replace:true}).then(res=>{
+    let filename  = `export${new Date().getTime()}.csv`
+
+    this.file.writeFile(this.file.externalRootDirectory+'/Download/',filename,csv,{replace:true}).then(res=>{
      // console.log(JSON.stringify(res));
-      this.sshare.share(null,null,res.nativeURL,null);
+     // this.sshare.share(null,null,res.nativeURL,null);
+     alert(`File ' ${filename} ' Saved in Download folder `);
     })
-    this.file.writeFile(this.file.applicationStorageDirectory,'exp2.csv',csv,{replace:true}).then((res)=>{
-      console.log('file saved---->',res.nativeURL);
-    })
+    // this.file.writeFile(this.file.externalRootDirectory+'/Download/','exp2.csv',csv,{replace:true}).then((res)=>{
+    //   console.log('file saved---->',res.nativeURL);
+    // })
   }
 
 
