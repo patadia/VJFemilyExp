@@ -59,7 +59,7 @@ ion-item::part(native) {
     display: flex;
 }
 .balance {
-   // display: flex;
+    // display: flex;
     //justify-content: space-between;
     padding-left: 5px;
     padding-right: 5px;
@@ -75,8 +75,6 @@ ion-item::part(native) {
 
 .selfcontent {
     ion-card {
-       
-
         box-shadow: 2px 1px #c3e7c3;
         .ccard {
             background-color: #c8f6c9;
@@ -89,14 +87,12 @@ ion-item::part(native) {
         }
     }
     // ion-slides {
-        
-       
-        
+
     // }
     position: fixed !important;
 }
 
-ion-slide{
+ion-slide {
     width: auto !important;
 }
 
@@ -120,19 +116,21 @@ hr {
 //     //padding: 0px;
 //     //color: transparent;
 // }
-.cdatepick{
+.cdatepick {
     background-color: transparent;
     font-size: 12px;
     border: 1px;
     font-size: 20px;
-    -webkit-tap-highlight-color: rgba(247, 240, 240, 0);
+    /* -webkit-tap-highlight-color: rgba(247, 240, 240, 0); */
     -webkit-touch-callout: none;
-    border: 0px;
+    /* border: 0px; */
     height: 100%;
-    width: 100%;
-    padding: 0px;
+    /* width: 120%; */
+    /* padding: 0px; */
     margin-left: -10px;
+    margin-top: -10px;
     position: absolute;
+    pointer-events: none;
     // margin-top: 20px !important;
 }
 .labelDate {
@@ -270,17 +268,21 @@ ion-spinner {
     color: white;
 }
 
-
-.filtercls{
-    font-size: 25px;
-  //  position: fixed;
+.filtercls {
+    font-size: 30px;
+    //  position: fixed;
     right: 5px;
     padding: 3px;
     border-radius: 20px;
 }
 
-.funel_down{
+.funel_down {
     display: flex;
     justify-content: space-between;
 }
 
+.slider_exp {
+    .swiper-pagination-bullet-active {
+        background: #f9f9f900;
+    }
+}

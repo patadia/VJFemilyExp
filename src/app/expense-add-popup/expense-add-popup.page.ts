@@ -37,6 +37,7 @@ export class ExpenseAddPopupPage implements OnInit {
   public imagecount: number;
   public typeselect:any
   public type_exp:any;
+  title_head:string = "";
   Photoes:TPhotoes[] = [];
   delPhotoes:TPhotoes[] = [];
   counter: number = 0;
@@ -115,6 +116,7 @@ export class ExpenseAddPopupPage implements OnInit {
   ngOnInit() {
     console.log(this.navParams.data.ExpenseData);
     if (this.navParams.data?.ExpenseData) {
+      this.title_head = 'Edit ';
       console.log('navparam', JSON.stringify(this.navParams));
       this.AddBtn = false;
       this.title = this.navParams.data.ExpenseData.Title;
@@ -128,6 +130,8 @@ export class ExpenseAddPopupPage implements OnInit {
         this.getImages(this.navParams.data.ExpenseData.id);
       }
       
+    }else{
+      this.title_head = 'Add ';
     }
   }
 

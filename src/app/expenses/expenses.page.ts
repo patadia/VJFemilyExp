@@ -39,10 +39,10 @@ export class ExpensesPage implements OnInit {
   Syncdate: any;
   TotalCreditbal : any = 0.0;
   TotalDebitbal : any = 0.0;
-  ShowPbalance:boolean = false;
+  //ShowPbalance:boolean = false;
   slideOpts = {
     slidesPerView: 3,
-    spaceBetween: 0
+    spaceBetween: 10
   };
   constructor(private route: ActivatedRoute,
     private popover: PopoverController,
@@ -73,11 +73,14 @@ export class ExpensesPage implements OnInit {
 
     this.name = await this.Store.GetStorevalue('name_user');
     this.Fkey = await this.Store.GetStorevalue('familykeyID');
-    let Pbal = await this.Store.GetPbalFlag();
-    this.ShowPbalance = Pbal;
-    this.getdata_expense('');
-    let nedate = new Date(this.datepick);
-    this.GetDBexpense(nedate.getFullYear(), nedate.getMonth(), this.Fkey);
+   // let Pbal = await this.Store.GetPbalFlag();
+   // this.ShowPbalance = Pbal;
+    this.db.CreateDatabase();
+    setTimeout(() => {
+      this.getdata_expense('');
+      let nedate = new Date(this.datepick);
+      this.GetDBexpense(nedate.getFullYear(), nedate.getMonth(), this.Fkey);
+    }, 2000);
   }
   GetDBexpense(Year: any, month: any, Fkey: string) {
     console.log('date retrive', Year + '' + month + '' + Fkey);
@@ -508,7 +511,7 @@ async  Refresh_items() {
     this.Subscription_release();
     // this.db.ReadExpense(nedate.getFullYear(), nedate.getMonth(), this.Fkey);
     this.getdata_expense('');
-    this.ShowPbalance = await this.Store.GetPbalFlag();
+   // this.ShowPbalance = await this.Store.GetPbalFlag();
   }
 
   ExpenseList(event) {

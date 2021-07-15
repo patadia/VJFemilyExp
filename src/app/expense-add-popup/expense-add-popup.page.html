@@ -2,7 +2,7 @@
   <ion-toolbar>
     <div class="toolbar_head">
       
-      <ion-title>Expense Manager</ion-title>
+      <ion-title>{{title_head}} Expense</ion-title>
       <ion-icon size="large" class="closeicon" slot="icon-only" name="close-circle" (click)="popupclose()"></ion-icon>
     </div>
   </ion-toolbar>
@@ -14,7 +14,7 @@
  
   <ion-item>
     <ion-label position="floating">
-      Date
+      Date *
     </ion-label>
     <ion-datetime [(ngModel)]="dateonadd" id="amount" display-format="DD/MM/YYYY">
 
@@ -22,7 +22,7 @@
   </ion-item>
   <ion-item>
     <ion-label position="floating">
-      Title
+      Title *
     </ion-label>
     <ion-input placeholder='Title' [(ngModel)]="title" id="title">
 
@@ -30,7 +30,7 @@
   </ion-item>
   <ion-item>
     <ion-label position="floating">
-      Amount
+      Amount *
     </ion-label>
     <ion-input placeholder='Amount' type="number" [(ngModel)]="amount" id="amount">
 
@@ -38,7 +38,7 @@
   </ion-item>
   <ion-item>
     <ion-label position="floating">
-      Type of transaction
+      Type of transaction *
     </ion-label>
     <ion-select interface="popover" [(ngModel)]="mySelect" (ionChange)="onChange($event)">
       <ion-select-option value="credit">

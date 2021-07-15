@@ -349,3 +349,9 @@ ion-card-subtitle{
   --width: 95%;
   --height: 95%;
 }
+
+.slider_exp {
+  .swiper-pagination-bullet-active {
+      background: #f9f9f900;
+  }
+}

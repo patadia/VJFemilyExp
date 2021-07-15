@@ -14,7 +14,7 @@
       </ion-menu-toggle>
       <ion-menu-toggle autoHide="false">
 
-        <ion-item (click)="GotoMenu('setting')" lines="none">
+        <ion-item (click)="GotoMenu('setting')" lines="none" *ngIf="!ishidden">
           <ion-label>Settings</ion-label>
         </ion-item>
       </ion-menu-toggle>

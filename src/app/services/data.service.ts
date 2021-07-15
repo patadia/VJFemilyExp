@@ -61,6 +61,7 @@ export class DataService {
   Types_exp = new BehaviorSubject([]);
   Totalcredit = new BehaviorSubject([]);
   Totaldebit = new BehaviorSubject([]);
+  
   constructor(private plt: Platform,
     private sqlitePorter: SQLitePorter,
     private sqlite: SQLite) {
@@ -161,7 +162,7 @@ export class DataService {
   //////
   //////////////
   fetchExpenses(Year: any, month: any, Fkey: string): Observable<TExpenes[]> {
-    this.ReadExpense(Year, month, Fkey);
+    //this.ReadExpense(Year, month, Fkey);
     return this.Expenses.asObservable();
   }
 

@@ -26,8 +26,8 @@
           <!-- <ion-icon class="iconcal" name="md-calculator"></ion-icon> -->
           <!-- <input class="btn btn-dark form-controll cdatepick" type="date" id="pickdate" [(ngModel)]="datepick"
             (change)="changenewdate(datepick)"> -->
-            <ion-datetime class="btn btn-dark form-controll cdatepick" id="pickdate" [(ngModel)]="datepick" display-format="DD MMM YYYY"
-            (ionChange)="changenewdate(datepick)"></ion-datetime>
+            <ion-datetime class="btn btn-dark form-controll cdatepick" id="pickdate" [(ngModel)]="datepick" display-format="MMMM 'YY"
+            (ionChange)="changenewdate(datepick)" [class.isDisabled]=true></ion-datetime>
           <!-- <ion-icon name="log-out-outline" (click)="Logout()" class="logoutbtn"></ion-icon> -->
           <!-- </div> -->
           
@@ -61,7 +61,7 @@
     </ion-item> -->
   <div class="balance">
 
-    <ion-slides mode="ios" pager="ios" scrollbar="ios" [options]="slideOpts">
+    <ion-slides mode="ios" pager="ios" scrollbar="ios" [options]="slideOpts" class="slider_exp">
       <ion-slide>
         <ion-card>
           <ion-card-header class="ccard">
@@ -117,17 +117,16 @@
           </ion-card-content>
         </ion-card>
       </ion-slide> -->
-      <ion-slide *ngIf="ShowPbalance">
+      <!-- <ion-slide *ngIf="ShowPbalance">
         <ion-card>
           <ion-card-header class="bcard">
             <ion-card-subtitle>Pre Balance</ion-card-subtitle>
-            <!-- <ion-card-title>Awesome Title</ion-card-title> -->
           </ion-card-header>
           <ion-card-content>
             {{TotalCreditbal - TotalDebitbal}}
           </ion-card-content>
         </ion-card>
-      </ion-slide>
+      </ion-slide> -->
     </ion-slides>
     <!-- <label>Credit <p>{{Creditbal}}</p> </label>
       <label>Debit <p>{{Debitbal}}</p> </label>
