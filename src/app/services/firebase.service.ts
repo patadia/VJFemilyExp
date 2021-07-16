@@ -16,6 +16,7 @@ export class FirebaseService {
   linkcollection = 'TokenLinker';
   expensetable= "Expensetable";
   Type_Exp_table = "TypeOfExpense";
+  Prebal_linker = "PreBalLinker";
 
   constructor(
     private firestore: AngularFirestore,
@@ -148,7 +149,18 @@ export class FirebaseService {
   }
 
 
-  
+  setFlagPrebal(data:any){
+    return this.firestore.collection(this.Prebal_linker).add(data);
+  }
+
+  UpdateFlagPrebal(data:any,Id:string){
+    return this.firestore.doc(this.Prebal_linker+'/'+Id).update(data);
+  }
+
+  GetPrebalFlag(Fkey:string,Uid:string){
+    return this.firestore.collection(this.Prebal_linker,ref=> ref.where('FamilyKey','==',Fkey)
+    .where('UserId','==',Uid)).valueChanges({ idField: 'id' });
+  }
 
 
 
