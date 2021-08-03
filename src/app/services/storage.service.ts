@@ -66,16 +66,18 @@ export class StorageService {
   }
 
   async GetPbalFlag(){
-    let pbf = await this._storage?.get('showpbal');
+    var fFkey = await this._storage.get('familykeyID');
+    let pbf = await this._storage?.get('showpbal-'+fFkey+'-v1');
     if(!pbf){
-      await this._storage.set('showpbal',false);
+      await this._storage.set('showpbal-'+fFkey+'-v1',false);
       return false;
     }
     return pbf
   }
 
   async SetPbfalg(flg){
-    await this._storage.set('showpbal',flg)
+    var fFkey = await this._storage.get('familykeyID');
+    await this._storage.set('showpbal-'+fFkey+'-v1',flg);
   }
 
 }

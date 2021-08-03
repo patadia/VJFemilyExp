@@ -162,6 +162,11 @@ export class FirebaseService {
     .where('UserId','==',Uid)).valueChanges({ idField: 'id' });
   }
 
+  GetReadonlyBalflag(Fkey:string){
+    return this.firestore.collection(this.Prebal_linker,ref=> 
+        ref.where("FamilyKey","==",Fkey)).valueChanges({idField:'id'});
+  }
+
 
 
 }

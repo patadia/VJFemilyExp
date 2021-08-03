@@ -354,7 +354,6 @@ console.log(JSON.stringify(datam));
 
  Read_Type_Exp(){
     try {
-     
       return this.database.executeSql(`select distinct Type from TypeExpense`,[]).then(data=>{
         let tp:typeexp[] = [];
         console.log('types data',JSON.stringify(data));
@@ -439,5 +438,7 @@ console.log(JSON.stringify(datam));
       console.log(error);
     }
   }
+
+  
 
 }

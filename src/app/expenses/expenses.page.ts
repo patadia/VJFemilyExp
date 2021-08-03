@@ -3,11 +3,9 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { ActivatedRoute } from '@angular/router';
 import { IonRouterOutlet, Platform, PopoverController, ActionSheetController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
-import { CPopoverComponent } from '../cpopover/cpopover.component';
 import { FirebaseService } from '../services/firebase.service';
 import { StorageService } from '../services/storage.service';
 import { DatePipe } from '@angular/common';
-import { App } from '@capacitor/app';
 import { Router } from '@angular/router';
 import { ExpenseAddPopupPage } from '../expense-add-popup/expense-add-popup.page';
 import { DataService, TExpenes } from '../services/data.service';
@@ -80,7 +78,19 @@ export class ExpensesPage implements OnInit {
       this.getdata_expense('');
       let nedate = new Date(this.datepick);
       this.GetDBexpense(nedate.getFullYear(), nedate.getMonth(), this.Fkey);
+      this.checkprebalisOnandAddData();
     }, 2000);
+  }
+
+ async checkprebalisOnandAddData(){
+    try {
+      var pflag = await this.Store.GetPbalFlag();
+      if(pflag == true){
+        console.log('prebalflag active --> ');
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
   GetDBexpense(Year: any, month: any, Fkey: string) {
     console.log('date retrive', Year + '' + month + '' + Fkey);

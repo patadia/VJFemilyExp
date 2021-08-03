@@ -41,6 +41,21 @@ export class HomePage {
   async movetoexpense(id: string) {
     // alert(id);
     if (id != null) {
+    
+      
+     
+        var fkey = await this.Store.GetStorevalue('familykeyID');
+       var sub = this.firebaseService.GetReadonlyBalflag(fkey).subscribe((d:any)=>{
+          console.log('prebalflag detail --->  ',d);
+          if(d.length > 0){
+
+            this.Store.SetPbfalg(d[0].PrebalFlag);
+          }else{
+            this.Store.SetPbfalg(false);
+          }
+          sub.unsubscribe();
+        })
+      
       this.route.navigate(['./split-master']);
     }
   }
