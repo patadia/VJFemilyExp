@@ -10,8 +10,8 @@ import { Router } from '@angular/router';
 import { ExpenseAddPopupPage } from '../expense-add-popup/expense-add-popup.page';
 import { DataService, TExpenes } from '../services/data.service';
 import { FilterPagePage } from '../filter-page/filter-page.page';
-import {Ng2ImgMaxService} from 'ng2-img-max'
-import {ExportService} from '../services/export.service'
+import { Ng2ImgMaxService } from 'ng2-img-max'
+import { ExportService } from '../services/export.service'
 
 
 @Component({
@@ -35,8 +35,9 @@ export class ExpensesPage implements OnInit {
   private expenseFetchsub: Subscription;
   private Fkey: string;
   Syncdate: any;
-  TotalCreditbal : any = 0.0;
-  TotalDebitbal : any = 0.0;
+  TotalCreditbal: any = 0.0;
+  TotalDebitbal: any = 0.0;
+  Totalvalue_added: boolean = false;
   //ShowPbalance:boolean = false;
   slideOpts = {
     slidesPerView: 3,
@@ -52,8 +53,8 @@ export class ExpensesPage implements OnInit {
     private routerOutlet: IonRouterOutlet,
     private actionSheetCtrl: ActionSheetController,
     private db: DataService,
-    private conimg : Ng2ImgMaxService,
-    private exp : ExportService
+    private conimg: Ng2ImgMaxService,
+    private exp: ExportService
   ) {
     this.Store.init().then(() => {
 
@@ -71,8 +72,8 @@ export class ExpensesPage implements OnInit {
 
     this.name = await this.Store.GetStorevalue('name_user');
     this.Fkey = await this.Store.GetStorevalue('familykeyID');
-   // let Pbal = await this.Store.GetPbalFlag();
-   // this.ShowPbalance = Pbal;
+    // let Pbal = await this.Store.GetPbalFlag();
+    // this.ShowPbalance = Pbal;
     this.db.CreateDatabase();
     setTimeout(() => {
       this.getdata_expense('');
@@ -82,12 +83,61 @@ export class ExpensesPage implements OnInit {
     }, 2000);
   }
 
- async checkprebalisOnandAddData(){
+  getnamewithcmonth() {
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"];
+    var typeexp = monthNames[new Date().getMonth()] + new Date().getFullYear() + '-SystemType';
+    return typeexp;
+  }
+
+  async checkprebalisOnandAddData() {
     try {
-      var pflag = await this.Store.GetPbalFlag();
-      if(pflag == true){
-        console.log('prebalflag active --> ');
-      }
+      setTimeout(async () => {
+
+        var pflag = await this.Store.GetPbalFlag();
+        if (pflag == true) {
+          console.log('prebalflag active --> ');
+          if (this.Totalvalue_added) {
+
+            var total = this.TotalCreditbal - this.TotalDebitbal;
+            console.log('totalbalance-->', total);
+            let typeExp = this.getnamewithcmonth();
+            let issaved = await this.Store.Getcurrentprebal();
+            if(issaved === typeExp){
+              return;
+            }
+            const data = {
+              Title: `Previous Month's Credit`,
+              Amount: Number(total),
+              Transaction_Type: 'credit',
+              date_on: new Date().toString(),
+              Date_unix: parseInt((new Date().getTime() / 1000).toFixed(0)),
+              byName: this.name,
+              FamilyKey: this.Fkey,
+              Syncdate: parseInt((new Date().getTime() / 1000).toFixed(0)),
+              isDelete: false,
+              Images: 0,
+              Type_expense: typeExp
+            }
+            console.log(JSON.stringify(data));
+
+           var sub =  this.fire.VerifyExpdataPrevious(this.Fkey,typeExp).subscribe((d)=>{
+                if(d.length > 0){
+                  
+                }else{
+                  this.fire.Create_expense(data).then(async(s)=>{
+                    await this.Store.SetCurrentPrebal(typeExp);
+                  })
+                }
+            })
+            
+
+          } else {
+            this.checkprebalisOnandAddData();
+          }
+
+        }
+      }, 5000);
     } catch (error) {
       console.log(error);
     }
@@ -110,7 +160,7 @@ export class ExpensesPage implements OnInit {
           byName: e.byName,
           Syncdate: e.Syncdate,
           isDelete: e.isDelete,
-          Images : e.Images,
+          Images: e.Images,
           Type_expense: e.Type_expense
         }
         this.ExpennseList.push(pusher);
@@ -142,36 +192,37 @@ export class ExpensesPage implements OnInit {
     });
   }
 
- async ReadExpense_filter(){
-   console.log('date for datepick',this.datepick)
-  let Month =  new Date(this.datepick).getMonth();
-  let year = new Date(this.datepick).getFullYear();
-  let month = Month;
-  const start = new Date(year, month, 1);
-  const daysinmonth = new Date(year, month + 1, 0).getDate();
-  const end = new Date(year, month, daysinmonth, 23, 59, 59);
-  let start_unix = parseInt((start.getTime() / 1000).toFixed(0));
-  let End_unix = parseInt((end.getTime() / 1000).toFixed(0));
+  async ReadExpense_filter() {
+    console.log('date for datepick', this.datepick)
+    let Month = new Date(this.datepick).getMonth();
+    let year = new Date(this.datepick).getFullYear();
+    let month = Month;
+    const start = new Date(year, month, 1);
+    const daysinmonth = new Date(year, month + 1, 0).getDate();
+    const end = new Date(year, month, daysinmonth, 23, 59, 59);
+    let start_unix = parseInt((start.getTime() / 1000).toFixed(0));
+    let End_unix = parseInt((end.getTime() / 1000).toFixed(0));
     let _data = {
-      Sdate : start_unix,
+      Sdate: start_unix,
       Edate: End_unix,
-      ByName : '',
-      FamilyKey : this.Fkey
+      ByName: '',
+      FamilyKey: this.Fkey
     }
     // console.log(_data);
 
     await this.db.FilterExpense(_data);
     this.TOTAL_bal();
   }
- 
-  async TOTAL_bal(){
-    this.db.FetchexpensesTotalbalCred(this.Fkey).subscribe((data)=>{
+
+  async TOTAL_bal() {
+    this.db.FetchexpensesTotalbalCred(this.Fkey).subscribe((data) => {
       console.log(JSON.stringify(data));
       this.TotalCreditbal = data;
     })
-    this.db.FetchexpensesTotalbalDebit(this.Fkey).subscribe((data)=>{
+    this.db.FetchexpensesTotalbalDebit(this.Fkey).subscribe((data) => {
       console.log(JSON.stringify(data));
       this.TotalDebitbal = data;
+      this.Totalvalue_added = true;
     })
 
   }
@@ -197,11 +248,11 @@ export class ExpensesPage implements OnInit {
             deleteLog = e.isDelete;
           }
           let image = 0
-          if(e?.Images){
+          if (e?.Images) {
             image = e.Images
           }
           let Type_expenses = 'default';
-          if(e.Type_expense !== undefined){
+          if (e.Type_expense !== undefined) {
             Type_expenses = e.Type_expense;
           }
           let pusher: TExpenes = {
@@ -226,9 +277,9 @@ export class ExpensesPage implements OnInit {
             Syncdate: Number(e.Syncdate),
             FamilyKey: this.Fkey,
             isDelete: deleteLog,
-            Images : image,
+            Images: image,
             id: 0,
-            Type_expense:Type_expenses
+            Type_expense: Type_expenses
           }
           //this.ExpennseList.push(pusher);
           this.db.AddExpense(pusher as TExpenes).then(() => {
@@ -250,7 +301,7 @@ export class ExpensesPage implements OnInit {
           this.ExpenseReset();
         }
 
-       // this.db.ReadExpense(nedate.getFullYear(), nedate.getMonth(), this.Fkey);
+        // this.db.ReadExpense(nedate.getFullYear(), nedate.getMonth(), this.Fkey);
         this.ReadExpense_filter();
         // this.GetDBexpense(nedate.getFullYear(), nedate.getMonth(), this.Fkey);
 
@@ -313,7 +364,7 @@ export class ExpensesPage implements OnInit {
     return await popo.present();
   }
 
-  
+
 
   async Edit_Expensedata(expense: any) {
     let check = await this.Store.GetStorevalue('ISKeyUser');
@@ -351,7 +402,7 @@ export class ExpensesPage implements OnInit {
       } catch (error) {
         console.log(error);
       }
-    }else{
+    } else {
       alert('You do not have permission to edit other members expense data');
     }
     //update in firebase
@@ -362,21 +413,21 @@ export class ExpensesPage implements OnInit {
 
   }
 
-  Editimages(imgdata : any){
+  Editimages(imgdata: any) {
     try {
-      if(imgdata.images?.photoes.length > 0){
-        let pics = imgdata.images.photoes.filter(i=> i.type === 'dataurl');
-        if(pics.length > 0){
+      if (imgdata.images?.photoes.length > 0) {
+        let pics = imgdata.images.photoes.filter(i => i.type === 'dataurl');
+        if (pics.length > 0) {
 
-          this.uploadAttachment(pics,imgdata.data.id);
-        } 
+          this.uploadAttachment(pics, imgdata.data.id);
+        }
       }
 
-      if(imgdata.images?.delphotoes.length > 0){
-        let delpics = imgdata.images.delphotoes.filter(i=> i.type === 'frombase');
+      if (imgdata.images?.delphotoes.length > 0) {
+        let delpics = imgdata.images.delphotoes.filter(i => i.type === 'frombase');
         delpics.forEach(e => {
-         let del =  this.fire.deleteattachement(imgdata.data.id,e.filename);
-         console.log(del);
+          let del = this.fire.deleteattachement(imgdata.data.id, e.filename);
+          console.log(del);
         });
       }
 
@@ -393,9 +444,9 @@ export class ExpensesPage implements OnInit {
       //     }
       this.fire.Create_expense(Add_data.data).then((data) => {
         console.log('add data', data);
-       // console.log('imagealist',Add_data?.images);
-        if(Add_data?.images?.photoes.length >0){
-          this.uploadAttachment(Add_data.images.photoes,data.id)
+        // console.log('imagealist',Add_data?.images);
+        if (Add_data?.images?.photoes.length > 0) {
+          this.uploadAttachment(Add_data.images.photoes, data.id)
         }
         //  this.getdata_expense(this.paramID);
       });
@@ -405,20 +456,20 @@ export class ExpensesPage implements OnInit {
   }
 
 
- async uploadAttachment(IMAGE_data:any,id){
+  async uploadAttachment(IMAGE_data: any, id) {
     try {
       IMAGE_data.forEach(i => {
-       
+
         // console.log(i.image.changingThisBreaksApplicationSecurity);
         let imblob = dataURItoBlob(i.image.changingThisBreaksApplicationSecurity);
-        var file = new File([imblob],new Date().getTime().toString()+'.png',{type: 'image/png'});
-        this.conimg.compressImage(file,0.070).subscribe(res=>{
-          let files = new File([res],res.name);
+        var file = new File([imblob], new Date().getTime().toString() + '.png', { type: 'image/png' });
+        this.conimg.compressImage(file, 0.070).subscribe(res => {
+          let files = new File([res], res.name);
           console.log(files);
-          this.fire.UploadBlobs(files,id);
+          this.fire.UploadBlobs(files, id);
         });
-       // console.log(imblob);
-      
+        // console.log(imblob);
+
       });
     } catch (error) {
       console.log(error);
@@ -514,14 +565,14 @@ export class ExpensesPage implements OnInit {
 
   }
 
-async  Refresh_items() {
+  async Refresh_items() {
 
     let nedate = new Date(this.datepick);
     //this.expenseFetchsub.unsubscribe();
     this.Subscription_release();
     // this.db.ReadExpense(nedate.getFullYear(), nedate.getMonth(), this.Fkey);
     this.getdata_expense('');
-   // this.ShowPbalance = await this.Store.GetPbalFlag();
+    // this.ShowPbalance = await this.Store.GetPbalFlag();
   }
 
   ExpenseList(event) {
@@ -535,7 +586,7 @@ async  Refresh_items() {
   }
 
 
- async Filter_items(){
+  async Filter_items() {
 
     const popo = await this.popover.create({
       component: FilterPagePage,
@@ -544,26 +595,26 @@ async  Refresh_items() {
     });
     popo.onDidDismiss().then(async (data: any) => {
       console.log(JSON.stringify(data.data?.Filterdata));
-      if(data.data?.Filterdata){
+      if (data.data?.Filterdata) {
         let startobj = new Date(data.data?.Filterdata.Sdate);
-        let startobjdec = new Date(startobj.getFullYear(),startobj.getMonth(),startobj.getDate(),0,0,0)
+        let startobjdec = new Date(startobj.getFullYear(), startobj.getMonth(), startobj.getDate(), 0, 0, 0)
         let endobj = new Date(data.data?.Filterdata.Edate);
-        let Endobjdec = new Date(endobj.getFullYear(),endobj.getMonth(),endobj.getDate(),23,59,59);
+        let Endobjdec = new Date(endobj.getFullYear(), endobj.getMonth(), endobj.getDate(), 23, 59, 59);
 
         let sdate = parseInt((new Date(startobjdec).getTime() / 1000).toFixed(0));
         let edate = parseInt((new Date(Endobjdec).getTime() / 1000).toFixed(0));
         let Name = '';
-        if(data.data?.Filterdata.Bynameselect !== 'default'){
+        if (data.data?.Filterdata.Bynameselect !== 'default') {
           Name = data.data?.Filterdata.Bynameselect;
-            // console.log('name of selected membetr -- >    >> ',Name);
+          // console.log('name of selected membetr -- >    >> ',Name);
         }
 
 
         let _data = {
-          Sdate : sdate,
+          Sdate: sdate,
           Edate: edate,
-          ByName : Name,
-          FamilyKey : this.Fkey
+          ByName: Name,
+          FamilyKey: this.Fkey
         }
         // console.log(_data);
 
@@ -574,10 +625,10 @@ async  Refresh_items() {
     return await popo.present();
   }
 
-  Export(){
-    this.exp.exportToExcel(this.ExpennseList,'explist');
+  Export() {
+    this.exp.exportToExcel(this.ExpennseList, 'explist');
   }
-  
+
 
 }
 
@@ -599,11 +650,11 @@ function dataURItoBlob(dataURI) {
 
   // set the bytes of the buffer to the correct values
   for (var i = 0; i < byteString.length; i++) {
-      ia[i] = byteString.charCodeAt(i);
+    ia[i] = byteString.charCodeAt(i);
   }
 
   // write the ArrayBuffer to a blob, and you're done
-  var blob = new Blob([ab], {type: mimeString});
+  var blob = new Blob([ab], { type: mimeString });
   return blob;
 
 }

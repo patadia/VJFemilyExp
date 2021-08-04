@@ -18,7 +18,7 @@ import {AngularFireStorageModule} from '@angular/fire/storage';
 import {PhotoViewer}from '@ionic-native/photo-viewer/ngx';
 import {File} from '@ionic-native/file/ngx';
 import {SocialSharing} from '@ionic-native/social-sharing/ngx'
-
+import { LocalNotifications} from '@ionic-native/local-notifications/ngx'
 
 export class AppConfigService {
   static settings: IAppConfig;
@@ -70,7 +70,7 @@ export function initializeApp(appConfig: AppConfigService) {
     }, Storage, DatePipe,
     SQLitePorter,
     SQLite,PhotoViewer,
-    File,SocialSharing],
+    File,SocialSharing,LocalNotifications],
   bootstrap: [AppComponent],
 })
 

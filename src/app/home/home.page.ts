@@ -10,6 +10,9 @@ import { PasswordAdminComponent } from '../password-admin/password-admin.compone
 import { FirebaseService } from '../services/firebase.service';
 import { StorageService } from '../services/storage.service';
 import { AnimationOptions } from 'ngx-lottie';
+import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
+
+
 
 @Component({
   selector: 'app-home',
@@ -31,7 +34,8 @@ export class HomePage {
     public popoverc: PopoverController,
     private firebaseService: FirebaseService
     , public fb: FormBuilder,
-    public Store: StorageService) {
+    public Store: StorageService,
+    public LocalN :LocalNotifications) {
     this.Store.init().then(() => {
       this.init();
     })
@@ -65,11 +69,15 @@ export class HomePage {
       username: new FormControl('', Validators.required),
       FamilyKey_password: new FormControl('', Validators.required),
     })
+    this.LocalN.requestPermission().then((d)=>{
+      console.log(d);
+    });
   }
 
   async init() {
     // const storage = await this.storage.create();
     // this._storage = storage;
+    
     try {
 
       let check = await this.Store.GetStorevalue('ISKeyUser');
@@ -79,6 +87,7 @@ export class HomePage {
         let userid = await this.Store.GetStorevalue('KeyUserID');
         console.log(userid);
         this.movetoexpense(userid);
+     
       }
 
       if (check === 'HeadLogedin') {
@@ -87,9 +96,21 @@ export class HomePage {
         let userid = await this.Store.GetStorevalue('KeyUserID');
         // alert(userid);
         this.movetoexpense(userid);
-
+       
       }
-
+      this.LocalN.schedule({
+        id: 1,
+        text: 'Hi have you added your expense for Today',
+        title:'Greetings..!',
+        sound: 'res://platform_default'
+      });
+      this.LocalN.schedule({
+        id: 1,
+        text: 'Hi have you added your expense for Today',
+        title:'Greetings..!',
+        trigger:{ every: { hour: 21, minute: 0 }},
+       sound: 'res://platform_default'
+      });
 
     } catch (error) {
       alert(error);

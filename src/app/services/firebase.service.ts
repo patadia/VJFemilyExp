@@ -116,6 +116,10 @@ export class FirebaseService {
     
   }
 
+  VerifyExpdataPrevious(Fkey:string,TType:string){
+    return this.firestore.collection(this.expensetable,ref=> ref.where('FamilyKey','==',Fkey).where('Type_expense','==',TType)).valueChanges();
+  }
+
 
   UploadBlobs(blob,id){
     const uploadTask = this.firestorage.upload(

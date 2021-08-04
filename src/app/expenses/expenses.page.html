@@ -144,7 +144,7 @@
     <ion-list class="listmain">
       <ion-item-sliding *ngFor="let e of ExpennseList">
         <ion-item-options side="end">
-          <ion-item-option color="success" (click)="View(e)">View</ion-item-option>
+          <ion-item-option color="success" *ngIf="!e.Type_expense.includes('SystemType')" (click)="View(e)">View</ion-item-option>
           <ion-item-option color="danger" (click)="Delete(e)">Delete</ion-item-option>
         </ion-item-options>
         <ion-item lines="none" class="ion-no-padding">

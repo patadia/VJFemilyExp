@@ -4,6 +4,7 @@ import { SQLitePorter } from '@ionic-native/sqlite-porter/ngx';
 import { HttpClient } from '@angular/common/http';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite/ngx';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { promise } from 'protractor';
 
 
 export interface TMember {
@@ -439,6 +440,20 @@ console.log(JSON.stringify(datam));
     }
   }
 
-  
+  async GetdataAddedForPrebal(Fkey:string):Promise<any>{
+    let Month =  new Date().getMonth();
+      let year = new Date().getFullYear();
+      let month = Month -1;
+      if(month === -1){
+        year = year -1;
+      }
+      const start = new Date(year, month, 1);
+      const daysinmonth = new Date(year, month + 1, 0).getDate();
+      const end = new Date(year, month, daysinmonth, 23, 59, 59);
+      let start_unix = parseInt((start.getTime() / 1000).toFixed(0));
+      let End_unix = parseInt((end.getTime() / 1000).toFixed(0));
+  await this.database.executeSql(`select SUM(Amount) as CreditBal from ExpenseData where FamilyKey = ? and Transaction_type = 'credit' and isDelete = ? and Date_unix >= ? and Date_unix <=?`,[Fkey,false,start_unix,End_unix]).then( (data)=>{return data;});
+      
+}
 
 }

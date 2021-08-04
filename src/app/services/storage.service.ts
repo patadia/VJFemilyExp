@@ -80,4 +80,15 @@ export class StorageService {
     await this._storage.set('showpbal-'+fFkey+'-v1',flg);
   }
 
+  async Getcurrentprebal(){
+    var fFkey = await this._storage.get('familykeyID');
+    let pbf = await this._storage?.get('showpbal-'+fFkey+'-val');
+    return pbf;
+  }
+  async SetCurrentPrebal(mn:string){
+    var fFkey = await this._storage.get('familykeyID');
+    let prebalc = await this._storage.set('showpbal-'+fFkey+'-val',mn);
+    return prebalc;
+  }
+
 }
