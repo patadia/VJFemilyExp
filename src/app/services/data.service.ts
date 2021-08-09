@@ -149,8 +149,8 @@ export class DataService {
 
   async UpdateMember(m: any) {
     try {
-      let DataM = [m.isDelete, m.Syncdate, m.MFCM_ID];
-      const data = await this.database.executeSql(`Update MembersData set isDelete = ?,Syncdate = ? where MFCM_ID = ?`, DataM).then(() => {
+      let DataM = [m.isDelete, m.Syncdate, m.ishead,m.MFCM_ID];
+      const data = await this.database.executeSql(`Update MembersData set isDelete = ?,Syncdate = ?,ishead = ? where MFCM_ID = ?`, DataM).then(() => {
         this.ReadMember(m.FamilyKey);
       })
     } catch (error) {

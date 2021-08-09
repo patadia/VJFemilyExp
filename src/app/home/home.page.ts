@@ -77,33 +77,53 @@ export class HomePage {
   async init() {
     // const storage = await this.storage.create();
     // this._storage = storage;
-    
+    this.processing = true;
     try {
 
       let check = await this.Store.GetStorevalue('ISKeyUser');
       console.log(check);
-      // alert(check);
-      if (check === 'Logedin') {
-        let userid = await this.Store.GetStorevalue('KeyUserID');
-        console.log(userid);
-        this.movetoexpense(userid);
-     
-      }
-
-      if (check === 'HeadLogedin') {
-        console.log(check);
-        // this.route.navigate(['./familytree']);
-        let userid = await this.Store.GetStorevalue('KeyUserID');
+      let username = await this.Store.GetStorevalue('Current_uname');
+      if(username){
+        let member = {
+          username: username
+        }
+        this.firebaseService.veryfin_member_Exist_user(member).subscribe(async(data:any)=>{
+            if(data.length >0){
+              let headmember = data[0].ishead;
+              let Loginuser = 'Logedin'
+              if (headmember) {
+                Loginuser = 'HeadLogedin'
+              }
+              let usercheck = await this.Store.SetStorageData('ISKeyUser', Loginuser);
+              if(headmember){
+                let userid = await this.Store.GetStorevalue('KeyUserID');
+                // alert(userid);
+                this.movetoexpense(userid);
+              }else{
+                let userid = await this.Store.GetStorevalue('KeyUserID');
         // alert(userid);
-        this.movetoexpense(userid);
-       
+                this.movetoexpense(userid);``
+              }
+            }
+        })
       }
-      this.LocalN.schedule({
-        id: 1,
-        text: 'Hi have you added your expense for Today',
-        title:'Greetings..!',
-        sound: 'res://platform_default'
-      });
+      // alert(check);
+      // if (check === 'Logedin') {
+      //   let userid = await this.Store.GetStorevalue('KeyUserID');
+      //   console.log(userid);
+      //   this.movetoexpense(userid);
+     
+      // }
+
+      // if (check === 'HeadLogedin') {
+      //   console.log(check);
+      //   // this.route.navigate(['./familytree']);
+      //   let userid = await this.Store.GetStorevalue('KeyUserID');
+      //   // alert(userid);
+      //   this.movetoexpense(userid);
+       
+      // }
+
       this.LocalN.schedule({
         id: 1,
         text: 'Hi have you added your expense for Today',
@@ -112,9 +132,12 @@ export class HomePage {
        sound: 'res://platform_default'
       });
 
+      this.processing = false;
+
     } catch (error) {
       alert(error);
       console.log(error);
+      this.processing = false;
     }
   }
 
@@ -215,7 +238,7 @@ export class HomePage {
   }
 
   Created(animation: AnimationEventInit) {
-    console.log(animation);
+    //console.log(animation);
   }
 
 }

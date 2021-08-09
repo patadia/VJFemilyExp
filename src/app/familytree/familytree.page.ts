@@ -228,7 +228,6 @@ export class FamilytreePage implements OnInit {
           buttons: [{
             text: 'Delete',
             handler:async () => {
-              
               member.isDelete = true;
               member.Syncdate= parseInt((new Date(new Date().toUTCString()).getTime()/1000).toFixed(0));
               this.firebaseService.update_Member(M.id, member);
@@ -271,6 +270,68 @@ export class FamilytreePage implements OnInit {
     } catch (error) {
       
     }
+  }
+
+  async Action(m){
+    console.log(JSON.stringify(m));
+    let member = m;
+    if(m.ishead == false){
+
+      let actionSheet = await this.actionSheetCtrl.create({
+        header: 'Are you sure, you wants to make this member as head?',
+        buttons: [{
+          text: 'Yes',
+          handler:async () => {
+            member.ishead = true;
+            member.Syncdate= parseInt((new Date(new Date().toUTCString()).getTime()/1000).toFixed(0));
+            this.firebaseService.update_Member(m.id, member);
+            let navTransition = actionSheet.dismiss();
+            member.MFCM_ID = member.id;
+            await this.db.UpdateMember(member).then(()=>{
+              this.GetMembers();
+            });
+            return false;
+          },
+        },
+        {
+          text: 'No',
+          handler: () => {
+            let navTransition = actionSheet.dismiss();
+            return false;
+          },
+        }]
+      });
+      
+      await actionSheet.present();
+    }else{
+      let actionSheet = await this.actionSheetCtrl.create({
+        header: 'Are you sure, you wants to remove this user from head?',
+        buttons: [{
+          text: 'Yes',
+          handler:async () => {
+            member.ishead = false;
+            member.Syncdate= parseInt((new Date(new Date().toUTCString()).getTime()/1000).toFixed(0));
+            this.firebaseService.update_Member(m.id, member);
+            let navTransition = actionSheet.dismiss();
+            member.MFCM_ID = member.id;
+            await this.db.UpdateMember(member).then(()=>{
+              this.GetMembers();
+            });
+            return false;
+          },
+        },
+        {
+          text: 'No',
+          handler: () => {
+            let navTransition = actionSheet.dismiss();
+            return false;
+          },
+        }]
+      });
+      await actionSheet.present();
+    }
+
+    
   }
 
 }
