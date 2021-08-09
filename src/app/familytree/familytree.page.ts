@@ -25,6 +25,7 @@ interface Familytree {
 export class FamilytreePage implements OnInit {
 
   public Familykey: string = '';
+  public Cuser:string = '';
   Members = [];
   _familydata: Familytree;
   FormCreateFamilyHead: FormGroup;
@@ -55,6 +56,7 @@ export class FamilytreePage implements OnInit {
     // If using, define drivers here: await this.storage.defineDriver(/*...*/);
 
     this.Familykey = await this.Store.GetStorevalue('familykeyID');
+    this.Cuser = await this.Store.GetStorevalue('Current_uname');
    
     //console.log('getsyncdatemodel', this.syncDate);
     this.GetMembers();
@@ -72,7 +74,8 @@ export class FamilytreePage implements OnInit {
           Name: e.m_name,
           username: e.Email,
           ishead: e.ishead,
-          FamilyKey: e.FamilyKey
+          FamilyKey: e.FamilyKey,
+          IsMaster:e.IsMaster
         };
       })
     //  readdata.unsubscribe();
@@ -84,24 +87,40 @@ export class FamilytreePage implements OnInit {
     console.log('getsyncdatemodel', this.syncDate);
 
     try {
-      var getMember = this.firebaseService.read_Members_sync(this.Familykey, this.syncDate).subscribe((data) => {
-        //  console.log(data);
+      var getMember = this.firebaseService.read_Members_sync(this.Familykey, this.syncDate).subscribe((data:any) => {
+          console.log("Member data==-----> from firebase   ",JSON.stringify(data));
+          console.log(data);
         var dataMembers = data.map(e => {
-
+          let Ismastered = false
+          if(e.IsMaster !== undefined){
+            Ismastered = e.IsMaster;
+          }
           this.member = {
-            Email: e.payload.doc.data()['username'],
+            Email: e.username,
             FamilyKey: this.Familykey,
-            MFCM_ID: e.payload.doc.id,
-            Mobile: e.payload.doc.data()['Mobile'],
-            ishead: e.payload.doc.data()['ishead'],
-            m_name: e.payload.doc.data()['Name'],
-            isDelete: e.payload.doc.data()['isDelete'],
-            Syncdate:e.payload.doc.data()['Syncdate']
+            MFCM_ID: e.id,
+            Mobile: e.Mobile,
+            ishead: e.ishead,
+            m_name: e.Name,
+            isDelete: e.isDelete,
+            Syncdate:e.Syncdate,
+            IsMaster:Ismastered
           };
+          // this.member = {
+          //   Email: e.payload.doc.data()['username'],
+          //   FamilyKey: this.Familykey,
+          //   MFCM_ID: e.payload.doc.id,
+          //   Mobile: e.payload.doc.data()['Mobile'],
+          //   ishead: e.payload.doc.data()['ishead'],
+          //   m_name: e.payload.doc.data()['Name'],
+          //   isDelete: e.payload.doc.data()['isDelete'],
+          //   Syncdate:e.payload.doc.data()['Syncdate'],
+          //   IsMaster:Ismastered
+          // };
 
           this.db.AddMember(this.member).then(() => {
             console.log('Added ', this.member);
-            this.member = {};
+            //this.member = {};
           });
 
 
@@ -117,6 +136,10 @@ export class FamilytreePage implements OnInit {
         var setnew =  this.Store.SetSyncDate(new Date().toUTCString(), 'Member');
         console.log(setnew);
         getMember.unsubscribe();
+        setTimeout(() => {
+          
+          this.getfromdb();
+        }, 1500);
        // this.getfromdb();
         //console.log('check  multy $$$$$$$$');
        // this.GetMembers();
@@ -275,7 +298,7 @@ export class FamilytreePage implements OnInit {
   async Action(m){
     console.log(JSON.stringify(m));
     let member = m;
-    if(m.ishead == false){
+    if(m.ishead === 'false'){
 
       let actionSheet = await this.actionSheetCtrl.create({
         header: 'Are you sure, you wants to make this member as head?',
@@ -285,11 +308,12 @@ export class FamilytreePage implements OnInit {
             member.ishead = true;
             member.Syncdate= parseInt((new Date(new Date().toUTCString()).getTime()/1000).toFixed(0));
             this.firebaseService.update_Member(m.id, member);
+            this.GetMembers();
             let navTransition = actionSheet.dismiss();
             member.MFCM_ID = member.id;
-            await this.db.UpdateMember(member).then(()=>{
-              this.GetMembers();
-            });
+            // await this.db.UpdateMember(member).then(()=>{
+            //   this.GetMembers();
+            // });
             return false;
           },
         },
@@ -314,9 +338,10 @@ export class FamilytreePage implements OnInit {
             this.firebaseService.update_Member(m.id, member);
             let navTransition = actionSheet.dismiss();
             member.MFCM_ID = member.id;
-            await this.db.UpdateMember(member).then(()=>{
-              this.GetMembers();
-            });
+            this.GetMembers();
+            // await this.db.UpdateMember(member).then(()=>{
+            //   this.GetMembers();
+            // });
             return false;
           },
         },

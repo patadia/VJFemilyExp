@@ -59,11 +59,10 @@
       <ion-list class="listmember" lines="full">
         <ion-item-sliding *ngFor="let m of Members">
           <ion-item-options side="end">
-            <ion-item-option (click)="Action(m)">Action</ion-item-option>
+            <ion-item-option *ngIf='m.IsMaster === "false"' (click)="Action(m)">Action</ion-item-option>
             <ion-item-option color="danger" (click)="Delete(m)">Delete</ion-item-option>
           </ion-item-options>
         <ion-item lines="none">
-
           <div class="familymemberdiv">
             <ion-col size="2">
               <label class="iconsetup">{{m.Name.substring(0,1)}}</label>  

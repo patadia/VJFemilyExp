@@ -16,7 +16,8 @@ export interface TMember {
   ishead: boolean,
   FamilyKey: string,
   isDelete: boolean,
-  Syncdate: string
+  Syncdate: string,
+  IsMaster:boolean
 }
 export interface TExpenes {
   id: number,
@@ -68,7 +69,7 @@ export class DataService {
     private sqlite: SQLite) {
     this.plt.ready().then(() => {
       this.sqlite.create({
-        name: 'emdb2.db',
+        name: 'emdb3.db',
         location: 'default'
       })
         .then((db: SQLiteObject) => {
@@ -81,7 +82,7 @@ export class DataService {
 
   CreateDatabase() {
     try {
-      let sql = 'create table IF NOT EXISTS MembersData(id integer primary key AUTOINCREMENT,m_name Text,Email Text,Mobile Text,MFCM_ID Text,ishead boolean,FamilyKey Text,isDelete boolean,Syncdate string);';
+      let sql = 'create table IF NOT EXISTS MembersData(id integer primary key AUTOINCREMENT,m_name Text,Email Text,Mobile Text,MFCM_ID Text,ishead boolean,FamilyKey Text,isDelete boolean,Syncdate string,IsMaster boolean);';
       sql = sql + 'create table IF NOT EXISTS ExpenseData (id integer primary key Autoincrement,EFCM_ID Text,Title Text,Amount real,Transaction_type Text,date_on Text,Date_unix integer,byName Text,FamilyKey Text,isDelete boolean,Syncdate integer,Images integer,Type_expense Text);';
       sql = sql + 'create table IF NOT EXISTS TypeExpense(id integer primary key Autoincrement,Type Text,Syncdate integer);';
       this.sqlitePorter.importSqlToDb(this.database, sql)
@@ -113,7 +114,8 @@ export class DataService {
             Mobile: dataread.Mobile,
             ishead: dataread.ishead,
             isDelete: dataread.isDelete,
-            Syncdate: dataread.Syncdate
+            Syncdate: dataread.Syncdate,
+            IsMaster:dataread.IsMaster
           });
         }
       }
@@ -135,12 +137,24 @@ export class DataService {
         m.ishead = false;
       if (!m?.isDelete)
         m.isDelete = false;
-      let DataM = [m.m_name, m.Email, m.Mobile, m.MFCM_ID, m.ishead, m.FamilyKey, m.isDelete, m.Syncdate];
+      let DataM = [m.m_name, m.Email, m.Mobile, m.MFCM_ID, m.ishead,m.IsMaster, m.FamilyKey, m.isDelete, m.Syncdate];
       console.log('add->member', DataM);
-      const data = await this.database.executeSql('INSERT OR IGNORE INTO MembersData (m_name,Email,Mobile,MFCM_ID,ishead,FamilyKey,isDelete,Syncdate) VALUES (?,?,?,?,?,?,?,?)', DataM).then(() => {
 
+      let checkExist = await this.database.executeSql('select * from MembersData where MFCM_ID =?', [m.MFCM_ID]);
+      console.log('read data from members ', JSON.stringify(checkExist));
+      if (checkExist.rows.length > 0) {
+        let DataMem_update = [m.isDelete, m.Syncdate, m.FamilyKey,m.m_name, m.Email, m.Mobile, m.ishead,m.IsMaster ,m.MFCM_ID];
+        let stored = await this.database.executeSql(`Update MembersData set isDelete = ?,Syncdate = ?,FamilyKey =?,m_name=?,Email=?,Mobile = ?,ishead = ?,IsMaster = ? where MFCM_ID = ?`, DataMem_update)
+        console.log('read data from update before add ', JSON.stringify(stored));
         this.ReadMember(m.FamilyKey);
-      })
+      }else{
+
+        
+        const data = await this.database.executeSql('INSERT INTO MembersData (m_name,Email,Mobile,MFCM_ID,ishead,IsMaster,FamilyKey,isDelete,Syncdate) VALUES (?,?,?,?,?,?,?,?,?)', DataM).then(() => {
+          
+          this.ReadMember(m.FamilyKey);
+        })
+      }
       //console.log('return obj', data);
     } catch (error) {
       console.log(error);

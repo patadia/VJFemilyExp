@@ -15,7 +15,8 @@ interface headMember {
   FamilyKey: string,
   Mobile: string;
   isDelete: boolean,
-  Syncdate:number
+  Syncdate:number,
+  IsMaster:boolean
 }
 
 @Component({
@@ -118,6 +119,7 @@ export class GatePassHeadPage implements OnInit {
       dataobj.ishead = data.ishead;
       dataobj.Mobile = data.phone.countryCode + '-' + data.phone.dialCode + '-' + data.phone.number;
       dataobj.isDelete = data.isDelete;
+      dataobj.IsMaster = true;
       dataobj.Syncdate = parseInt((new Date(new Date().toUTCString()).getTime() / 1000).toFixed(0));
       console.log('regobj', dataobj);
 

@@ -90,6 +90,7 @@ export class HomePage {
         this.firebaseService.veryfin_member_Exist_user(member).subscribe(async(data:any)=>{
             if(data.length >0){
               let headmember = data[0].ishead;
+              console.log(`${username}----> is ${headmember}  <------`)
               let Loginuser = 'Logedin'
               if (headmember) {
                 Loginuser = 'HeadLogedin'

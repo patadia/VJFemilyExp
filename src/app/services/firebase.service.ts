@@ -45,7 +45,7 @@ export class FirebaseService {
   }
 
   read_Members_sync(familykey,syncDate) {
-    return this.firestore.collection(this.Membercollection,ref=> ref.where('FamilyKey','==',familykey).where('isDelete','==',false).where('Syncdate','>=',syncDate)).snapshotChanges();
+    return this.firestore.collection(this.Membercollection,ref=> ref.where('FamilyKey','==',familykey).where('isDelete','==',false).where('Syncdate','>=',syncDate)).valueChanges({idField:'id'});
   }
 
   varify_Members(record:any) {

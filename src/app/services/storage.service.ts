@@ -6,6 +6,7 @@ import { Storage } from '@ionic/storage'
 })
 export class StorageService {
   private _storage: Storage | null = null;
+  private version:string = "v3";
   constructor(private storage: Storage) {
     this.init();
   }
@@ -30,15 +31,15 @@ export class StorageService {
 
   async ClearStore() {
     var fcmid = await this._storage.get('fcmID');
-    var syncdate_mem = await this._storage.get('SyncDate_v1-Member-'+fcmid);
-    var syncdate_exp = await this._storage.get('SyncDate_v1-Expense-'+fcmid);
-    var syncdate_type_exp = await this._storage.get('SyncDate_v1-typeExpense-'+fcmid);
+    var syncdate_mem = await this._storage.get('SyncDate_'+this.version+'-Member-'+fcmid);
+    var syncdate_exp = await this._storage.get('SyncDate_'+this.version+'-Expense-'+fcmid);
+    var syncdate_type_exp = await this._storage.get('SyncDate_'+this.version+'-typeExpense-'+fcmid);
 
     await this._storage.clear();
 
-    var syncsetup = await this._storage.set('SyncDate_v1-Member-'+fcmid,syncdate_mem);
-    var syncsetup_e = await this._storage.set('SyncDate_v1-Expense-'+fcmid,syncdate_exp);
-    var syncsetup_trxp = await this._storage.set('SyncDate_v1-typeExpense-'+fcmid,syncdate_type_exp);
+    var syncsetup = await this._storage.set('SyncDate_'+this.version+'-Member-'+fcmid,syncdate_mem);
+    var syncsetup_e = await this._storage.set('SyncDate_'+this.version+'-Expense-'+fcmid,syncdate_exp);
+    var syncsetup_trxp = await this._storage.set('SyncDate_'+this.version+'-typeExpense-'+fcmid,syncdate_type_exp);
   }
 
   async SetSyncDate(date: any,type:any) {
@@ -47,19 +48,19 @@ export class StorageService {
     var fcmid = await this._storage.get('fcmID');
     console.log('set sync' + fcmid + '--> ',syncdate);
 
-    let storedate = await this._storage.set('SyncDate_v1-'+type+'-'+fcmid, unixsync);
+    let storedate = await this._storage.set('SyncDate_'+this.version+'-'+type+'-'+fcmid, unixsync);
     return storedate;
   }
 
   async GetSyncDate(type:any) {
     var fcmid = await this._storage.get('fcmID');
-    let storedate = await this._storage?.get('SyncDate_v1-'+type+'-'+fcmid);
+    let storedate = await this._storage?.get('SyncDate_'+this.version+'-'+type+'-'+fcmid);
     console.log('get-'+fcmid,storedate);
     if (!storedate) {
       var syncdate = new Date(1990, 1, 1);
       console.log('getafter new setup',syncdate);
       var unixsync = parseInt((syncdate.getTime() / 1000).toFixed(0));
-      return await this._storage.set('SyncDate_v1-'+type+'-'+fcmid, unixsync);
+      return await this._storage.set('SyncDate_'+this.version+'-'+type+'-'+fcmid, unixsync);
     }
     else
       return storedate;
