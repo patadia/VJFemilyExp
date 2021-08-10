@@ -34,16 +34,22 @@ export class ExpenseAddPopupPage implements OnInit {
   private Fkey: string;
   public AddBtn: boolean = true;
   public dateonadd: any;
+  public dateonselectyear:any;
+  public dateonselectMonth:any;
   public imagecount: number;
   public typeselect:any
   public type_exp:any;
+  public myweekday:any;
   title_head:string = "";
   Photoes:TPhotoes[] = [];
   delPhotoes:TPhotoes[] = [];
   counter: number = 0;
   typesofExp = [];
   public Syncdate:number;
-  
+  public radioval:string = '';
+  public showRecurring = false
+
+
   constructor(private popover: PopoverController,
     private navParams: NavParams,
     private Store: StorageService,
@@ -54,6 +60,8 @@ export class ExpenseAddPopupPage implements OnInit {
     private db:DataService
    ) {
     this.dateonadd = this.datepipe.transform(new Date(), 'yyyy-MM-dd');
+    this.dateonselectyear = this.datepipe.transform(new Date(), 'yyyy-MM-dd');
+    this.dateonselectMonth = this.datepipe.transform(new Date(), 'yyyy-MM-dd');
     this.Store.init().then(() => {
 
       this.init();
@@ -69,7 +77,8 @@ export class ExpenseAddPopupPage implements OnInit {
     this.Fkey = await this.Store.GetStorevalue('familykeyID');
     this.Syncdate = Number(await this.Store.GetSyncDate('typeExpense'));
     this.gettypes_Expenses();
-    this.type_exp = 'default'
+    this.type_exp = 'default';
+    
 
   }
   async gettypes_Expenses(){
@@ -129,6 +138,7 @@ export class ExpenseAddPopupPage implements OnInit {
       if(this.imagecount > 0){
         this.getImages(this.navParams.data.ExpenseData.id);
       }
+      this.radioval = this.navParams.data.ExpenseData?.RecurrentEvent;
       
     }else{
       this.title_head = 'Add ';
@@ -171,7 +181,8 @@ export class ExpenseAddPopupPage implements OnInit {
       Syncdate: parseInt((new Date().getTime() / 1000).toFixed(0)),
       isDelete: false,
       Images: this.Photoes.length,
-      Type_expense:this.type_exp
+      Type_expense:this.type_exp,
+      RecurrentEvent:''
     }
 
     const images = {
@@ -208,6 +219,10 @@ export class ExpenseAddPopupPage implements OnInit {
    this.type_exp= s.detail.value
   }
 
+  onChangeweekday(s){
+    this.myweekday= s.detail.value
+   }
+
 
 
 
@@ -226,7 +241,8 @@ export class ExpenseAddPopupPage implements OnInit {
         isDelete: false,
         id: this.navParams.data.ExpenseData.id,
         Images:this.Photoes.length,
-        Type_expense:this.type_exp
+        Type_expense:this.type_exp,
+        RecurrentEvent:''
       }
 
       const images = {
@@ -304,4 +320,15 @@ console.log(id);
   popupclose(){
     this.popover.dismiss();
   }
+
+  radioGroupChange(e){
+      console.log(e);
+      console.log(e.detail.value);
+      this.radioval = e.detail.value;
+  }
+
+  ShowRecactivity(e){
+    this.showRecurring = e.detail.checked;
+  }
+
 }

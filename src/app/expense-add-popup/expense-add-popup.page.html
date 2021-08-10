@@ -84,8 +84,53 @@
 
     
   </div>
+ 
+    <div class="togglerecurring">
+      <ion-label>Is Recurring?</ion-label>
+      <ion-toggle [ngModel]="showRecurring" (ionChange)="ShowRecactivity($event)"></ion-toggle>
+    </div>
+    
+        <ion-list  class="radiogrp" *ngIf="showRecurring">
+          <ion-radio-group [value]="radioval" (ionChange)="radioGroupChange($event)">
+            <ion-radio value="Weekly"></ion-radio>
+              <ion-label>Week</ion-label>
+              <ion-radio value="Monthly" ></ion-radio>
+              <ion-label>Month</ion-label>
+              <ion-radio value="Yearly"></ion-radio>
+              <ion-label>Year</ion-label>
+          </ion-radio-group>
+        </ion-list>
+
+          <ion-item *ngIf="radioval === 'Week' && showRecurring">
+            <ion-label position="floating">
+              Select Weekday *
+            </ion-label>
+            <ion-select interface="popover" [(ngModel)]="myweekday" (ionChange)="onChangeweekday($event)">
+              <ion-select-option value="0">Sunday</ion-select-option>
+              <ion-select-option value="1">Monday</ion-select-option>
+              <ion-select-option value="2">Tuesday</ion-select-option>
+              <ion-select-option value="3">Wednesday</ion-select-option>
+              <ion-select-option value="4">Thursday</ion-select-option>
+              <ion-select-option value="5">Friday</ion-select-option>
+              <ion-select-option value="6">Saturday</ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item *ngIf="radioval === 'Month' && showRecurring">
+            <ion-label position="floating">
+              select Day *
+            </ion-label>
+            <ion-datetime [(ngModel)]="dateonselectMonth" display-format="DD"></ion-datetime>
+          </ion-item>
+          <ion-item *ngIf="radioval === 'Year' && showRecurring">
+            <ion-label position="floating">
+              select date *
+            </ion-label>
+            <ion-datetime [(ngModel)]="dateonselectyear" display-format="DD- MMMM"></ion-datetime>
+          </ion-item>
+
   <ion-button *ngIf="AddBtn" class="itemaddbtn" (click)="Add_data()">Add</ion-button>
-    <ion-button *ngIf="!AddBtn" class="itemaddbtn" (click)="Edit_data()">Edit</ion-button>
+  <ion-button *ngIf="!AddBtn" class="itemaddbtn" (click)="Edit_data()">Edit</ion-button>
 </div>
 
 

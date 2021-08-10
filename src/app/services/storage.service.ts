@@ -6,7 +6,7 @@ import { Storage } from '@ionic/storage'
 })
 export class StorageService {
   private _storage: Storage | null = null;
-  private version:string = "v3";
+  private version:string = "v4";
   constructor(private storage: Storage) {
     this.init();
   }

@@ -117,7 +117,8 @@ export class ExpensesPage implements OnInit {
               Syncdate: parseInt((new Date().getTime() / 1000).toFixed(0)),
               isDelete: false,
               Images: 0,
-              Type_expense: typeExp
+              Type_expense: typeExp,
+              RecurrentEvent:''
             }
             console.log(JSON.stringify(data));
 
@@ -161,7 +162,8 @@ export class ExpensesPage implements OnInit {
           Syncdate: e.Syncdate,
           isDelete: e.isDelete,
           Images: e.Images,
-          Type_expense: e.Type_expense
+          Type_expense: e.Type_expense,
+          RecurrentEvent:e.RecurrentEvent
         }
         this.ExpennseList.push(pusher);
         console.log(JSON.stringify(pusher));
@@ -255,6 +257,10 @@ export class ExpensesPage implements OnInit {
           if (e.Type_expense !== undefined) {
             Type_expenses = e.Type_expense;
           }
+          let recurrentEv = '';
+          if(e.RecurrentEvent !== undefined){
+            recurrentEv = e.RecurrentEvent;
+          }
           let pusher: TExpenes = {
             // EFCM_ID: e.payload.doc.id,
             // Title: e.payload.doc.data()['Title'],
@@ -279,7 +285,8 @@ export class ExpensesPage implements OnInit {
             isDelete: deleteLog,
             Images: image,
             id: 0,
-            Type_expense: Type_expenses
+            Type_expense: Type_expenses,
+            RecurrentEvent:recurrentEv
           }
           //this.ExpennseList.push(pusher);
           this.db.AddExpense(pusher as TExpenes).then(() => {

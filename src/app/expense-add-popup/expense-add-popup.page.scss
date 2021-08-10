@@ -19,6 +19,7 @@ ion-item{
   }
   ion-content{
     position: absolute;
+    
   }
   ion-toolbar{
     background-color: #208891;
@@ -81,4 +82,21 @@ ion-item{
   }
   .closeicon{
     padding: 4px;
+  }
+
+  .radiogrp{
+    ion-label{
+      color: white;
+    align-items: center;
+    margin: 10px;
+    text-align: center;
+    vertical-align: super;
+    };
+    background-color: transparent;
+    margin-left: 20px;
+  }
+
+  .togglerecurring{
+    display: flex;
+    justify-content: center;
   }

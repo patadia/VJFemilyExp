@@ -130,8 +130,23 @@ export class HomePage {
         text: 'Hi have you added your expense for Today',
         title:'Greetings..!',
         trigger:{ every: { hour: 21, minute: 0 }},
-       sound: 'res://platform_default'
+       sound: 'notify'
       });
+      
+      //  this.LocalN.schedule({
+      //   id: 34,
+      //   text: 'Hi have you added your expense for Today',
+      //   title:'Greetings..!',
+      //   sound: 'file://assets/raw/notify.mp3'
+      // });
+
+      // this.LocalN.schedule({
+      //   id: 36,
+      //   text: 'Hi have you added your expense for Today',
+      //   title:'Greetings..!',
+      //   trigger:{ every: { hour: 13, minute: 30 }},
+      //   sound: 'notify'
+      // });
 
       this.processing = false;
 

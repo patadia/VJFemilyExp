@@ -32,7 +32,16 @@ export interface TExpenes {
   isDelete: boolean,
   Syncdate: number,
   Images:number,
-  Type_expense:string
+  Type_expense:string,
+  RecurrentEvent:string
+}
+
+export interface TNotification{
+  id:number,
+  EFCM_ID:string,
+  Type:string,
+  NotifyNo:number,
+
 }
 
 export interface TName{
@@ -69,7 +78,7 @@ export class DataService {
     private sqlite: SQLite) {
     this.plt.ready().then(() => {
       this.sqlite.create({
-        name: 'emdb3.db',
+        name: 'emdb4.db',
         location: 'default'
       })
         .then((db: SQLiteObject) => {
@@ -82,9 +91,10 @@ export class DataService {
 
   CreateDatabase() {
     try {
-      let sql = 'create table IF NOT EXISTS MembersData(id integer primary key AUTOINCREMENT,m_name Text,Email Text,Mobile Text,MFCM_ID Text,ishead boolean,FamilyKey Text,isDelete boolean,Syncdate string,IsMaster boolean);';
-      sql = sql + 'create table IF NOT EXISTS ExpenseData (id integer primary key Autoincrement,EFCM_ID Text,Title Text,Amount real,Transaction_type Text,date_on Text,Date_unix integer,byName Text,FamilyKey Text,isDelete boolean,Syncdate integer,Images integer,Type_expense Text);';
-      sql = sql + 'create table IF NOT EXISTS TypeExpense(id integer primary key Autoincrement,Type Text,Syncdate integer);';
+      let sql = 'create table IF NOT EXISTS MembersData (id integer primary key AUTOINCREMENT,m_name Text,Email Text,Mobile Text,MFCM_ID Text,ishead boolean,FamilyKey Text,isDelete boolean,Syncdate string,IsMaster boolean);';
+      sql = sql + 'create table IF NOT EXISTS ExpenseData (id integer primary key Autoincrement,EFCM_ID Text,Title Text,Amount real,Transaction_type Text,date_on Text,Date_unix integer,byName Text,FamilyKey Text,isDelete boolean,Syncdate integer,Images integer,Type_expense Text,RecurrentEvent Text);';
+      sql = sql + 'create table IF NOT EXISTS TypeExpense (id integer primary key Autoincrement,Type Text,Syncdate integer);';
+      sql = sql + 'create table IF NOT EXISTS Notification (id integer primary key Autoincrement,Type Text,EFCM_ID Text,NotifyNo integer);';
       this.sqlitePorter.importSqlToDb(this.database, sql)
         .then(_ => {
           this.dbReady.next(true);
@@ -218,7 +228,8 @@ console.log(JSON.stringify(datam));
             isDelete: dataread.isDelete,
             Syncdate: dataread.Syncdate,
             Images: dataread.Images,
-            Type_expense: dataread.Type_expense
+            Type_expense: dataread.Type_expense,
+            RecurrentEvent:dataread.RecurrentEvent
           });
         }
       }
@@ -235,14 +246,14 @@ console.log(JSON.stringify(datam));
       let checkExist = await this.database.executeSql('select * from ExpenseData where EFCM_ID =?', [m.EFCM_ID]);
       console.log('read data from addexpense ', JSON.stringify(checkExist));
       if (checkExist.rows.length > 0) {
-        let DataM = [m.isDelete, m.Syncdate, m.Amount, m.Date_unix, m.FamilyKey, m.Title, m.Transaction_type, m.byName, m.date_on,m.Images,m.Type_expense, m.EFCM_ID];
-        let stored = await this.database.executeSql(`Update ExpenseData set isDelete = ?,Syncdate = ?,Amount =?,Date_unix =?,FamilyKey =?,Title =?,Transaction_type =?,byName =?,date_on=?,Images = ?,Type_expense = ?  where EFCM_ID = ?`, DataM)
+        let DataM = [m.isDelete, m.Syncdate, m.Amount, m.Date_unix, m.FamilyKey, m.Title, m.Transaction_type, m.byName, m.date_on,m.Images,m.Type_expense,m.RecurrentEvent, m.EFCM_ID];
+        let stored = await this.database.executeSql(`Update ExpenseData set isDelete = ?,Syncdate = ?,Amount =?,Date_unix =?,FamilyKey =?,Title =?,Transaction_type =?,byName =?,date_on=?,Images = ?,Type_expense = ? ,RecurrentEvent = ?  where EFCM_ID = ?`, DataM)
         console.log('read data from update before add ', JSON.stringify(stored));
       }
       else {
-        let DataM = [m.Amount, m.Date_unix, m.EFCM_ID, m.FamilyKey, m.Title, m.Transaction_type, m.byName, m.date_on, m.isDelete, m.Syncdate,m.Images,m.Type_expense];
+        let DataM = [m.Amount, m.Date_unix, m.EFCM_ID, m.FamilyKey, m.Title, m.Transaction_type, m.byName, m.date_on, m.isDelete, m.Syncdate,m.Images,m.Type_expense,m.RecurrentEvent];
         console.log('add->Expense', DataM);
-        const data = await this.database.executeSql('INSERT OR IGNORE INTO ExpenseData (Amount,Date_unix,EFCM_ID,FamilyKey,Title,Transaction_type,byName,date_on,isDelete,Syncdate,Images,Type_expense) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)', DataM).then(() => {
+        const data = await this.database.executeSql('INSERT OR IGNORE INTO ExpenseData (Amount,Date_unix,EFCM_ID,FamilyKey,Title,Transaction_type,byName,date_on,isDelete,Syncdate,Images,Type_expense,RecurrentEvent) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)', DataM).then(() => {
           console.log('data added expense');
         })
       }
@@ -267,10 +278,10 @@ console.log(JSON.stringify(datam));
   async UpdateExpense_edit(m: any) {
     try {
 
-      let DataM = [m.isDelete, m.Syncdate, m.Amount, m.Date_unix, m.FamilyKey, m.Title, m.Transaction_type, m.byName, m.date_on,m.Images,m.Type_expense, m.EFCM_ID];
+      let DataM = [m.isDelete, m.Syncdate, m.Amount, m.Date_unix, m.FamilyKey, m.Title, m.Transaction_type, m.byName, m.date_on,m.Images,m.Type_expense,m.RecurrentEvent, m.EFCM_ID];
       console.log('edit->Expense  ',JSON.stringify(DataM));
 
-      let stored = await this.database.executeSql(`Update ExpenseData set isDelete = ?,Syncdate = ?,Amount =?,Date_unix =?,FamilyKey =?,Title =?,Transaction_type =?,byName =?,date_on=?, Images = ?,Type_expense = ?  where EFCM_ID =?`, DataM)
+      let stored = await this.database.executeSql(`Update ExpenseData set isDelete = ?,Syncdate = ?,Amount =?,Date_unix =?,FamilyKey =?,Title =?,Transaction_type =?,byName =?,date_on=?, Images = ?,Type_expense = ?,RecurrentEvent = ?  where EFCM_ID =?`, DataM)
       console.log(JSON.stringify('edit review ',stored));
     } catch (error) {
         console.log(error);
@@ -299,7 +310,8 @@ console.log(JSON.stringify(datam));
               isDelete: dataread.isDelete,
               Syncdate: dataread.Syncdate,
               Images : dataread.Images,
-              Type_expense:dataread.Type_expense
+              Type_expense:dataread.Type_expense,
+              RecurrentEvent:dataread.RecurrentEvent
             });
           }
         }
