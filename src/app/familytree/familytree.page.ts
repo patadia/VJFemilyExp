@@ -5,7 +5,7 @@ import { StorageService } from '../services/storage.service';
 import { Router } from '@angular/router';
 import { ActionSheetController } from '@ionic/angular';
 import { DataService, TMember } from '../services/data.service';
-import { from, Observable } from 'rxjs';
+import { from, Observable, Subscription } from 'rxjs';
 import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
 import {Share} from '@capacitor/share';
 
@@ -36,7 +36,8 @@ export class FamilytreePage implements OnInit {
   CountryISO = CountryISO;
   PhoneNumberFormat = PhoneNumberFormat;
   preferredCountries: CountryISO[] = [CountryISO.UnitedStates, CountryISO.UnitedKingdom];
-  syncDate: any;
+  syncDate: number;
+  private readMemSub: Subscription;
   constructor(private firebaseService: FirebaseService,
     public fb: FormBuilder,
     public Store: StorageService,
@@ -57,10 +58,14 @@ export class FamilytreePage implements OnInit {
 
     this.Familykey = await this.Store.GetStorevalue('familykeyID');
     this.Cuser = await this.Store.GetStorevalue('Current_uname');
-   
+    this.syncDate =Number(await this.Store.GetSyncDate('Member'));
+    console.log('getsyncdatemodel', this.syncDate);
     //console.log('getsyncdatemodel', this.syncDate);
-    this.GetMembers();
+    setTimeout(() => {
+      
+    }, 1500);
     this.getfromdb();
+    this.GetMembers();
 
   }
 
@@ -83,15 +88,23 @@ export class FamilytreePage implements OnInit {
   }
 
   async GetMembers() {
-    this.syncDate = await this.Store.GetSyncDate('Member');
-    console.log('getsyncdatemodel', this.syncDate);
-
+   
     try {
-      var getMember = this.firebaseService.read_Members_sync(this.Familykey, this.syncDate).subscribe((data:any) => {
+      // var mem = this.firebaseService.read_Memberss(this.Familykey).subscribe((data)=>{
+      //   mem.unsubscribe();
+      //   console.log('from members all!');
+      //   console.log(JSON.stringify(data));
+      //   console.log(data);
+      //   console.log('all member length========> ',data.length);
+      // });
+      console.log('Get mem data for  ---> > ',this.syncDate);
+      //var fm = this.firebaseService.read_Members_sync(this.Familykey,this.syncDate);
+      this.readMemSub = this.firebaseService.read_Members_sync(this.Familykey,this.syncDate).subscribe(async(data:any) => {
           console.log("Member data==-----> from firebase   ",JSON.stringify(data));
-          console.log(data);
+          console.log("mem data length    --- ",data.length);
         var dataMembers = data.map(e => {
           let Ismastered = false
+         //if(e.payload.doc.data()['IsMaster'] !== undefined){
           if(e.IsMaster !== undefined){
             Ismastered = e.IsMaster;
           }
@@ -102,7 +115,7 @@ export class FamilytreePage implements OnInit {
             Mobile: e.Mobile,
             ishead: e.ishead,
             m_name: e.Name,
-            isDelete: e.isDelete,
+            isDelete: e.isDelete, 
             Syncdate:e.Syncdate,
             IsMaster:Ismastered
           };
@@ -120,8 +133,8 @@ export class FamilytreePage implements OnInit {
 
           this.db.AddMember(this.member).then(() => {
             console.log('Added ', this.member);
-            //this.member = {};
           });
+          this.member = {};
 
 
           // return {
@@ -133,18 +146,29 @@ export class FamilytreePage implements OnInit {
           // };
         })
         
-        var setnew =  this.Store.SetSyncDate(new Date().toUTCString(), 'Member');
-        console.log(setnew);
-        getMember.unsubscribe();
-        setTimeout(() => {
+
+        if(data.length > 0){
+          var setnew =  this.Store.SetSyncDate(new Date(), 'Member');
+          this.syncDate = Number(await this.Store.GetSyncDate('Member'));
+          console.log(setnew);
+          setTimeout(() => {
+            this.readMemSub.unsubscribe();
+            this.GetMembers()
+          }, 2500);
           
-          this.getfromdb();
-        }, 1500);
-       // this.getfromdb();
+          //this.readMemSub.unsubscribe();
+        }
+        //this.db.ReadMember(this.Familykey);
+
+        this.db.ReadMember(this.Familykey);
+       console.log('=================> i am executed <=========================');
+       
         //console.log('check  multy $$$$$$$$');
        // this.GetMembers();
         // this.fetchdata();
       })
+
+
     } catch (e) {
       console.log(e);
      // this.getfromdb();
@@ -168,7 +192,7 @@ export class FamilytreePage implements OnInit {
   }
 
   ngOnDestroy() {
-
+    this.readMemSub.unsubscribe();
   }
 
   CreateRecord() {
@@ -195,12 +219,12 @@ export class FamilytreePage implements OnInit {
           if (s.length == 0) {
             dataobj.isDelete = false;
             dataobj.ishead = false;
-            dataobj.Syncdate = parseInt((new Date(new Date().toUTCString()).getTime() / 1000).toFixed(0));
+            dataobj.Syncdate = parseInt((new Date().getTime() / 1000).toFixed(0));
             this.firebaseService.create_Member(dataobj).then(resp => {
               console.log(resp.id);
               // this._storage.set('PersonalID',resp.id);
               this.FormCreateFamilyHead.reset();
-              this.GetMembers();
+             // this.GetMembers();
             }).catch(error => {
               console.log(error);
             });
@@ -252,13 +276,13 @@ export class FamilytreePage implements OnInit {
             text: 'Delete',
             handler:async () => {
               member.isDelete = true;
-              member.Syncdate= parseInt((new Date(new Date().toUTCString()).getTime()/1000).toFixed(0));
+              member.Syncdate= parseInt((new Date().getTime()/1000).toFixed(0));
               this.firebaseService.update_Member(M.id, member);
               let navTransition = actionSheet.dismiss();
               member.MFCM_ID = member.id;
-              await this.db.UpdateMember(member).then(()=>{
-                this.GetMembers();
-              });
+              // await this.db.UpdateMember(member).then(()=>{
+              //  // this.GetMembers();
+              // });
               return false;
             },
           },
@@ -306,9 +330,9 @@ export class FamilytreePage implements OnInit {
           text: 'Yes',
           handler:async () => {
             member.ishead = true;
-            member.Syncdate= parseInt((new Date(new Date().toUTCString()).getTime()/1000).toFixed(0));
+            member.Syncdate= parseInt((new Date().getTime()/1000).toFixed(0));
             this.firebaseService.update_Member(m.id, member);
-            this.GetMembers();
+            //this.GetMembers();
             let navTransition = actionSheet.dismiss();
             member.MFCM_ID = member.id;
             // await this.db.UpdateMember(member).then(()=>{
@@ -334,11 +358,11 @@ export class FamilytreePage implements OnInit {
           text: 'Yes',
           handler:async () => {
             member.ishead = false;
-            member.Syncdate= parseInt((new Date(new Date().toUTCString()).getTime()/1000).toFixed(0));
+            member.Syncdate= parseInt((new Date().getTime()/1000).toFixed(0));
             this.firebaseService.update_Member(m.id, member);
             let navTransition = actionSheet.dismiss();
             member.MFCM_ID = member.id;
-            this.GetMembers();
+            //this.GetMembers();
             // await this.db.UpdateMember(member).then(()=>{
             //   this.GetMembers();
             // });

@@ -6,7 +6,7 @@ import { Storage } from '@ionic/storage'
 })
 export class StorageService {
   private _storage: Storage | null = null;
-  private version:string = "v4";
+  private version:string = "vs1";
   constructor(private storage: Storage) {
     this.init();
   }
@@ -14,7 +14,7 @@ export class StorageService {
   async init() {
     const storage = await this.storage.create();
     this._storage = storage;
-    console.log('storage Initialize')
+    console.log('storage Initialize');
     console.log(this._storage);
   }
 
@@ -60,10 +60,10 @@ export class StorageService {
       var syncdate = new Date(1990, 1, 1);
       console.log('getafter new setup',syncdate);
       var unixsync = parseInt((syncdate.getTime() / 1000).toFixed(0));
-      return await this._storage.set('SyncDate_'+this.version+'-'+type+'-'+fcmid, unixsync);
+      return parseInt( await this._storage.set('SyncDate_'+this.version+'-'+type+'-'+fcmid, unixsync));
     }
     else
-      return storedate;
+      return parseInt(storedate);
   }
 
   async GetPbalFlag(){

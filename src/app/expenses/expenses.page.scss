@@ -286,3 +286,22 @@ ion-spinner {
         background: #f9f9f900;
     }
 }
+
+.SpinnerDiv{
+    z-index: 10000;
+    height: 125%;
+    background-color: #787679ad;
+    position: absolute;
+    width: 100%;
+    touch-action: none;
+    -ms-touch-action: none;
+    ion-spinner{
+        position: absolute;
+        /* height: 42px; */
+        /* width: 323px; */
+        transform: scale3d(7,7,7);
+        margin-top: 35%;
+        margin-left: 50%;
+        // margin-right: 20%;
+    }
+}

@@ -43,6 +43,7 @@ export class ExpensesPage implements OnInit {
     slidesPerView: 3,
     spaceBetween: 10
   };
+  isLoading = false;
   constructor(private route: ActivatedRoute,
     private popover: PopoverController,
     private fire: FirebaseService,
@@ -185,6 +186,7 @@ export class ExpensesPage implements OnInit {
   // }
 
   ngOnInit() {
+    this.isLoading = true;
     this.routeSub = this.route.params.subscribe(params => {
       console.log(params) //log the entire params object
       console.log(params['ID']) //log the value of id
@@ -230,6 +232,7 @@ export class ExpensesPage implements OnInit {
   }
   async getdata_expense(ID) {
     try {
+      this.isLoading = true;
       this.Syncdate = Number(await this.Store.GetSyncDate('Expense'));
       console.log(this.Fkey);
       //this.ExpennseList = [];
@@ -240,6 +243,8 @@ export class ExpensesPage implements OnInit {
       // this.readExpdataSub = this.fire.Read_expbyMonth(nedate.getFullYear(), nedate.getMonth(),this.Fkey).subscribe((edata: any) => {
       this.readExpdataSub = this.fire.read_expense_Sync(this.Syncdate, this.Fkey).subscribe((edata: any) => {
         console.log('check', edata);
+        let counter = 1;
+        let len_data = edata.length;
         //this.ExpennseList = [];
         // this.Creditbal = 0.0;
         // this.Debitbal = 0.0;
@@ -261,6 +266,8 @@ export class ExpensesPage implements OnInit {
           if(e.RecurrentEvent !== undefined){
             recurrentEv = e.RecurrentEvent;
           }
+          
+
           let pusher: TExpenes = {
             // EFCM_ID: e.payload.doc.id,
             // Title: e.payload.doc.data()['Title'],
@@ -290,8 +297,15 @@ export class ExpensesPage implements OnInit {
           }
           //this.ExpennseList.push(pusher);
           this.db.AddExpense(pusher as TExpenes).then(() => {
+            if(len_data===counter)
+            {
+              this.isLoading = false;
+            }
+            counter = counter + 1;
             console.log('Exp added ', JSON.stringify(pusher))
           })
+
+        
           // if (e.payload.doc.data()['Transaction_Type'] == 'debit') {
           //   this.Debitbal += parseFloat(e.payload.doc.data()['Amount']);
           // }
@@ -300,22 +314,28 @@ export class ExpensesPage implements OnInit {
           // }
         });
 
+      
+
         if (edata.length > 0) {
           this.Subscription_release();
           // this.expenseFetchsub.unsubscribe();
           var setnew = this.Store.SetSyncDate(new Date(), 'Expense');
           //console.log(setnew);
           this.ExpenseReset();
+          
+        }else{
+          this.isLoading = false;
         }
 
         // this.db.ReadExpense(nedate.getFullYear(), nedate.getMonth(), this.Fkey);
         this.ReadExpense_filter();
         // this.GetDBexpense(nedate.getFullYear(), nedate.getMonth(), this.Fkey);
+        //this.isLoading = false;
 
       })
-
     } catch (error) {
       console.log(error);
+      this.isLoading = false;
     }
   }
 
@@ -635,6 +655,8 @@ export class ExpensesPage implements OnInit {
   Export() {
     this.exp.exportToExcel(this.ExpennseList, 'explist');
   }
+
+  
 
 
 }

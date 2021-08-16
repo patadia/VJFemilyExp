@@ -46,6 +46,9 @@
 </ion-header>
 
 <ion-content fullscreen="true" class="selfcontent">
+  <div class="SpinnerDiv" *ngIf="isLoading">
+    <ion-spinner name="bubbles"></ion-spinner>
+</div>
   <!-- <div>
     
     <ion-label>Welcome {{name}}</ion-label>
@@ -133,6 +136,7 @@
       <label>Balance <p>{{Creditbal - Debitbal}} </p></label> -->
   </div>
 
+ 
   <div class="listdiv">
    
     <ion-refresher slot="fixed" (ionRefresh)="ExpenseList($event)" pullMin="100" pullMax="200">

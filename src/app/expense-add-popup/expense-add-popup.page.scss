@@ -88,15 +88,43 @@ ion-item{
     ion-label{
       color: white;
     align-items: center;
-    margin: 10px;
+    margin: 5px;
     text-align: center;
     vertical-align: super;
     };
-    background-color: transparent;
-    margin-left: 20px;
+    background-color: #e4353566;
+    margin-left: 5%;
+    margin-right: 5%;
+    height: 60px;
+    text-align: center;
+    padding: 15px;
+    border-radius: 20px;
+    border-color: orange;
   }
 
   .togglerecurring{
     display: flex;
     justify-content: center;
+    color: white;
+    ion-label{
+      vertical-align: middle;
+      margin-top: 5px;
+    }
+  }
+
+  .item_datecust{
+    //@at-root: 135px;
+    height: 60px;
+    background-color: orange;
+    margin-left: 20%;
+    margin-right: 20%;
+    text-align: center;
+  }
+
+  .item_selectcust{
+    // width: 200px;
+    height: 60px;
+    background-color: orange;
+    margin-left: 20%;
+    margin-right: 20%;
   }

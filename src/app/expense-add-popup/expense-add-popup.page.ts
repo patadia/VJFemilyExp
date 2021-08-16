@@ -6,13 +6,13 @@ import { StorageService } from '../services/storage.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { FirebaseService } from '../services/firebase.service';
 import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
-import { DataService,TType_Exp } from '../services/data.service';
+import { DataService, TType_Exp } from '../services/data.service';
 
 interface TPhotoes {
   image: SafeResourceUrl,
   filename: string,
-  id:number,
-  type:string
+  id: number,
+  type: string
 }
 
 @Component({
@@ -24,7 +24,7 @@ export class ExpenseAddPopupPage implements OnInit {
 
   slideOpts = {
     slidesPerView: 2,
-    spaceBetween: 0 
+    spaceBetween: 0
   };
   public title: string = '';
   public amount: any;
@@ -34,20 +34,21 @@ export class ExpenseAddPopupPage implements OnInit {
   private Fkey: string;
   public AddBtn: boolean = true;
   public dateonadd: any;
-  public dateonselectyear:any;
-  public dateonselectMonth:any;
+  public dateonselectyear: any;
+  public dateonselectMonth: any;
   public imagecount: number;
-  public typeselect:any
-  public type_exp:any;
-  public myweekday:any;
-  title_head:string = "";
-  Photoes:TPhotoes[] = [];
-  delPhotoes:TPhotoes[] = [];
+  public typeselect: any
+  public type_exp: any;
+  public myweekday: any;
+  title_head: string = "";
+  Photoes: TPhotoes[] = [];
+  delPhotoes: TPhotoes[] = [];
   counter: number = 0;
   typesofExp = [];
-  public Syncdate:number;
-  public radioval:string = '';
-  public showRecurring = false
+  public Syncdate: number;
+  public radioval: string = '';
+  public showRecurring = false;
+  public RecurringCombineVal = '';
 
 
   constructor(private popover: PopoverController,
@@ -55,10 +56,10 @@ export class ExpenseAddPopupPage implements OnInit {
     private Store: StorageService,
     public datepipe: DatePipe,
     private sanitizer: DomSanitizer,
-    private fire:FirebaseService,
-    private phview:PhotoViewer,
-    private db:DataService
-   ) {
+    private fire: FirebaseService,
+    private phview: PhotoViewer,
+    private db: DataService
+  ) {
     this.dateonadd = this.datepipe.transform(new Date(), 'yyyy-MM-dd');
     this.dateonselectyear = this.datepipe.transform(new Date(), 'yyyy-MM-dd');
     this.dateonselectMonth = this.datepipe.transform(new Date(), 'yyyy-MM-dd');
@@ -69,7 +70,7 @@ export class ExpenseAddPopupPage implements OnInit {
     })
 
   }
-  
+
   async init() {
     // If using, define drivers here: await this.storage.defineDriver(/*...*/);
 
@@ -78,16 +79,16 @@ export class ExpenseAddPopupPage implements OnInit {
     this.Syncdate = Number(await this.Store.GetSyncDate('typeExpense'));
     this.gettypes_Expenses();
     this.type_exp = 'default';
-    
+
 
   }
-  async gettypes_Expenses(){
-   let firete =   this.fire.GetTypes_Exp(this.Syncdate).subscribe((edata:any)=>{
-     
-      edata.forEach(e=>{
-        let typeexp:TType_Exp = {
-           Type : e.Type,
-          Syncdate:e.Syncdate
+  async gettypes_Expenses() {
+    let firete = this.fire.GetTypes_Exp(this.Syncdate).subscribe((edata: any) => {
+
+      edata.forEach(e => {
+        let typeexp: TType_Exp = {
+          Type: e.Type,
+          Syncdate: e.Syncdate
         }
 
         this.db.AddType_Expenses(typeexp).then(() => {
@@ -97,21 +98,21 @@ export class ExpenseAddPopupPage implements OnInit {
       this.Store.SetSyncDate(new Date(), 'typeExpense');
       this.getDBTypeExp();
       firete.unsubscribe();
-   })
+    })
     // this.typeselect = this.navParams.data.ExpenseData?.Type_expense;
     //   this.type_exp = this.navParams.data.ExpenseData?.Type_expense;
   }
 
 
-  getDBTypeExp(){
+  getDBTypeExp() {
     console.log('call types started');
     try {
-      this.db.FetchTypesOfexpense().subscribe((s)=>{
-        console.log('types of data exp',JSON.stringify(s));
-        s.forEach(t=>{
+      this.db.FetchTypesOfexpense().subscribe((s) => {
+        console.log('types of data exp', JSON.stringify(s));
+        s.forEach(t => {
           this.typesofExp.push(t.Type);
         })
-        if(this.navParams.data.ExpenseData?.Type_expense){
+        if (this.navParams.data.ExpenseData?.Type_expense) {
 
           this.typeselect = this.navParams.data.ExpenseData?.Type_expense;
           this.type_exp = this.navParams.data.ExpenseData?.Type_expense;
@@ -121,7 +122,7 @@ export class ExpenseAddPopupPage implements OnInit {
       console.log(error);
     }
   }
-  
+
   ngOnInit() {
     console.log(this.navParams.data.ExpenseData);
     if (this.navParams.data?.ExpenseData) {
@@ -135,41 +136,97 @@ export class ExpenseAddPopupPage implements OnInit {
       this.dateonadd = this.datepipe.transform(this.navParams.data.ExpenseData.date_on, 'yyyy-MM-dd');
       this.byName = this.navParams.data.ExpenseData.byName;
       this.imagecount = this.navParams.data.ExpenseData.Images;
-      if(this.imagecount > 0){
+      if (this.imagecount > 0) {
         this.getImages(this.navParams.data.ExpenseData.id);
       }
-      this.radioval = this.navParams.data.ExpenseData?.RecurrentEvent;
-      
-    }else{
+      try {
+        console.log('eventlog-->', this.navParams.data.ExpenseData?.RecurrentEvent);
+        if (this.navParams.data.ExpenseData?.RecurrentEvent) {
+          this.showRecurring = true;
+          let selectorRec = this.navParams.data.ExpenseData?.RecurrentEvent.split('-');
+          this.radioval = selectorRec[0];
+          let insidesplit = selectorRec[1].split('>');
+          let dateget = new Date();
+          switch (this.radioval) {
+            case "Week":
+                this.myweekday = insidesplit[0];
+                break;
+            case "Month":
+                this.dateonselectMonth = this.datepipe.transform(new Date(dateget.getFullYear(),dateget.getMonth(),insidesplit[0]), 'yyyy-MM-dd');
+              break;
+            case "Year":
+                this.dateonselectyear = this.datepipe.transform(new Date(dateget.getFullYear(),insidesplit[1],insidesplit[0]), 'yyyy-MM-dd');
+              break;
+          }
+          this.RecurringCombineVal = this.navParams.data.ExpenseData?.RecurrentEvent;
+          console.log(this.RecurringCombineVal);
+        }
+      }catch(error){
+        console.log(error);
+      }
+
+    } else {
       this.title_head = 'Add ';
     }
   }
 
-  getImages(id){
+  getImages(id) {
     try {
       let sc = this.fire.GetImages(id);
-        console.log(sc);
-        sc.listAll().forEach(async (res)=>{
-          res.items.forEach(async(ref) =>{
-              let urlget = await ref.getDownloadURL();
-              let attachment = {
-                image: this.sanitizer.bypassSecurityTrustResourceUrl(urlget),
-                filename: ref.name,
-                id:this.counter,
-                type:'frombase'
+      console.log(sc);
+      sc.listAll().forEach(async (res) => {
+        res.items.forEach(async (ref) => {
+          let urlget = await ref.getDownloadURL();
+          let attachment = {
+            image: this.sanitizer.bypassSecurityTrustResourceUrl(urlget),
+            filename: ref.name,
+            id: this.counter,
+            type: 'frombase'
 
-              };
-              this.Photoes.push(attachment);
-              this.counter = this.counter + 1;
-          })
+          };
+          this.Photoes.push(attachment);
+          this.counter = this.counter + 1;
         })
+      })
     } catch (error) {
       console.log(error);
     }
   }
 
   Add_data() {
+    if (this.showRecurring) {
+      if (this.radioval !== '') {
+        switch (this.radioval) {
+          case "Week":
+            console.log(this.myweekday);
+            if(this.myweekday >= 0)
+            {
+              this.RecurringCombineVal = `Week-${this.myweekday}>09>00`;
+            }else{
+              alert('Please select weekday in recurring');
+              this.RecurringCombineVal = '';
+              return;
+            }
+            break;
+          case "Month":
+              console.log(this.dateonselectMonth);
+              this.RecurringCombineVal = `Month-${new Date(this.dateonselectMonth).getDate()}>09>00`;
+            break;
+          case "Year":
+            console.log(this.dateonselectyear);
+            this.RecurringCombineVal = `Year-${new Date(this.dateonselectyear).getDate()}>${new Date(this.dateonselectyear).getMonth()}>09>00`;
+            
+            break;
+        }
+      }else{
 
+        alert('Recurring is on please specify the value');
+        this.RecurringCombineVal = '';
+        return;
+      }
+
+      console.log(this.RecurringCombineVal);
+    }
     const data = {
       Title: this.title.trim(),
       Amount: Number(this.amount),
@@ -181,20 +238,20 @@ export class ExpenseAddPopupPage implements OnInit {
       Syncdate: parseInt((new Date().getTime() / 1000).toFixed(0)),
       isDelete: false,
       Images: this.Photoes.length,
-      Type_expense:this.type_exp,
-      RecurrentEvent:''
+      Type_expense: this.type_exp,
+      RecurrentEvent: this.RecurringCombineVal
     }
 
     const images = {
-      photoes : this.Photoes
+      photoes: this.Photoes
     }
     //console.log(data);
     if (!data.Title || !data.Amount || !data.Transaction_Type) {
-      alert('Add All the Field');
+      alert('Add All the Mendatory Field');
       return;
     }
     this.popover.dismiss({
-      "Add_data": {data,images}
+      "Add_data": { data, images }
     })
   }
 
@@ -202,10 +259,10 @@ export class ExpenseAddPopupPage implements OnInit {
 
   }
 
-  datetoDatetime(date:any){
+  datetoDatetime(date: any) {
     let dateobj = new Date(date);
     let current_date = new Date();
-    let datenew =  new Date(dateobj.getFullYear(),dateobj.getMonth(),dateobj.getDate(),current_date.getHours(),current_date.getMinutes())
+    let datenew = new Date(dateobj.getFullYear(), dateobj.getMonth(), dateobj.getDate(), current_date.getHours(), current_date.getMinutes())
     console.log(datenew);
     return datenew;
   }
@@ -215,18 +272,53 @@ export class ExpenseAddPopupPage implements OnInit {
     //console.log(mySelect.detail.value);
   }
 
-  onChangetype(s){
-   this.type_exp= s.detail.value
+  onChangetype(s) {
+    this.type_exp = s.detail.value
   }
 
-  onChangeweekday(s){
-    this.myweekday= s.detail.value
-   }
+  onChangeweekday(s) {
+    this.myweekday = s.detail.value
+  }
 
 
 
 
   Edit_data() {
+
+    if (this.showRecurring) {
+      if (this.radioval !== '') {
+        switch (this.radioval) {
+          case "Week":
+            console.log(this.myweekday);
+            if(this.myweekday >= 0)
+            {
+              this.RecurringCombineVal = `Week-${this.myweekday}>09>00`;
+            }else{
+              alert('Please select weekday in recurring');
+              this.RecurringCombineVal = '';
+              return;
+            }
+            break;
+          case "Month":
+              console.log(this.dateonselectMonth);
+              this.RecurringCombineVal = `Month-${new Date(this.dateonselectMonth).getDate()}>09>00`;
+            break;
+          case "Year":
+            console.log(this.dateonselectyear);
+            this.RecurringCombineVal = `Year-${new Date(this.dateonselectyear).getDate()}>${new Date(this.dateonselectyear).getMonth()}>09>00`;
+            break;
+        }
+      }else{
+        alert('Recurring is on please specify the value');
+        this.RecurringCombineVal = '';
+        return;
+      }
+      console.log(this.RecurringCombineVal);
+    }
+
+
+
+
     try {
       console.log('in edit');
       const data = {
@@ -240,13 +332,13 @@ export class ExpenseAddPopupPage implements OnInit {
         Syncdate: parseInt((new Date().getTime() / 1000).toFixed(0)),
         isDelete: false,
         id: this.navParams.data.ExpenseData.id,
-        Images:this.Photoes.length,
-        Type_expense:this.type_exp,
-        RecurrentEvent:''
+        Images: this.Photoes.length,
+        Type_expense: this.type_exp,
+        RecurrentEvent: this.RecurringCombineVal
       }
 
       const images = {
-        photoes : this.Photoes,
+        photoes: this.Photoes,
         delphotoes: this.delPhotoes
       }
 
@@ -256,16 +348,16 @@ export class ExpenseAddPopupPage implements OnInit {
         return;
       }
       this.popover.dismiss({
-        "Edit_data": {data,images}
+        "Edit_data": { data, images }
       })
     } catch (error) {
       console.log('edit error', error);
     }
   }
 
- 
+
   async UploadAttachment() {
-  
+
 
     const image = await Camera.getPhoto({
       quality: 80,
@@ -277,22 +369,22 @@ export class ExpenseAddPopupPage implements OnInit {
     let attachment = {
       image: this.sanitizer.bypassSecurityTrustResourceUrl(image && (image.dataUrl)),
       filename: image.format,
-      id:this.counter,
-      type:'dataurl'
+      id: this.counter,
+      type: 'dataurl'
     };
-    this.counter = this.counter+1;
+    this.counter = this.counter + 1;
     console.log(attachment);
     this.Photoes.push(attachment as TPhotoes);
   }
 
-  async Deleteimage(id:any){
-console.log(id);
-    let delp = this.Photoes.filter(e=> e.id === id);
+  async Deleteimage(id: any) {
+    console.log(id);
+    let delp = this.Photoes.filter(e => e.id === id);
     this.delPhotoes.push(delp[0]);
     this.Photoes = this.Photoes.filter(e => e.id !== id);
   }
 
-  async Downloadimage(img:any){
+  async Downloadimage(img: any) {
     try {
       // console.log('image----> --> ',JSON.stringify(img));
       // var xhr = new XMLHttpRequest();
@@ -303,32 +395,34 @@ console.log(id);
       // xhr.open('GET', img.changingThisBreaksApplicationSecurity);
       // xhr.send();
       window.open(img.changingThisBreaksApplicationSecurity);
-     
+
     } catch (error) {
       console.log(error);
     }
   }
 
-  async fullimage(img){
+  async fullimage(img) {
     try {
-      this.phview.show(img.changingThisBreaksApplicationSecurity,'',{share: true});
+      this.phview.show(img.changingThisBreaksApplicationSecurity, '', { share: true });
     } catch (error) {
       console.log(error);
     }
   }
-  
-  popupclose(){
+
+  popupclose() {
     this.popover.dismiss();
   }
 
-  radioGroupChange(e){
-      console.log(e);
-      console.log(e.detail.value);
-      this.radioval = e.detail.value;
+  radioGroupChange(e) {
+    console.log(e);
+    console.log(e.detail.value);
+    this.radioval = e.detail.value;
+
   }
 
-  ShowRecactivity(e){
+  ShowRecactivity(e) {
     this.showRecurring = e.detail.checked;
+    this.RecurringCombineVal = '';
   }
 
 }

@@ -23,7 +23,9 @@ export class FirebaseService {
     private storage:StorageService,
     private firestorage:AngularFireStorage
   ) { 
-    
+      // firestore.firestore.clearPersistence().then(()=>{
+      //   console.log('cache clear');
+      // });
   }
 
   veryfin_member_Exist_user(record:any){
@@ -41,11 +43,14 @@ export class FirebaseService {
   }
 
   read_Memberss(familykey) {
-    return this.firestore.collection(this.Membercollection,ref=> ref.where('FamilyKey','==',familykey).where('isDelete','==',false)).snapshotChanges();
+      return this.firestore.collection(this.Membercollection,ref=> ref.where('FamilyKey','==',familykey)).valueChanges();
   }
 
-  read_Members_sync(familykey,syncDate) {
-    return this.firestore.collection(this.Membercollection,ref=> ref.where('FamilyKey','==',familykey).where('isDelete','==',false).where('Syncdate','>=',syncDate)).valueChanges({idField:'id'});
+  read_Members_sync(familykey:string,syncDate:number) {
+    //syncDate = 633810600;
+    return this.firestore.collection(this.Membercollection,ref=> ref.where('Syncdate','>',syncDate)
+        .where('FamilyKey','==',familykey).orderBy('Syncdate','desc')).valueChanges({idField: 'id'});
+        //.valueChanges({ idField: 'id' });
   }
 
   varify_Members(record:any) {

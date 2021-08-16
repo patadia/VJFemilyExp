@@ -57,7 +57,7 @@ export class SplitMasterPage implements OnInit {
       this.route.navigate(['./home']);
     } else {
 
-      this.route.navigate(['split-master/' + path]);
+      this.route.navigate(['split-master/' + path])
     }
   }
 

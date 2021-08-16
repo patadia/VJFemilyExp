@@ -25,7 +25,8 @@ export class HomePage {
   Formverify: FormGroup;
   private verifysub: Subscription;
   options: AnimationOptions = {
-    path: 'assets/expense.json'
+    path: 'assets/expense.json',
+     loop:2
   }
 
   processing:boolean = false;
@@ -129,7 +130,7 @@ export class HomePage {
         id: 1,
         text: 'Hi have you added your expense for Today',
         title:'Greetings..!',
-        trigger:{ every: { hour: 21, minute: 0 }},
+        trigger:{count:1, every: { hour: 21, minute: 0 }},
        sound: 'notify'
       });
       
@@ -178,7 +179,7 @@ export class HomePage {
           let uname = await this.Store.SetStorageData("Current_uname", d[0].payload.doc.data()['username']);
           let fkey = await this.Store.SetStorageData("familykeyID", d[0].payload.doc.data()['FamilyKey']);
           this.Formverify.reset();
-          this.movetoexpense(d[0].payload.doc.id);
+          this.init();
           this.UnsubScribe();
           this.processing = false;
         } else {
@@ -199,7 +200,7 @@ export class HomePage {
               let uname = await this.Store.SetStorageData("Current_uname", d[0].payload.doc.data()['username']);
               let fkey = await this.Store.SetStorageData("familykeyID", d[0].payload.doc.data()['FamilyKey']);
               this.Formverify.reset();
-              this.movetoexpense(d[0].payload.doc.id);
+              this.init();
               this.UnsubScribe();
               this.processing = false;
             }else{
@@ -255,6 +256,7 @@ export class HomePage {
 
   Created(animation: AnimationEventInit) {
     //console.log(animation);
+    
   }
 
 }

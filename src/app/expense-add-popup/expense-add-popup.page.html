@@ -92,20 +92,21 @@
     
         <ion-list  class="radiogrp" *ngIf="showRecurring">
           <ion-radio-group [value]="radioval" (ionChange)="radioGroupChange($event)">
-            <ion-radio value="Weekly"></ion-radio>
-              <ion-label>Week</ion-label>
-              <ion-radio value="Monthly" ></ion-radio>
-              <ion-label>Month</ion-label>
-              <ion-radio value="Yearly"></ion-radio>
-              <ion-label>Year</ion-label>
+            <ion-radio value="Week"></ion-radio>
+              <ion-label>Weekly</ion-label>
+              <ion-radio value="Month" ></ion-radio>
+              <ion-label>Monthly</ion-label>
+              <ion-radio value="Year"></ion-radio>
+              <ion-label>Yearly</ion-label>
           </ion-radio-group>
         </ion-list>
 
-          <ion-item *ngIf="radioval === 'Week' && showRecurring">
+          <ion-item *ngIf="radioval === 'Week' && showRecurring" class="item_selectcust">
             <ion-label position="floating">
               Select Weekday *
             </ion-label>
             <ion-select interface="popover" [(ngModel)]="myweekday" (ionChange)="onChangeweekday($event)">
+              <ion-select-option value="-1">Select Weekday</ion-select-option>
               <ion-select-option value="0">Sunday</ion-select-option>
               <ion-select-option value="1">Monday</ion-select-option>
               <ion-select-option value="2">Tuesday</ion-select-option>
@@ -116,13 +117,13 @@
             </ion-select>
           </ion-item>
 
-          <ion-item *ngIf="radioval === 'Month' && showRecurring">
+          <ion-item *ngIf="radioval === 'Month' && showRecurring" class="item_datecust">
             <ion-label position="floating">
               select Day *
             </ion-label>
             <ion-datetime [(ngModel)]="dateonselectMonth" display-format="DD"></ion-datetime>
           </ion-item>
-          <ion-item *ngIf="radioval === 'Year' && showRecurring">
+          <ion-item *ngIf="radioval === 'Year' && showRecurring" class="item_datecust">
             <ion-label position="floating">
               select date *
             </ion-label>
